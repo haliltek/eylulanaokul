@@ -16,6 +16,8 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
   const [seoSubTab, setSeoSubTab] = useState<'serp' | 'analytics' | 'unlighthouse'>('serp');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [cmsOpen, setCmsOpen] = useState(false);
   const [auditing, setAuditing] = useState(false);
   const [refreshingSerp, setRefreshingSerp] = useState(false);
 
@@ -270,43 +272,152 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
   const unlighthouse = data.seo?.unlighthouse || { summary: { seo: 98, performance: 96, accessibility: 100, bestPractices: 98, totalPages: 14 }, pages: [] };
   const blog = data.blog || { heroTitle: '', heroSubtitle: '', categories: [], posts: [] };
 
+  const navGroups: { title: string; items: { key: string; label: string; icon: string; badge?: number }[] }[] = [
+    { title: 'Genel', items: [{ key: 'dashboard', label: 'Genel Bakış', icon: 'dashboard' }] },
+    {
+      title: 'İçerik Yönetimi',
+      items: [
+        { key: 'cms', label: 'Sayfa Editörü', icon: 'web' },
+        { key: 'blog', label: 'Blog Yazıları', icon: 'article', badge: blog.posts.length },
+        { key: 'meals', label: 'Haftalık Yemek Menüsü', icon: 'restaurant_menu' },
+        { key: 'media', label: 'Medya Kütüphanesi', icon: 'perm_media', badge: data.mediaLibrary.length },
+      ],
+    },
+    { title: 'İletişim', items: [{ key: 'messages', label: 'Gelen Mesajlar', icon: 'mail', badge: data.crmLeads.length }] },
+    { title: 'Pazarlama', items: [{ key: 'seo', label: 'SEO & Analitik', icon: 'monitoring' }] },
+    { title: 'Sistem', items: [{ key: 'settings', label: 'Site & İletişim Ayarları', icon: 'settings' }] },
+  ];
+  const currentLabel = navGroups.flatMap((g) => g.items).find((i) => i.key === activeTab)?.label || 'Yönetim';
+
+  const goTab = (key: string) => {
+    setActiveTab(key as any);
+    setSidebarOpen(false);
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0 });
+  };
+
+  const logout = async () => {
+    try { await fetch('/api/admin/logout', { method: 'POST' }); } catch {}
+    window.location.href = '/admin/login';
+  };
+
+  const sidebar = (
+    <div className="flex flex-col h-full bg-[#0B1E36] text-slate-300">
+      <div className="h-16 px-5 flex items-center border-b border-white/10 shrink-0">
+        <Link href="/admin" className="flex items-center gap-2.5">
+          <span className="w-9 h-9 rounded-lg bg-[#E5880B] text-white font-black flex items-center justify-center">E</span>
+          <span className="leading-tight">
+            <span className="block text-sm font-bold text-white">Eylül Akademi</span>
+            <span className="block text-[10px] uppercase tracking-widest text-slate-400">Yönetim Konsolu</span>
+          </span>
+        </Link>
+      </div>
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
+        {navGroups.map((g) => (
+          <div key={g.title}>
+            <div className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500">{g.title}</div>
+            <div className="space-y-0.5">
+              {g.items.map((it) => {
+                const active = activeTab === it.key;
+                return (
+                  <div key={it.key}>
+                    <button
+                      onClick={() => {
+                        goTab(it.key);
+                        if (it.key === 'cms') setCmsOpen((o) => (active ? !o : true));
+                      }}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-semibold transition ${
+                        active ? 'bg-white/10 text-white' : 'hover:bg-white/5 hover:text-white'
+                      }`}
+                    >
+                      <span className={`material-symbols-outlined text-[20px] ${active ? 'text-[#E5880B]' : ''}`}>{it.icon}</span>
+                      <span className="flex-1 text-left">{it.label}</span>
+                      {typeof it.badge === 'number' && (
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-white/10 text-slate-200">{it.badge}</span>
+                      )}
+                      {it.key === 'cms' && (
+                        <span className={`material-symbols-outlined text-[18px] transition-transform ${cmsOpen ? 'rotate-180' : ''}`}>expand_more</span>
+                      )}
+                    </button>
+                    {it.key === 'cms' && cmsOpen && (
+                      <div className="ml-5 mt-1 pl-3 border-l border-white/10 space-y-0.5">
+                        {pagesList.map((p) => (
+                          <button
+                            key={p.key}
+                            onClick={() => { setSelectedCmsPage(p.key); goTab('cms'); }}
+                            className={`w-full text-left px-3 py-1.5 rounded-md text-[12px] transition ${
+                              activeTab === 'cms' && selectedCmsPage === p.key ? 'text-white bg-white/10 font-semibold' : 'text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            {p.title}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </nav>
+      <div className="p-3 border-t border-white/10 shrink-0 space-y-1">
+        <a href="/" target="_blank" rel="noreferrer" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-semibold hover:bg-white/5 hover:text-white transition">
+          <span className="material-symbols-outlined text-[20px]">open_in_new</span> Web Sitesini Aç
+        </a>
+        <button onClick={logout} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-semibold hover:bg-white/5 hover:text-white transition">
+          <span className="material-symbols-outlined text-[20px]">logout</span> Çıkış Yap
+        </button>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen lg:pl-64">
       {/* Toast Bildirimi */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-5 py-3 rounded-lg shadow-xl text-xs font-semibold border border-slate-700 animate-in fade-in slide-in-from-bottom-2">
+        <div className="fixed bottom-6 right-6 z-[60] bg-slate-900 text-white px-5 py-3 rounded-lg shadow-xl text-xs font-semibold border border-slate-700">
           {toastMessage}
         </div>
       )}
 
-      {/* İkonlardan Arındırılmış Editoryal Sekme Menüsü */}
-      <div className="flex flex-wrap items-center gap-1.5 border-b border-slate-200 pb-3">
-        {[
-          { key: 'dashboard', label: 'Genel Bakış (Dashboard)' },
-          { key: 'seo', label: 'SEO & Analitik Merkezi' },
-          { key: 'blog', label: `Blog Yönetimi (${blog.posts.length})` },
-          { key: 'cms', label: '13 Sayfa & İçerik Editörü' },
-          { key: 'media', label: `Medya Kütüphanesi (${data.mediaLibrary.length})` },
-          { key: 'meals', label: 'Haftalık Yemek Menüsü' },
-          { key: 'messages', label: `Gelen Mesajlar (${data.crmLeads.length})` },
-          { key: 'settings', label: 'Site & İletişim Ayarları' },
-        ].map((tab) => {
-          const isActive = activeTab === tab.key;
-          return (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold transition relative ${
-                isActive
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200'
-              }`}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
+      {/* Masaüstü Sidebar */}
+      <aside className="hidden lg:block fixed inset-y-0 left-0 w-64 z-40">{sidebar}</aside>
+
+      {/* Mobil Sidebar */}
+      {sidebarOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 flex">
+          <div className="absolute inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
+          <aside className="relative w-72 max-w-[85%] h-full">{sidebar}</aside>
+        </div>
+      )}
+
+      {/* Üst Bar */}
+      <header className="h-16 bg-white border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
+        <div className="flex items-center gap-3 min-w-0">
+          <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100" aria-label="Menü">
+            <span className="material-symbols-outlined">menu</span>
+          </button>
+          <div className="min-w-0">
+            <div className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider hidden sm:block">Yönetim / {currentLabel}</div>
+            <h1 className="text-base font-bold text-slate-900 truncate">{currentLabel}</h1>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="hidden md:inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Canlı
+          </span>
+          <button onClick={() => goTab('messages')} className="relative p-2 rounded-lg hover:bg-slate-100" aria-label="Mesajlar">
+            <span className="material-symbols-outlined text-slate-600">notifications</span>
+            {data.crmLeads.length > 0 && <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#E5880B]" />}
+          </button>
+          <div className="flex items-center gap-2 pl-2 sm:pl-3 border-l border-slate-200">
+            <span className="w-8 h-8 rounded-full bg-[#0E4984] text-white text-xs font-bold flex items-center justify-center">YN</span>
+            <span className="hidden sm:block text-xs font-semibold text-slate-700 leading-tight">Yönetici<span className="block text-[10px] text-slate-400 font-normal">Eylül Akademi Kars</span></span>
+          </div>
+        </div>
+      </header>
+
+      <main className="p-4 sm:p-6 lg:p-8 max-w-[1400px] space-y-6">
 
       {/* ========================================================================= */}
       {/* 1. EDİTORYAL GENEL BAKIŞ (DASHBOARD) - VARSAYILAN AÇILIŞ                   */}
@@ -1530,6 +1641,7 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
           </div>
         </div>
       )}
+      </main>
     </div>
   );
 };

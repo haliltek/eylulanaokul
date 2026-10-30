@@ -37,7 +37,6 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ settings }) => {
         { label: 'Etkinlikler', href: '/etkinlikler', desc: 'Sanat, Müzik, Jimnastik ve Atölyeler' },
         { label: 'Etkinlik Videoları', href: '/icerikler/etkinlik-videolari', desc: 'Okulumuzdaki Eğlenceli Etkinlik Kayıtları' },
         { label: 'Özel Eylül Anaokulu Ders Programı', href: '/icerikler/ders-programi', desc: 'Haftalık ve Yaş Gruplarına Göre Ders Planı' },
-        { label: 'Aylık Yemek Listesi', href: '/icerikler/aylik-yemek-listesi', desc: 'Diyetisyen Onaylı Doğal ve Taze Aylık Menü' },
       ],
     },
     { label: 'Blog', href: '/blog' },
@@ -58,14 +57,7 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ settings }) => {
         { label: 'Haftalık Yemek Menüsü', href: '/beslenme', desc: 'Pazartesi - Cuma Detaylı Menü Takvimi' },
       ],
     },
-    {
-      label: 'Kayıt',
-      href: '/kayit-ve-basvuru',
-      subLinks: [
-        { label: 'Kayıt & Başvuru Süreci', href: '/kayit-ve-basvuru', desc: '3 Adımda Kolay Kayıt ve Bilgi Talebi' },
-        { label: 'Okul Ziyareti Planla', href: '/kayit-ve-basvuru#ziyaret', desc: 'Pedagog Eşliğinde Birebir Tanıtım Turu' },
-      ],
-    },
+    { label: 'Kayıt', href: '/kayit-ve-basvuru' },
     { label: 'İletişim', href: '/iletisim' },
   ];
 

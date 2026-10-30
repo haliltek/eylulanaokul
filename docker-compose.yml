@@ -19,6 +19,8 @@ services:
       - PORT=3000
       - HOSTNAME=0.0.0.0
       - NEXT_TELEMETRY_DISABLED=1
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+      - ADMIN_SECRET=${ADMIN_SECRET:-}
     volumes:
       # Kalıcı medya ve kullanıcı yüklemeleri (veli kayıtları, etkinlik fotoğrafları)
       - ./uploads:/app/public/uploads
