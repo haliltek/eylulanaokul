@@ -1,0 +1,130 @@
+# ==============================================================================
+# EYLÜL ÇOCUK AKADEMİSİ - GÜVENLİ VE KAPSAMLI .gitignore
+# Mimar: Kılıç (Güllü Erhan) - Git & Sürüm Yöneticisi
+# Kapsam: Next.js 15+ App Router, Materio MUI Admin, Node.js, Güvenlik & Gizlilik
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. BAĞIMLILIKLAR (Dependencies)
+# ------------------------------------------------------------------------------
+node_modules/
+/.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnpm-store/
+
+# ------------------------------------------------------------------------------
+# 2. DERLEME VE GEÇİCİ ÇIKTILAR (Build & Temporary Outputs)
+# ------------------------------------------------------------------------------
+.next/
+out/
+build/
+dist/
+.output/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts.bak
+
+# ------------------------------------------------------------------------------
+# 3. GİZLİ VERİLER, ÇEVRE DEĞİŞKENLERİ VE SIRLAR (Security & Secrets)
+# ASLA commit edilmeyecek sırlar, veritabanı bağlantıları, API anahtarları
+# ------------------------------------------------------------------------------
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.staging
+.env.production
+*.pem
+*.key
+*.cert
+*.crt
+id_rsa
+id_ecdsa
+id_ed25519
+*.pfx
+*.p12
+
+# ------------------------------------------------------------------------------
+# 4. GÜNLÜK DOSYALARI (Logs)
+# ------------------------------------------------------------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ------------------------------------------------------------------------------
+# 5. TEST, KAPSAM VE ÇALIŞMA RAPORLARI (Testing & Coverage)
+# ------------------------------------------------------------------------------
+coverage/
+.nyc_output/
+*.lcov
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+.clinic/
+playwright-report/
+test-results/
+
+# ------------------------------------------------------------------------------
+# 6. EDİTÖR, İŞLETİM SİSTEMİ VE YEREL GELİŞTİRİCİ ARTIKLARI
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+
+# IDE & Editör
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*~
+
+# ------------------------------------------------------------------------------
+# 7. DİĞER GEÇİCİ ÇALIŞMA DOSYALARI
+# ------------------------------------------------------------------------------
+.eslintcache
+.stylelintcache
+.prettiercache
+tmp/
+temp/
+
+# ------------------------------------------------------------------------------
+# 8. İSTİSNALAR VE KORUNACAK DOSYALAR (Whitelisted / Preserved Assets)
+# 10 Kurumsal HTML/CSS Tasarım Klasörleri, Başlangıç Verileri ve Dokümanlar Korunur
+# ------------------------------------------------------------------------------
+!warm_horizon_academy/
+!all_day_english_eyl_l_ocuk_akademisi/
+!do_al_ve_dengeli_beslenme_eyl_l_ocuk_akademisi/
+!e_itim_modeli_bem_eyl_l_ocuk_akademisi/
+!eyl_l_ocuk_akademisi_anasayfa/
+!hakk_m_zda_eyl_l_ocuk_akademisi/
+!i_leti_im_eyl_l_ocuk_akademisi/
+!kay_t_ve_ba_vuru_eyl_l_ocuk_akademisi/
+!okulumuz_eyl_l_ocuk_akademisi/
+!velilerimiz_i_in_eyl_l_ocuk_akademisi/
+!zengin_etkinlik_d_nyas_eyl_l_ocuk_akademisi/
+!image.png/
+!whatsapp_image_2026_10_19_at_22.32.53.jpeg/
+!.env.example
+
+# Canlı içerik deposu ve yüklemeler (müşteri/başvuru verisi ve anahtar içerebilir)
+data/cms-store.json
+uploads/*
+!uploads/.gitkeep

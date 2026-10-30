@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Eylül Anaokulu - Çocuk Akademisi</title>
+<!-- Google Fonts: Nunito & Playfair Display / Quicksand -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&amp;family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#0E4984',
+              navy: '#1A3358',
+              accent: '#E5880B',
+              orange: '#EA7C02',
+              cream: '#FEFAF2',
+              lightCream: '#FFFDF9',
+              green: '#74B127',
+              leafTeal: '#2A7276',
+            }
+          },
+          fontFamily: {
+            sans: ['Nunito', 'sans-serif'],
+            heading: ['Comfortaa', 'Nunito', 'sans-serif']
+          },
+          borderRadius: {
+            '4xl': '2rem',
+            '5xl': '2.5rem',
+            'curved': '3rem'
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom CSS for decorative and organic shape styling -->
+<style data-purpose="decorations">
+    /* Subtle organic background foliage */
+    .bg-foliage-pattern {
+      background-color: #FEFAF2;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(229, 136, 11, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(42, 114, 118, 0.05) 0%, transparent 45%);
+    }
+
+    /* Soft curved cutouts */
+    .hero-mask {
+      border-radius: 2.2rem;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(26, 51, 88, 0.07), 0 8px 10px -6px rgba(26, 51, 88, 0.05);
+    }
+
+    /* Subtle pulse animation for play button */
+    @keyframes subtle-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.95; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+    .animate-play {
+      animation: subtle-pulse 2.2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-foliage-pattern text-slate-800 font-sans antialiased selection:bg-brand-accent selection:text-white min-h-screen relative overflow-x-hidden">
+<!-- BEGIN: DecorativeBackgroundElements -->
+<!-- Subtle decorative watercolor style leaves in header and corners -->
+<div class="pointer-events-none fixed top-0 left-0 w-44 h-44 opacity-25 -z-10 translate-x-[-20%] translate-y-[-10%]">
+<svg fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M40,160 C20,100 70,30 160,20 C140,90 110,140 40,160 Z" fill="#E5880B"></path>
+<path d="M40,160 C80,120 120,80 160,20" stroke="#C57004" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Bottom Corner Leaves -->
+<div class="pointer-events-none fixed bottom-0 right-0 w-56 h-56 opacity-30 -z-10 translate-x-[15%] translate-y-[15%]">
+<svg fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M160,40 C180,100 130,170 40,180 C60,110 90,60 160,40 Z" fill="#2A7276"></path>
+<path d="M120,60 C150,110 110,150 50,160" fill="#74B127" opacity="0.6"></path>
+</svg>
+</div>
+<!-- END: DecorativeBackgroundElements -->
+<!-- BEGIN: SiteHeader -->
+<header class="w-full pt-4 pb-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-purpose="site-header">
+<div class="flex items-center justify-between pb-3 border-b border-amber-100/60 lg:border-none">
+<!-- Brand Logo -->
+<a class="flex items-center gap-2 group" href="#" title="Eylül Çocuk Akademisi Anasayfa">
+<div class="flex flex-col items-center">
+<div class="flex items-center">
+<!-- Brand stylized text -->
+<span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-blue flex items-center">
+              EYL
+              <!-- Stylized Ü with sprouting leaf motif -->
+<span class="relative inline-block mx-0.5 text-brand-accent">
+                Ü
+                <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 flex items-center justify-center">
+<svg class="w-4 h-4 text-brand-green" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C12 14 17 9 22 8C22 4.7 17.5 2 12 2Z"></path>
+</svg>
+</span>
+</span>
+              L
+            </span>
+<div class="h-7 w-[2px] bg-slate-300 mx-2.5 hidden sm:block"></div>
+<div class="flex flex-col leading-tight">
+<span class="text-xs sm:text-sm font-bold tracking-wider text-brand-blue uppercase">ÇOCUK</span>
+<span class="text-[10px] sm:text-xs font-semibold tracking-wider text-brand-blue uppercase">AKADEMİSİ</span>
+</div>
+</div>
+<!-- Subtitle / Tagline pill badge -->
+<div class="flex items-center w-full justify-center mt-0.5">
+<span class="h-[1.5px] bg-brand-accent w-4 inline-block"></span>
+<span class="text-[9px] tracking-[0.2em] font-black uppercase text-brand-accent px-1.5">ANAOKULU</span>
+<span class="h-[1.5px] bg-brand-accent w-4 inline-block"></span>
+</div>
+</div>
+</a>
+<!-- Desktop Navigation Menu -->
+<nav class="hidden md:flex items-center space-x-5 lg:space-x-7 text-[14px] font-bold text-slate-700">
+<a class="text-brand-accent transition-colors hover:text-brand-orange" href="#">Anasayfa</a>
+<a class="hover:text-brand-blue transition-colors" href="#">Eğitim Modeli</a>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Okulumuz</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Veliler</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Kayıt</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<a class="hover:text-brand-blue transition-colors" href="#">İletişim</a>
+</nav>
+<!-- Primary Action CTA Button -->
+<div class="flex items-center gap-3">
+<a class="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white bg-brand-accent hover:bg-brand-orange shadow-md shadow-brand-accent/25 hover:shadow-lg hover:shadow-brand-accent/35 transition-all duration-200 transform hover:-translate-y-0.5" href="#iletisim">
+          Okul Ziyareti Planla
+        </a>
+<!-- Mobile Menu Toggle Button -->
+<button aria-label="Menüyü Aç" class="md:hidden p-2 rounded-lg text-slate-600 hover:text-brand-blue focus:outline-none" type="button">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+</svg>
+</button>
+</div>
+</div>
+</header>
+<!-- END: SiteHeader -->
+<!-- BEGIN: MainContent -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-16 space-y-9 sm:space-y-12">
+<!-- BEGIN: HeroSection -->
+<section class="relative hero-mask bg-amber-50/50 border border-amber-100/70" data-purpose="hero-banner">
+<!-- Background Image with Gradient Overlay -->
+<div class="relative w-full min-h-[460px] md:min-h-[500px] lg:min-h-[530px] flex items-center overflow-hidden">
+<!-- Background classroom girl image -->
+<div class="absolute inset-0 z-0">
+<img alt="Eylül Çocuk Akademisi'nde mutlu öğrenci" class="w-full h-full object-cover object-right sm:object-center transform scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqqBvvgnitjIqoyH1pgnXbj3o4-F3EBt82a3u3eV1xvAXVhj6tXut0hX99r3X7k_NL9HykxwyoMAfDckVWNsua-e_pXcB3R84YrYxEZsoajqTAQxZT2l7p_1kSPuizUpKsEFIGHQbrMYEY_QZhoG4pm2RfCOqHIRe9NRR4maYaukvni2me_eE2Pj1a4XRvgH6ZiN9V771zsExQa-dWdT3CSSFClq1DC-CDQukG6_6r6u5t4Je3cqAu"/>
+<!-- Gentle cream/white gradient mask favoring the left side for crisp text contrast -->
+<div class="absolute inset-0 bg-gradient-to-r from-amber-50/95 via-amber-50/85 to-transparent sm:via-amber-50/60 sm:to-transparent"></div>
+<!-- Soft bottom blur transition -->
+<div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white/40 to-transparent"></div>
+</div>
+<!-- Hero Text Content Container -->
+<div class="relative z-10 max-w-xl lg:max-w-2xl px-6 sm:px-12 py-10 sm:py-16">
+<!-- Decorative Quote Tagline -->
+<div class="mb-4">
+<h1 class="text-3xl sm:text-4xl lg:text-[46px] font-extrabold tracking-tight text-brand-navy leading-[1.2]">
+<span class="block italic font-sans text-brand-blue font-black">“Güvenle</span>
+<span class="block italic font-sans text-brand-blue font-black ml-4 sm:ml-6">Bugüne,</span>
+<span class="block italic font-sans text-brand-blue font-black">Umutla</span>
+<span class="block italic font-sans text-brand-blue font-black ml-4 sm:ml-6">Yarına...”</span>
+</h1>
+</div>
+<!-- Description paragraph -->
+<p class="text-slate-700 text-sm sm:text-base lg:text-lg font-medium leading-relaxed max-w-md mb-8">
+            Sevgi, ilgi ve özenle her çocuğun potansiyelini destekleyen bütüncül bir eğitim yaklaşımı.
+          </p>
+<!-- Call to Action -->
+<div>
+<a class="inline-flex items-center justify-center px-7 py-3 rounded-full text-sm sm:text-base font-bold text-white bg-brand-accent hover:bg-brand-orange shadow-lg shadow-brand-accent/30 hover:shadow-xl hover:shadow-brand-accent/40 transition-all duration-200 transform hover:-translate-y-0.5" href="#kesfedin">
+              Okulumuzu Keşfedin
+            </a>
+</div>
+</div>
+<!-- Optional soft leaf badge floating on right top edge -->
+<div class="absolute top-6 right-8 hidden lg:block opacity-60">
+<svg class="w-14 h-14 text-white/90 drop-shadow" fill="currentColor" viewbox="0 0 24 24">
+<path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"></path>
+</svg>
+</div>
+</div>
+</section>
+<!-- END: HeroSection -->
+<!-- BEGIN: CorePillarsFeatures -->
+<!-- 5 Clean white pillar cards with outline icons and 2-line titles -->
+<section aria-label="Eğitim Yaklaşımı ve Ayrıcalıklarımız" class="py-2">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-3.5 sm:gap-4 lg:gap-5">
+<!-- Pillar 1: BEM Modeli -->
+<div class="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group">
+<div class="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
+<!-- Graduation / Crest Icon -->
+<svg class="w-10 h-10 stroke-current" fill="none" stroke-width="1.6" viewbox="0 0 24 24">
+<path d="M12 3L2 8l10 5 10-5-10-5zm0 8.5L5 8.7V14c0 3.87 3.13 7 7 7s7-3.13 7-7V8.7l-7 2.8z" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="12" cy="13.5" fill="none" r="2.5" stroke-width="1.4"></circle>
+</svg>
+</div>
+<h3 class="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
+            BEM<br/>
+<span class="font-bold text-[11px] sm:text-xs text-slate-700">Bütünleştirilmiş Eğitim Modeli</span>
+</h3>
+</div>
+<!-- Pillar 2: All Day English -->
+<div class="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group">
+<div class="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
+<!-- Speech bubbles / bilingual icon -->
+<svg class="w-10 h-10 stroke-current" fill="none" stroke-width="1.6" viewbox="0 0 24 24">
+<path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<h3 class="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
+            All Day<br/>
+<span class="font-bold text-[11px] sm:text-xs text-slate-700">English</span>
+</h3>
+</div>
+<!-- Pillar 3: İlkokula Hazırlık -->
+<div class="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group">
+<div class="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
+<!-- Learning Child / Book Icon -->
+<svg class="w-10 h-10 stroke-current" fill="none" stroke-width="1.6" viewbox="0 0 24 24">
+<circle cx="12" cy="6" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+<path d="M12 11c-3.5 0-6 2-6 5v2h12v-2c0-3-2.5-5-6-5z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M6 18l-2 3h16l-2-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<h3 class="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
+            İlkokula<br/>
+<span class="font-bold text-[11px] sm:text-xs text-slate-700">Hazırlık</span>
+</h3>
+</div>
+<!-- Pillar 4: Zengin Etkinlik Dünyası -->
+<div class="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group">
+<div class="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
+<!-- Activity / Shapes / Toys Icon -->
+<svg class="w-10 h-10 stroke-current" fill="none" stroke-width="1.6" viewbox="0 0 24 24">
+<rect height="15" rx="2" stroke-linecap="round" stroke-linejoin="round" width="18" x="3" y="6"></rect>
+<path d="M16 2v4M8 2v4M3 10h18" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="8" cy="15" fill="currentColor" r="1.5"></circle>
+<path d="M14 14l2 3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<h3 class="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
+            Zengin<br/>
+<span class="font-bold text-[11px] sm:text-xs text-slate-700">Etkinlik Dünyası</span>
+</h3>
+</div>
+<!-- Pillar 5: Doğa ile Öğrenme -->
+<div class="col-span-2 md:col-span-1 bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group">
+<div class="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
+<!-- Nature & Sprout / Tree Icon -->
+<svg class="w-10 h-10 stroke-current" fill="none" stroke-width="1.6" viewbox="0 0 24 24">
+<path d="M12 21V11" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M12 11c0-4 4-7 8-7 0 5-4 7-8 7z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M12 15c0-3-3-5-6-5 0 4 3 5 6 5z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M5 21h14" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<h3 class="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
+            Doğa ile<br/>
+<span class="font-bold text-[11px] sm:text-xs text-slate-700">Öğrenme</span>
+</h3>
+</div>
+</div>
+</section>
+<!-- END: CorePillarsFeatures -->
+<!-- BEGIN: VideoFeatureCard -->
+<section class="relative rounded-3xl overflow-hidden shadow-lg border border-amber-100" data-purpose="video-highlight-banner">
+<div class="relative w-full h-52 sm:h-64 md:h-72 lg:h-80 group cursor-pointer">
+<!-- Classroom Kids Playing Background Image -->
+<img alt="Eylül Çocuk Akademisi sınıf içi etkinlikler ve oyun anları" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMJOcMj_5ofmln-7zxjodxrkIggHEPizxtTm6fTxnlJg9orzRErxF4C5ICuonpZmqeFVsCoQN4U8gzVHTAyoWKzH6YVhlZxg2nyUAe7x8QfWnJJHPMtuZyG7g7DBiVPoyzftXbVbzN_TdtqPQIBPLU7VGIZvsWhBlNtYwxeF0QEa68LKcxh3xhE3DrgfO0l31wjXMOFnKZ3aCzvZTY8pmeNzQ1MZ2zu8brUXpubQfpQIsbqyZpma6h"/>
+<!-- Dark and warm gradient overlays for readability and warmth -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20"></div>
+<!-- Carousel navigation arrows -->
+<button aria-label="Önceki Video" class="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all backdrop-blur-sm">
+<svg class="w-5 h-5 text-white/90" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</button>
+<button aria-label="Sonraki Video" class="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all backdrop-blur-sm">
+<svg class="w-5 h-5 text-white/90" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</button>
+<!-- Center Interactive Video Play Icon -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/80 hover:bg-white text-brand-orange flex items-center justify-center shadow-xl backdrop-blur-md animate-play transition-transform">
+<!-- Triangle Play Icon -->
+<svg class="w-7 h-7 sm:w-8 sm:h-8 ml-1 fill-current" viewbox="0 0 24 24">
+<path d="M8 5v14l11-7z"></path>
+</svg>
+</div>
+</div>
+<!-- Video Text Overlay Content -->
+<div class="absolute bottom-4 sm:bottom-6 left-6 sm:left-8 z-10 text-white">
+<h2 class="text-xl sm:text-2xl font-bold tracking-tight drop-shadow-md">
+            Eylül'de Bir Gün
+          </h2>
+<p class="text-xs sm:text-sm text-slate-200 font-medium drop-shadow-sm mt-0.5">
+            Okul yaşamımızı keşfedin.
+          </p>
+</div>
+</div>
+</section>
+<!-- END: VideoFeatureCard -->
+<!-- BEGIN: DiscoverySectionTeaser -->
+<section class="relative py-8 sm:py-12 px-4 text-center max-w-3xl mx-auto" data-purpose="discovery-teaser">
+<!-- Botanical watercolor leaves framing bottom/sides -->
+<div class="pointer-events-none absolute left-0 bottom-0 -translate-x-1/2 translate-y-1/4 w-36 h-36 opacity-35 hidden sm:block">
+<svg fill="none" viewbox="0 0 100 100">
+<path d="M10,80 Q30,10 80,20 Q60,70 10,80 Z" fill="#E5880B"></path>
+<path d="M20,90 Q40,30 90,40" stroke="#C57004" stroke-width="2"></path>
+</svg>
+</div>
+<div class="pointer-events-none absolute right-0 bottom-0 translate-x-1/3 translate-y-1/4 w-40 h-40 opacity-40 hidden sm:block">
+<svg fill="none" viewbox="0 0 100 100">
+<path d="M80,80 Q20,60 30,10 Q80,20 80,80 Z" fill="#2A7276"></path>
+<path d="M60,90 Q40,40 10,30" stroke="#1F575A" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Section Title -->
+<h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-brand-navy tracking-tight mb-4">
+        Her Çocuk Bir Keşif
+      </h2>
+<!-- Turkish description paragraph -->
+<p class="text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed max-w-2xl mx-auto mb-7">
+        Çocuklarımızın doğuştan gelen merak duygusunu besleyerek, deneyimleyerek öğrenmelerini ve kendi yeteneklerini güvenle keşfetmelerini sağlıyoruz. Uzman eğitim kadromuz ve doğayla iç içe öğrenme alanlarımızla geleceğe sevgiyle hazırlanıyoruz.
+      </p>
+<!-- Action Button -->
+<div>
+<a class="inline-flex items-center justify-center px-8 py-3 rounded-full text-xs sm:text-sm font-bold text-white bg-brand-accent hover:bg-brand-orange shadow-md shadow-brand-accent/25 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5" href="#egitim-modeli">
+          Eğitim Modelimizi İnceleyin
+        </a>
+</div>
+</section>
+<!-- END: DiscoverySectionTeaser -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: SimpleFooter -->
+<footer class="w-full border-t border-amber-100/70 bg-amber-50/40 py-6 text-center text-xs text-slate-500">
+<div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="font-extrabold text-brand-blue tracking-tight">EYLÜL ÇOCUK AKADEMİSİ</span>
+<span>© 2024 Tüm Hakları Saklıdır.</span>
+</div>
+<div class="flex gap-4">
+<a class="hover:text-brand-blue transition-colors" href="#">Gizlilik Politikası</a>
+<a class="hover:text-brand-blue transition-colors" href="#">KVKK Aydınlatma Metni</a>
+<a class="hover:text-brand-blue transition-colors" href="#">İletişim</a>
+</div>
+</div>
+</footer>
+<!-- END: SimpleFooter -->
+</body></html>

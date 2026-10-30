@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Eylül Anaokulu - Çocuk Akademisi</title>
+<!-- Google Fonts: Nunito & Playfair Display / Quicksand -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&amp;family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#0E4984',
+              navy: '#1A3358',
+              accent: '#E5880B',
+              orange: '#EA7C02',
+              cream: '#FEFAF2',
+              lightCream: '#FFFDF9',
+              green: '#74B127',
+              leafTeal: '#2A7276',
+            }
+          },
+          fontFamily: {
+            sans: ['Nunito', 'sans-serif'],
+            heading: ['Comfortaa', 'Nunito', 'sans-serif']
+          },
+          borderRadius: {
+            '4xl': '2rem',
+            '5xl': '2.5rem',
+            'curved': '3rem'
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom CSS for decorative and organic shape styling -->
+<style data-purpose="decorations">
+    /* Subtle organic background foliage */
+    .bg-foliage-pattern {
+      background-color: #FEFAF2;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(229, 136, 11, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(42, 114, 118, 0.05) 0%, transparent 45%);
+    }
+
+    /* Soft curved cutouts */
+    .hero-mask {
+      border-radius: 2.2rem;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(26, 51, 88, 0.07), 0 8px 10px -6px rgba(26, 51, 88, 0.05);
+    }
+
+    /* Subtle pulse animation for play button */
+    @keyframes subtle-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.95; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+    .animate-play {
+      animation: subtle-pulse 2.2s infinite ease-in-out;
+    }
+  </style>
+<meta content="web_standard" name="shell-type"/></head>
+<body class="bg-foliage-pattern text-slate-800 font-sans antialiased selection:bg-brand-accent selection:text-white min-h-screen relative overflow-x-hidden">
+<!-- BEGIN: DecorativeBackgroundElements -->
+<!-- Subtle decorative watercolor style leaves in header and corners -->
+<div class="pointer-events-none fixed top-0 left-0 w-44 h-44 opacity-25 -z-10 translate-x-[-20%] translate-y-[-10%]">
+<svg fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M40,160 C20,100 70,30 160,20 C140,90 110,140 40,160 Z" fill="#E5880B"></path>
+<path d="M40,160 C80,120 120,80 160,20" stroke="#C57004" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Bottom Corner Leaves -->
+<div class="pointer-events-none fixed bottom-0 right-0 w-56 h-56 opacity-30 -z-10 translate-x-[15%] translate-y-[15%]">
+<svg fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M160,40 C180,100 130,170 40,180 C60,110 90,60 160,40 Z" fill="#2A7276"></path>
+<path d="M120,60 C150,110 110,150 50,160" fill="#74B127" opacity="0.6"></path>
+</svg>
+</div>
+<!-- END: DecorativeBackgroundElements -->
+<!-- BEGIN: SiteHeader -->
+<header class="w-full pt-4 pb-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-purpose="site-header">
+<div class="flex items-center justify-between pb-3 border-b border-amber-100/60 lg:border-none">
+<!-- Brand Logo -->
+<a class="flex items-center gap-2 group" href="#" title="Eylül Çocuk Akademisi Anasayfa">
+<div class="flex flex-col items-center">
+<div class="flex items-center">
+<!-- Brand stylized text -->
+<span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-blue flex items-center">
+              EYL
+              <!-- Stylized Ü with sprouting leaf motif -->
+<span class="relative inline-block mx-0.5 text-brand-accent">
+                Ü
+                <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 flex items-center justify-center">
+<svg class="w-4 h-4 text-brand-green" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C12 14 17 9 22 8C22 4.7 17.5 2 12 2Z"></path>
+</svg>
+</span>
+</span>
+              L
+            </span>
+<div class="h-7 w-[2px] bg-slate-300 mx-2.5 hidden sm:block"></div>
+<div class="flex flex-col leading-tight">
+<span class="text-xs sm:text-sm font-bold tracking-wider text-brand-blue uppercase">ÇOCUK</span>
+<span class="text-[10px] sm:text-xs font-semibold tracking-wider text-brand-blue uppercase">AKADEMİSİ</span>
+</div>
+</div>
+<!-- Subtitle / Tagline pill badge -->
+<div class="flex items-center w-full justify-center mt-0.5">
+<span class="h-[1.5px] bg-brand-accent w-4 inline-block"></span>
+<span class="text-[9px] tracking-[0.2em] font-black uppercase text-brand-accent px-1.5">ANAOKULU</span>
+<span class="h-[1.5px] bg-brand-accent w-4 inline-block"></span>
+</div>
+</div>
+</a>
+<!-- Desktop Navigation Menu -->
+<nav class="hidden md:flex items-center space-x-5 lg:space-x-7 text-[14px] font-bold text-slate-700">
+<a class="text-brand-accent transition-colors hover:text-brand-orange" href="#">Anasayfa</a>
+<a class="hover:text-brand-blue transition-colors" href="#">Eğitim Modeli</a>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Okulumuz</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Veliler</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Kayıt</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<a class="hover:text-brand-blue transition-colors" href="#">İletişim</a>
+</nav>
+<!-- Primary Action CTA Button -->
+<div class="flex items-center gap-3">
+<a class="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white bg-brand-accent hover:bg-brand-orange shadow-md shadow-brand-accent/25 hover:shadow-lg hover:shadow-brand-accent/35 transition-all duration-200 transform hover:-translate-y-0.5" href="#iletisim">
+          Okul Ziyareti Planla
+        </a>
+<!-- Mobile Menu Toggle Button -->
+<button aria-label="Menüyü Aç" class="md:hidden p-2 rounded-lg text-slate-600 hover:text-brand-blue focus:outline-none" type="button">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+</svg>
+</button>
+</div>
+</div>
+</header>
+<!-- END: SiteHeader -->
+<!-- BEGIN: MainContent -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-16 space-y-9 sm:space-y-12"><div class="flex flex-col w-full">
+<section class="relative w-full overflow-hidden rounded-lg bg-surface-container-lowest p-6 sm:p-10 lg:p-12 shadow-sm">
+<div class="pointer-events-none absolute -top-12 -right-12 w-64 h-64 rounded-full bg-secondary-fixed/30 blur-2xl"></div>
+<div class="pointer-events-none absolute bottom-0 left-1/3 w-80 h-80 rounded-full bg-tertiary-fixed/20 blur-3xl"></div>
+<div class="relative z-10 max-w-3xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container text-primary font-label-sm text-label-sm mb-4">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary-container"></span>
+        2024 - 2025 Dönemi Ön Kayıtları Başladı
+      </div>
+<h1 class="font-headline-xl text-headline-xl text-primary tracking-tight">Kayıt ve Başvuru</h1>
+<p class="font-headline-sm text-headline-sm text-secondary-container mt-1">Eylül'de Yeni Bir Başlangıç</p>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-4 leading-relaxed">
+        Eylül Çocuk Akademisi ailesine adım atmak için ilk adımı bugün atın. Çocuğunuzun bireysel gelişim hızına saygı duyan, sevgi temelli ve modern öğrenme ortamımızda yerinizi erken kayıt imkanlarıyla ayırtabilirsiniz.
+      </p>
+</div>
+<!-- 3-Step Enrollment Flow -->
+<div class="relative z-10 mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+<div class="group relative rounded-lg bg-surface-container-low p-6 transition-all duration-300 hover:bg-surface-container hover:shadow-md">
+<div class="flex items-center justify-between mb-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-secondary-container text-on-secondary font-headline-sm text-headline-sm shadow-sm group-hover:scale-105 transition-transform">
+            01
+          </span>
+<span class="material-symbols-outlined text-secondary-container text-2xl" style="font-variation-settings: 'FILL' 1;">
+            assignment
+          </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Başvuru Formu</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Ön başvuru formunu doldurun, uzman rehberlik ekibimiz en kısa sürede sizinle iletişime geçsin.
+        </p>
+</div>
+<div class="group relative rounded-lg bg-surface-container-low p-6 transition-all duration-300 hover:bg-surface-container hover:shadow-md">
+<div class="flex items-center justify-between mb-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-secondary-container text-on-secondary font-headline-sm text-headline-sm shadow-sm group-hover:scale-105 transition-transform">
+            02
+          </span>
+<span class="material-symbols-outlined text-secondary-container text-2xl" style="font-variation-settings: 'FILL' 1;">
+            school
+          </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Okul Ziyareti</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Okulumuzu gezin, eğitim kadromuzla tanışın ve çocuğunuz için hazırlanan doğal atölye ortamını keşfedin.
+        </p>
+</div>
+<div class="group relative rounded-lg bg-surface-container-low p-6 transition-all duration-300 hover:bg-surface-container hover:shadow-md">
+<div class="flex items-center justify-between mb-4">
+<span class="flex items-center justify-center w-12 h-12 rounded-full bg-secondary-container text-on-secondary font-headline-sm text-headline-sm shadow-sm group-hover:scale-105 transition-transform">
+            03
+          </span>
+<span class="material-symbols-outlined text-secondary-container text-2xl" style="font-variation-settings: 'FILL' 1;">
+            verified
+          </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Kayıt Süreci</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Kontenjan dahilinde kayıt işlemlerini güvenle tamamlayın, sıcacık Eylül Akademisi ailesine katılın.
+        </p>
+</div>
+</div>
+<!-- Feature Block & Cheerful Portrait Layout -->
+<div class="relative z-10 mt-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+<!-- Left Schedule Tour Card -->
+<div class="lg:col-span-7 flex flex-col justify-between rounded-lg bg-surface-container p-6 sm:p-8 relative overflow-hidden">
+<div class="flex items-start gap-4">
+<div class="flex items-center justify-center w-14 h-14 rounded-full bg-surface-container-lowest text-secondary-container shadow-sm flex-shrink-0">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">Okul Ziyareti Planlayın</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1.5">
+              Çocuğunuzla birlikte sınıflarımızı, bahçemizi ve yemekhanemizi bizzat deneyimleyin. Randevu oluşturarak uzman pedagoglarımızla birebir görüşebilirsiniz.
+            </p>
+</div>
+</div>
+<div class="mt-6 flex flex-wrap items-center gap-4">
+<a class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-secondary-container text-on-secondary font-label-lg text-label-lg shadow-md hover:bg-secondary transition-all transform hover:-translate-y-0.5" href="#quick-call">
+<span>Randevu Al</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</a>
+<span class="inline-flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary text-base" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+            Hafta içi 09:00 - 17:00 arası müsait
+          </span>
+</div>
+</div>
+<!-- Right Photo Portrait matching design card -->
+<div class="lg:col-span-5 relative">
+<div class="relative w-full h-72 sm:h-80 rounded-lg overflow-hidden shadow-md">
+<img class="w-full h-full object-cover object-top" data-alt="A candid high quality portrait of a happy four year old girl with neat brown pigtails tied with soft orange ribbons smiling directly into the camera. Natural sunlight, warm joyful kindergarten outdoor garden setting with soft greenery and educational wooden play structures blurred gently in the background. Fresh, comforting, welcoming childcare academy aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtGA22rDFxNNgD1z4vl8u94Ga7ZPRILsbzshGnnP_mnQL23QrMMQjZFwGAFrktFj2eHwOga2ROZNvGcHg2IqsHUW2pLRZ0cb9qIM2LFYpvQu9kS5A5FiWYqJAMZxuDX194VqENUTtgNy7K32Mhr7LW1T5sHJajHH3PvkeGtJ7oFCthA9RthQwpYgVtxJF77dURfP-0pX4nIAmEMQ02y4eriO6SDolx5nmxUSvqPCvCRoO3-dfdM6dJ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent"></div>
+</div>
+<div class="absolute -bottom-3 -left-3 rounded-full bg-surface-container-lowest px-4 py-2 shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">nature_people</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Doğayla İç İçe Öğrenme</span>
+</div>
+</div>
+</div>
+<!-- Alert / Notice Banner -->
+<div class="relative z-10 mt-8 rounded-lg bg-surface-container-low px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-container text-2xl flex-shrink-0" style="font-variation-settings: 'FILL' 1;">
+          notifications_active
+        </span>
+<p class="font-label-lg text-label-lg text-primary text-center sm:text-left">
+          Sınıf kontenjanlarımız sınırlıdır. Erken kayıt avantajlarını ve burs olanaklarını kaçırmayın.
+        </p>
+</div>
+<span class="px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm flex-shrink-0">
+        Butik Sınıflar (Maks. 14 Çocuk)
+      </span>
+</div>
+<!-- Sizi Arayalım Quick Contact Card -->
+<div class="relative z-10 mt-10 rounded-lg bg-surface-container-low p-6 sm:p-8" id="quick-call">
+<div class="max-w-2xl mb-6">
+<h3 class="font-headline-md text-headline-md text-primary">Sizi Arayalım</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+          Bilgilerinizi bırakın; kurum koordinatörümüz aynı gün içinde sizi arayıp eğitim programımız ve kayıt şartları hakkında detaylı bilgi versin.
+        </p>
+</div>
+<form class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center" id="leadCaptureForm">
+<div class="sm:col-span-4">
+<label class="sr-only" for="parentName">Adınız</label>
+<input class="w-full px-5 py-3.5 rounded-full bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-container" id="parentName" name="parentName" placeholder="Adınız Soyadınız" required="" type="text"/>
+</div>
+<div class="sm:col-span-4">
+<label class="sr-only" for="parentPhone">Telefon Numaranız</label>
+<input class="w-full px-5 py-3.5 rounded-full bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-container" id="parentPhone" name="parentPhone" placeholder="Telefon Numaranız (05XX)" required="" type="tel"/>
+</div>
+<div class="sm:col-span-4">
+<button class="w-full px-6 py-3.5 rounded-full bg-secondary-container text-on-secondary font-label-lg text-label-lg shadow-md hover:bg-secondary transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2" type="submit">
+<span>Bilgi Talebi Gönder</span>
+<span class="material-symbols-outlined text-lg">send</span>
+</button>
+</div>
+</form>
+<div class="hidden mt-4 p-4 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-md text-label-md text-center" id="formSuccessMessage">
+        Talebiniz başarıyla alındı! Eğitim danışmanımız en kısa sürede sizi arayacaktır.
+      </div>
+</div>
+</section>
+<script>
+    (function() {
+      const form = document.getElementById('leadCaptureForm');
+      const msg = document.getElementById('formSuccessMessage');
+      if (form && msg) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          form.classList.add('opacity-50', 'pointer-events-none');
+          setTimeout(function() {
+            form.reset();
+            form.classList.remove('opacity-50', 'pointer-events-none');
+            msg.classList.remove('hidden');
+            setTimeout(function() {
+              msg.classList.add('hidden');
+            }, 6000);
+          }, 600);
+        });
+      }
+    })();
+  </script>
+</div></main>
+<!-- END: MainContent -->
+<!-- BEGIN: SimpleFooter -->
+<footer class="w-full border-t border-amber-100/70 bg-amber-50/40 py-6 text-center text-xs text-slate-500">
+<div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="font-extrabold text-brand-blue tracking-tight">EYLÜL ÇOCUK AKADEMİSİ</span>
+<span>© 2024 Tüm Hakları Saklıdır.</span>
+</div>
+<div class="flex gap-4">
+<a class="hover:text-brand-blue transition-colors" href="#">Gizlilik Politikası</a>
+<a class="hover:text-brand-blue transition-colors" href="#">KVKK Aydınlatma Metni</a>
+<a class="hover:text-brand-blue transition-colors" href="#">İletişim</a>
+</div>
+</div>
+</footer>
+<!-- END: SimpleFooter -->
+</body></html>

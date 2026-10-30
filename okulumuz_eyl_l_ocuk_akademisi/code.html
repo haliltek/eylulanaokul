@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Eylül Anaokulu - Çocuk Akademisi</title>
+<!-- Google Fonts: Nunito & Playfair Display / Quicksand -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&amp;family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#0E4984',
+              navy: '#1A3358',
+              accent: '#E5880B',
+              orange: '#EA7C02',
+              cream: '#FEFAF2',
+              lightCream: '#FFFDF9',
+              green: '#74B127',
+              leafTeal: '#2A7276',
+            }
+          },
+          fontFamily: {
+            sans: ['Nunito', 'sans-serif'],
+            heading: ['Comfortaa', 'Nunito', 'sans-serif']
+          },
+          borderRadius: {
+            '4xl': '2rem',
+            '5xl': '2.5rem',
+            'curved': '3rem'
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom CSS for decorative and organic shape styling -->
+<style data-purpose="decorations">
+    /* Subtle organic background foliage */
+    .bg-foliage-pattern {
+      background-color: #FEFAF2;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(229, 136, 11, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(42, 114, 118, 0.05) 0%, transparent 45%);
+    }
+
+    /* Soft curved cutouts */
+    .hero-mask {
+      border-radius: 2.2rem;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(26, 51, 88, 0.07), 0 8px 10px -6px rgba(26, 51, 88, 0.05);
+    }
+
+    /* Subtle pulse animation for play button */
+    @keyframes subtle-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.95; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+    .animate-play {
+      animation: subtle-pulse 2.2s infinite ease-in-out;
+    }
+  </style>
+<meta content="web_standard" name="shell-type"/></head>
+<body class="bg-foliage-pattern text-slate-800 font-sans antialiased selection:bg-brand-accent selection:text-white min-h-screen relative overflow-x-hidden">
+<!-- BEGIN: DecorativeBackgroundElements -->
+<!-- Subtle decorative watercolor style leaves in header and corners -->
+<div class="pointer-events-none fixed top-0 left-0 w-44 h-44 opacity-25 -z-10 translate-x-[-20%] translate-y-[-10%]">
+<svg fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M40,160 C20,100 70,30 160,20 C140,90 110,140 40,160 Z" fill="#E5880B"></path>
+<path d="M40,160 C80,120 120,80 160,20" stroke="#C57004" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Bottom Corner Leaves -->
+<div class="pointer-events-none fixed bottom-0 right-0 w-56 h-56 opacity-30 -z-10 translate-x-[15%] translate-y-[15%]">
+<svg fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M160,40 C180,100 130,170 40,180 C60,110 90,60 160,40 Z" fill="#2A7276"></path>
+<path d="M120,60 C150,110 110,150 50,160" fill="#74B127" opacity="0.6"></path>
+</svg>
+</div>
+<!-- END: DecorativeBackgroundElements -->
+<!-- BEGIN: SiteHeader -->
+<header class="w-full pt-4 pb-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-purpose="site-header">
+<div class="flex items-center justify-between pb-3 border-b border-amber-100/60 lg:border-none">
+<!-- Brand Logo -->
+<a class="flex items-center gap-2 group" href="#" title="Eylül Çocuk Akademisi Anasayfa">
+<div class="flex flex-col items-center">
+<div class="flex items-center">
+<!-- Brand stylized text -->
+<span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-blue flex items-center">
+              EYL
+              <!-- Stylized Ü with sprouting leaf motif -->
+<span class="relative inline-block mx-0.5 text-brand-accent">
+                Ü
+                <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 flex items-center justify-center">
+<svg class="w-4 h-4 text-brand-green" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C12 14 17 9 22 8C22 4.7 17.5 2 12 2Z"></path>
+</svg>
+</span>
+</span>
+              L
+            </span>
+<div class="h-7 w-[2px] bg-slate-300 mx-2.5 hidden sm:block"></div>
+<div class="flex flex-col leading-tight">
+<span class="text-xs sm:text-sm font-bold tracking-wider text-brand-blue uppercase">ÇOCUK</span>
+<span class="text-[10px] sm:text-xs font-semibold tracking-wider text-brand-blue uppercase">AKADEMİSİ</span>
+</div>
+</div>
+<!-- Subtitle / Tagline pill badge -->
+<div class="flex items-center w-full justify-center mt-0.5">
+<span class="h-[1.5px] bg-brand-accent w-4 inline-block"></span>
+<span class="text-[9px] tracking-[0.2em] font-black uppercase text-brand-accent px-1.5">ANAOKULU</span>
+<span class="h-[1.5px] bg-brand-accent w-4 inline-block"></span>
+</div>
+</div>
+</a>
+<!-- Desktop Navigation Menu -->
+<nav class="hidden md:flex items-center space-x-5 lg:space-x-7 text-[14px] font-bold text-slate-700">
+<a class="text-brand-accent transition-colors hover:text-brand-orange" href="#">Anasayfa</a>
+<a class="hover:text-brand-blue transition-colors" href="#">Eğitim Modeli</a>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Okulumuz</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Veliler</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Kayıt</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<a class="hover:text-brand-blue transition-colors" href="#">İletişim</a>
+</nav>
+<!-- Primary Action CTA Button -->
+<div class="flex items-center gap-3">
+<a class="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white bg-brand-accent hover:bg-brand-orange shadow-md shadow-brand-accent/25 hover:shadow-lg hover:shadow-brand-accent/35 transition-all duration-200 transform hover:-translate-y-0.5" href="#iletisim">
+          Okul Ziyareti Planla
+        </a>
+<!-- Mobile Menu Toggle Button -->
+<button aria-label="Menüyü Aç" class="md:hidden p-2 rounded-lg text-slate-600 hover:text-brand-blue focus:outline-none" type="button">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+</svg>
+</button>
+</div>
+</div>
+</header>
+<!-- END: SiteHeader -->
+<!-- BEGIN: MainContent -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-16 space-y-9 sm:space-y-12"><div class="flex flex-col w-full">
+<!-- BEGIN: Page Header & Introductory Narrative -->
+<section class="relative text-center max-w-4xl mx-auto space-y-space-sm px-margin-mobile sm:px-margin">
+<!-- Top Decorative Micro-Accent -->
+<div class="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-secondary-fixed/50 text-secondary">
+<span class="material-symbols-outlined text-label-sm" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-label-sm text-label-sm tracking-wide uppercase">Fiziksel İmkânlar ve Yerleşke</span>
+</div>
+<!-- Main Title & Subtitle Pair -->
+<div class="space-y-1">
+<h1 class="font-headline-xl text-headline-xl text-primary tracking-tight">
+        Okulumuz
+      </h1>
+<p class="font-headline-md text-headline-md text-secondary-container font-bold">
+        Güvenli, Sağlıklı ve İlham Veren Bir Ortam
+      </p>
+</div>
+<!-- Descriptive Lead Paragraph -->
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl mx-auto leading-relaxed pt-space-xs">
+      Eylül Çocuk Akademisi'nde çocuklarımızın güvenle büyümesi, öğrenmesi ve sosyalleşmesi için özenle tasarlanmış, ferah ve doğal ışık alan sınıflarımız, geniş oyun ve keşif alanlarımız bulunmaktadır.
+    </p>
+</section>
+<!-- END: Page Header & Introductory Narrative -->
+<!-- BEGIN: Campus Gallery Mosaic (4 Curated Photos) -->
+<section class="mt-space-lg w-full relative">
+<!-- Background Ambient Glow -->
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 w-3/4 h-72 bg-gradient-to-r from-secondary-fixed/30 via-tertiary-fixed/20 to-primary-fixed/20 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-md items-stretch">
+<!-- 1. Ferah Ahşap Sınıflar (Classroom with wooden tables and bright windows) -->
+<div class="md:col-span-7 group relative bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+<div class="relative h-64 sm:h-80 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Sunlit preschool classroom interior with warm natural wooden children's tables and miniature chairs, light parquet floor, floor-to-ceiling windows overlooking green trees, curated educational toys on low wooden Montessori shelves, warm daylight, airy, safe and comforting Scandinavian warmth style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUEjo9ZUCqHf32UKFjkA5D2wQxvju9qjMX-D_MSPE2QORQFbLCdNZY7u6C8jhkLy3XvDQWo8iJ9pkyPKQS5-3r-y_NAzdX2mlNA1sUsrphVqX_M9hKuI2kXrPqBTYwboAulTXIkrcGAm0h3pajyjECeRqEuXMAhwFlbpoq87qupfDRgWRn-rN0ACRSj6w79BOs4BhXwL0tRnliB70m0cB0Htwvosw54J6XVfj9_dhYNOdGZXyd6ktQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+<span class="absolute top-4 left-4 bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-md text-label-md px-space-md py-1 rounded-full shadow-sm">
+            Doğal Işıklı Sınıflar
+          </span>
+</div>
+<div class="p-space-md flex items-center justify-between bg-surface-container-lowest">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Montessori ve Doğal Ahşap Atölyeleri</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Çocuk ergonomisine uygun, tamamen doğal ahşap malzemelerle donatılmış geniş öğrenme alanları.</p>
+</div>
+<div class="hidden sm:flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-low text-primary flex-shrink-0 ml-space-sm group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-label-lg">fullscreen</span>
+</div>
+</div>
+</div>
+<!-- 2. Renkli Dinlenme & Okuma Köşesi (Colorful cozy reading and play corner) -->
+<div class="md:col-span-5 group relative bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+<div class="relative h-64 sm:h-80 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Cozy kindergarten reading corner and soft play lounge with plush modular cushions in cheerful pastel blue, orange, and gentle yellow, low book displays displaying illustrated children storybooks, soft wool rug, natural light, cheerful educational kindergarten atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwMJCgn6ONAX8QrFWd3YuXmrO7E3u5FWK3Xb545MR2GGXliEjEFhlR7aHtTI9iCxhHCyN88wCP6odSqfPeewCFVxBqYrkwA_ujTL71cNGmd1thiPbKesfqsMYE3LJdg4LiOmFiv0r69YZyE0FomHTo7M4Hapw7VyaP0RcaP708kYLg_Pf159bzU9eEM0INlZ92ABD9832X915nwdU10OmDCalxOh5i1nIgRSFRNaKb2DwqetABr0d3"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+<span class="absolute top-4 left-4 bg-surface-container-lowest/90 backdrop-blur-sm text-secondary font-label-md text-label-md px-space-md py-1 rounded-full shadow-sm">
+            Okuma &amp; Dinlenme
+          </span>
+</div>
+<div class="p-space-md bg-surface-container-lowest">
+<h3 class="font-headline-sm text-headline-sm text-primary">Sıcak Masal &amp; Oyun Köşesi</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Duygusal rahatlama ve kitap sevgisini pekiştiren yumuşak zeminli okuma alanı.</p>
+</div>
+</div>
+<!-- 3. Sanat & Üretim Atölyesi (Spacious bright kindergarten art room) -->
+<div class="md:col-span-5 group relative bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+<div class="relative h-64 sm:h-80 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Spacious airy kindergarten art studio and crafting room with child-height easels, watercolor painting palettes, display gallery wall featuring colorful children hand drawings, clay modeling station, clean organized organic creative environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiGXd78fKBnSqMEf7jV3gsncuEhdTLbXW25Qvz3veuUd8RltUEpmJQ3XFAooO0YWQPFXL89MAknNYXDBioG6ylW0TAy3UexK83SUpSxCG5FNz957ZFHR3Y0GFCLMTDYI2mQxTqHaXMsQX0FzEAYLHeariuItq4_YeVn5KcB3APoYzDeJcjfyUzSB6XFLqLuShrIWRMuxIoWwqM3b1x7p2bgYCHAQ3jkQeD4cT-Gdmc7QF3FeY1nGE4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+<span class="absolute top-4 left-4 bg-surface-container-lowest/90 backdrop-blur-sm text-tertiary font-label-md text-label-md px-space-md py-1 rounded-full shadow-sm">
+            Görsel Sanatlar
+          </span>
+</div>
+<div class="p-space-md bg-surface-container-lowest">
+<h3 class="font-headline-sm text-headline-sm text-primary">Yaratıcı Sanat &amp; Tasarım Alanı</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Boya, seramik ve özgür el sanatları etkinlikleriyle motor becerilerini geliştiren ferah stüdyo.</p>
+</div>
+</div>
+<!-- 4. Geniş Bahçe & Çocuk Parkı (Lush outdoor garden and playground) -->
+<div class="md:col-span-7 group relative bg-surface-container-lowest rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+<div class="relative h-64 sm:h-80 w-full overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Lush green botanical outdoor preschool garden and playground with secure safety cushioned lawn, colorful slides, timber swings, flowering shrubs, organic vegetable garden patches for children to explore under gentle sunny sky." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcVimafQaD2S34RBokdm0KCeZdebZPPUEHhW7eh93oDvxsYe7FTRIv8JMMkK8GE2eJ7iNuyZq6W7YJKdKFWsSHMCqsV2BPLOCt7V98AUERJ2kB-PhU9wESGhOE0n3jiBbQTvAk4JaOmIgBps5juOUULcvIYxth0M8gEEFMsH0F7NYR_9_BuD466vr93xoVe-sxsxlcvTXDIPfyFXUwjvHSyLO3vDhwXSLMMIygtyq_uuYigEV71sxA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+<span class="absolute top-4 left-4 bg-surface-container-lowest/90 backdrop-blur-sm text-tertiary-container font-label-md text-label-md px-space-md py-1 rounded-full shadow-sm">
+            Açık Hava &amp; Doğa
+          </span>
+</div>
+<div class="p-space-md flex items-center justify-between bg-surface-container-lowest">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Doğal Çim Bahçe &amp; Oyun Parkı</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Toprakla temas eden organik tarım bahçesi, güvenli kauçuk zeminli kaydırak ve hareket parkuru.</p>
+</div>
+<div class="hidden sm:flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-low text-primary flex-shrink-0 ml-space-sm group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-label-lg">nature_people</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Campus Gallery Mosaic -->
+<!-- BEGIN: Interactive 360 Virtual Tour Callout Section -->
+<section class="mt-space-lg w-full relative">
+<!-- Card Container -->
+<div class="relative rounded-xl bg-gradient-to-r from-surface-container-low via-surface-container-lowest to-surface-container-low shadow-md overflow-hidden px-6 py-8 sm:py-10 sm:px-12">
+<!-- Decorative Botanical Leaves in Card Background -->
+<div class="pointer-events-none absolute -bottom-6 -right-6 w-48 h-48 opacity-20">
+<svg class="w-full h-full text-secondary-container" fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M170,30 C190,90 140,160 50,170 C70,100 100,50 170,30 Z" fill="currentColor"></path>
+<path d="M130,50 C160,100 120,140 60,150" stroke="#003E80" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="flex flex-col md:flex-row items-center justify-between gap-space-md relative z-10">
+<!-- Left: Badge + Descriptive Pitch -->
+<div class="flex flex-col sm:flex-row items-center gap-space-md text-center sm:text-left">
+<!-- 360 Badge -->
+<div class="relative flex items-center justify-center w-20 h-20 rounded-full bg-secondary-fixed text-on-secondary-fixed shadow-inner flex-shrink-0 group">
+<span class="material-symbols-outlined text-headline-lg animate-spin" style="animation-duration: 12s; font-variation-settings: 'FILL' 0;">
+              360
+            </span>
+<span class="absolute -bottom-1 text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-secondary text-on-secondary">
+              CANLI
+            </span>
+</div>
+<div class="space-y-1">
+<h2 class="font-headline-md text-headline-md text-primary">
+              Sanal Tur İle Okulumuzu Keşfedin
+            </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl">
+              Okulumuzun iç ve dış tüm mekanlarını 360 derece panoramik görüntü kalitesiyle evinizin konforunda detaylıca inceleyin.
+            </p>
+</div>
+</div>
+<!-- Right: Primary CTA Action Button -->
+<div class="flex-shrink-0 w-full sm:w-auto">
+<button class="w-full sm:w-auto inline-flex items-center justify-center gap-space-xs px-space-lg py-3.5 rounded-full bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg shadow-md hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer" id="virtualTourTrigger" type="button">
+<span class="material-symbols-outlined text-label-lg">view_in_ar</span>
+<span>Sanal Turu Başlat</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Interactive 360 Virtual Tour Callout Section -->
+<!-- BEGIN: Quick Action Navigation Bottom Bar -->
+<section class="mt-space-lg pt-space-xs pb-space-sm w-full">
+<div class="rounded-lg bg-surface-container-low px-space-md py-space-md shadow-sm">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-sm sm:gap-space-md">
+<!-- 1. Randevu Alın -->
+<a class="flex flex-col items-center justify-center text-center p-space-md rounded-DEFAULT bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow-md transition-all duration-200 group" href="#randevu">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary group-hover:scale-110 transition-transform mb-space-xs">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+</div>
+<span class="font-label-lg text-label-lg text-primary group-hover:text-secondary-container transition-colors">
+            Randevu Alın
+          </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 hidden sm:block">
+            Okulu bizzat ziyaret edin
+          </span>
+</a>
+<!-- 2. Tanıtım Kataloğu -->
+<a class="flex flex-col items-center justify-center text-center p-space-md rounded-DEFAULT bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow-md transition-all duration-200 group" href="#katalog">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary group-hover:scale-110 transition-transform mb-space-xs">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<span class="font-label-lg text-label-lg text-primary group-hover:text-secondary-container transition-colors">
+            Tanıtım Kataloğu
+          </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 hidden sm:block">
+            PDF broşürü indirin
+          </span>
+</a>
+<!-- 3. Sanal Tur -->
+<a class="flex flex-col items-center justify-center text-center p-space-md rounded-DEFAULT bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow-md transition-all duration-200 group" href="#sanal-tur">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform mb-space-xs">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">tour</span>
+</div>
+<span class="font-label-lg text-label-lg text-primary group-hover:text-secondary-container transition-colors">
+            Sanal Tur
+          </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 hidden sm:block">
+            360° interaktif gezi
+          </span>
+</a>
+<!-- 4. Sık Sorulan Sorular -->
+<a class="flex flex-col items-center justify-center text-center p-space-md rounded-DEFAULT bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow-md transition-all duration-200 group" href="#sss">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-primary group-hover:scale-110 transition-transform mb-space-xs">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">help</span>
+</div>
+<span class="font-label-lg text-label-lg text-primary group-hover:text-secondary-container transition-colors">
+            Sık Sorulan Sorular
+          </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 hidden sm:block">
+            Merak edilen tüm detaylar
+          </span>
+</a>
+</div>
+</div>
+</section>
+<!-- END: Quick Action Navigation Bottom Bar -->
+</div>
+<!-- Simple Interactive Micro-script for Tour Modal Preview -->
+<script>
+  (function() {
+    const tourBtn = document.getElementById('virtualTourTrigger');
+    if (tourBtn) {
+      tourBtn.addEventListener('click', function() {
+        const originalText = tourBtn.innerHTML;
+        tourBtn.innerHTML = '<span class="material-symbols-outlined text-label-lg animate-spin">refresh</span><span>Yükleniyor...</span>';
+        setTimeout(() => {
+          alert('360° Sanal Tur simülasyonu başlatıldı! Okul alanlarını 3 boyutlu olarak gezebilirsiniz.');
+          tourBtn.innerHTML = originalText;
+        }, 600);
+      });
+    }
+  })();
+</script></main>
+<!-- END: MainContent -->
+<!-- BEGIN: SimpleFooter -->
+<footer class="w-full border-t border-amber-100/70 bg-amber-50/40 py-6 text-center text-xs text-slate-500">
+<div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="font-extrabold text-brand-blue tracking-tight">EYLÜL ÇOCUK AKADEMİSİ</span>
+<span>© 2024 Tüm Hakları Saklıdır.</span>
+</div>
+<div class="flex gap-4">
+<a class="hover:text-brand-blue transition-colors" href="#">Gizlilik Politikası</a>
+<a class="hover:text-brand-blue transition-colors" href="#">KVKK Aydınlatma Metni</a>
+<a class="hover:text-brand-blue transition-colors" href="#">İletişim</a>
+</div>
+</div>
+</footer>
+<!-- END: SimpleFooter -->
+</body></html>

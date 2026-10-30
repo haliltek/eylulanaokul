@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth scrolling for anchor jumps and pleasant reading flow */
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --background: #fefaf2;
+  --foreground: #1e293b;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Organic foliage soft radial gradients */
+.bg-foliage-pattern {
+  background-color: #FEFAF2;
+  background-image: 
+    radial-gradient(circle at 10% 15%, rgba(229, 136, 11, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 85%, rgba(42, 114, 118, 0.05) 0%, transparent 45%);
+}
+
+/* Soft curved cutouts */
+.hero-mask {
+  border-radius: 2.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(26, 51, 88, 0.07), 0 8px 10px -6px rgba(26, 51, 88, 0.05);
+}
+
+/* Subtle pulse animation for play button */
+@keyframes subtle-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.95; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+.animate-play {
+  animation: subtle-pulse 2.2s infinite ease-in-out;
+}
+
+/* Custom Scrollbar for modern aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fefaf2;
+}
+::-webkit-scrollbar-thumb {
+  background: #e4e2de;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #E5880B;
+}

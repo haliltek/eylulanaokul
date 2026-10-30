@@ -1,0 +1,98 @@
+# ==============================================================================
+# Eylül Çocuk Akademisi - Docker Compose Üretim Orkestrasyonu
+# Next.js 14/15 Standalone + Nginx Reverse Proxy + Kalıcı Volume Mimarisi
+# ==============================================================================
+
+services:
+  # ----------------------------------------------------------------------------
+  # Next.js Uygulama Konteyneri (Standalone Üretim İmajı)
+  # ----------------------------------------------------------------------------
+  anaokulu_app:
+    container_name: anaokulu_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: anaokulu-app:production
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NEXT_TELEMETRY_DISABLED=1
+    volumes:
+      # Kalıcı medya ve kullanıcı yüklemeleri (veli kayıtları, etkinlik fotoğrafları)
+      - ./uploads:/app/public/uploads
+      # Kalıcı veri ve SQLite / JSON dosya depolama alanı
+      - ./data:/app/data
+      # Unlighthouse SEO ve Hız Denetimi statik raporları
+      - ./public/unlighthouse:/app/public/unlighthouse
+    networks:
+      - anaokulu_net
+    expose:
+      - "3000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/api/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.50'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  # ----------------------------------------------------------------------------
+  # Nginx Alpine Ters Dizin ve Önbellek Sunucusu (Reverse Proxy & Edge Cache)
+  # ----------------------------------------------------------------------------
+  anaokulu_web:
+    container_name: anaokulu_web
+    image: nginx:1.25-alpine
+    restart: unless-stopped
+    ports:
+      # 8089 portu canlı sunucuda (142.93.104.78) Sigortam Dijital (8088) yanında
+      # eSchool (8096) ile çakışmayacak şekilde izole olarak tahsis edilmiştir.
+      - "${APP_PORT:-8089}:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./uploads:/var/www/uploads:ro
+    depends_on:
+      anaokulu_app:
+        condition: service_healthy
+    networks:
+      - anaokulu_net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:80/healthz || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 256M
+        reservations:
+          cpus: '0.10'
+          memory: 64M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+# ------------------------------------------------------------------------------
+# İzole Ağ Yapılandırması (Diğer Docker projelerinden tam bağımsızlık)
+# ------------------------------------------------------------------------------
+networks:
+  anaokulu_net:
+    name: anaokulu_net
+    driver: bridge

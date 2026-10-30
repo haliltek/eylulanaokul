@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Eylül Anaokulu - Çocuk Akademisi</title>
+<!-- Google Fonts: Nunito & Playfair Display / Quicksand -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&amp;family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              blue: '#0E4984',
+              navy: '#1A3358',
+              accent: '#E5880B',
+              orange: '#EA7C02',
+              cream: '#FEFAF2',
+              lightCream: '#FFFDF9',
+              green: '#74B127',
+              leafTeal: '#2A7276',
+            }
+          },
+          fontFamily: {
+            sans: ['Nunito', 'sans-serif'],
+            heading: ['Comfortaa', 'Nunito', 'sans-serif']
+          },
+          borderRadius: {
+            '4xl': '2rem',
+            '5xl': '2.5rem',
+            'curved': '3rem'
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom CSS for decorative and organic shape styling -->
+<style data-purpose="decorations">
+    /* Subtle organic background foliage */
+    .bg-foliage-pattern {
+      background-color: #FEFAF2;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(229, 136, 11, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(42, 114, 118, 0.05) 0%, transparent 45%);
+    }
+
+    /* Soft curved cutouts */
+    .hero-mask {
+      border-radius: 2.2rem;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(26, 51, 88, 0.07), 0 8px 10px -6px rgba(26, 51, 88, 0.05);
+    }
+
+    /* Subtle pulse animation for play button */
+    @keyframes subtle-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.95; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+    .animate-play {
+      animation: subtle-pulse 2.2s infinite ease-in-out;
+    }
+  </style>
+<meta content="web_standard" name="shell-type"/></head>
+<body class="bg-foliage-pattern text-slate-800 font-sans antialiased selection:bg-brand-accent selection:text-white min-h-screen relative overflow-x-hidden">
+<!-- BEGIN: DecorativeBackgroundElements -->
+<!-- Subtle decorative watercolor style leaves in header and corners -->
+<div class="pointer-events-none fixed top-0 left-0 w-44 h-44 opacity-25 -z-10 translate-x-[-20%] translate-y-[-10%]">
+<svg fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M40,160 C20,100 70,30 160,20 C140,90 110,140 40,160 Z" fill="#E5880B"></path>
+<path d="M40,160 C80,120 120,80 160,20" stroke="#C57004" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Bottom Corner Leaves -->
+<div class="pointer-events-none fixed bottom-0 right-0 w-56 h-56 opacity-30 -z-10 translate-x-[15%] translate-y-[15%]">
+<svg fill="none" viewbox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<path d="M160,40 C180,100 130,170 40,180 C60,110 90,60 160,40 Z" fill="#2A7276"></path>
+<path d="M120,60 C150,110 110,150 50,160" fill="#74B127" opacity="0.6"></path>
+</svg>
+</div>
+<!-- END: DecorativeBackgroundElements -->
+<!-- BEGIN: SiteHeader -->
+<header class="w-full pt-4 pb-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-purpose="site-header">
+<div class="flex items-center justify-between pb-3 border-b border-amber-100/60 lg:border-none">
+<!-- Brand Logo -->
+<a class="flex items-center gap-2 group" href="#" title="Eylül Çocuk Akademisi Anasayfa">
+<div class="flex flex-col items-center">
+<div class="flex items-center">
+<!-- Brand stylized text -->
+<span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-brand-blue flex items-center">
+              EYL
+              <!-- Stylized Ü with sprouting leaf motif -->
+<span class="relative inline-block mx-0.5 text-brand-accent">
+                Ü
+                <span class="absolute -top-3.5 left-1/2 -translate-x-1/2 flex items-center justify-center">
+<svg class="w-4 h-4 text-brand-green" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C12 14 17 9 22 8C22 4.7 17.5 2 12 2Z"></path>
+</svg>
+</span>
+</span>
+              L
+            </span>
+<div class="h-7 w-[2px] bg-slate-300 mx-2.5 hidden sm:block"></div>
+<div class="flex flex-col leading-tight">
+<span class="text-xs sm:text-sm font-bold tracking-wider text-brand-blue uppercase">ÇOCUK</span>
+<span class="text-[10px] sm:text-xs font-semibold tracking-wider text-brand-blue uppercase">AKADEMİSİ</span>
+</div>
+</div>
+<!-- Subtitle / Tagline pill badge -->
+<div class="flex items-center w-full justify-center mt-0.5">
+<span class="h-[1.5px] bg-brand-accent w-4 inline-block"></span>
+<span class="text-[9px] tracking-[0.2em] font-black uppercase text-brand-accent px-1.5">ANAOKULU</span>
+<span class="h-[1.5px] bg-brand-accent w-4 inline-block"></span>
+</div>
+</div>
+</a>
+<!-- Desktop Navigation Menu -->
+<nav class="hidden md:flex items-center space-x-5 lg:space-x-7 text-[14px] font-bold text-slate-700">
+<a class="text-brand-accent transition-colors hover:text-brand-orange" href="#">Anasayfa</a>
+<a class="hover:text-brand-blue transition-colors" href="#">Eğitim Modeli</a>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Okulumuz</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Veliler</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="relative group cursor-pointer flex items-center gap-1 hover:text-brand-blue">
+<span>Kayıt</span>
+<svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-brand-blue" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<a class="hover:text-brand-blue transition-colors" href="#">İletişim</a>
+</nav>
+<!-- Primary Action CTA Button -->
+<div class="flex items-center gap-3">
+<a class="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-white bg-brand-accent hover:bg-brand-orange shadow-md shadow-brand-accent/25 hover:shadow-lg hover:shadow-brand-accent/35 transition-all duration-200 transform hover:-translate-y-0.5" href="#iletisim">
+          Okul Ziyareti Planla
+        </a>
+<!-- Mobile Menu Toggle Button -->
+<button aria-label="Menüyü Aç" class="md:hidden p-2 rounded-lg text-slate-600 hover:text-brand-blue focus:outline-none" type="button">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path>
+</svg>
+</button>
+</div>
+</div>
+</header>
+<!-- END: SiteHeader -->
+<!-- BEGIN: MainContent -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-16 space-y-9 sm:space-y-12"><div class="flex flex-col w-full">
+<div class="relative w-full overflow-hidden rounded-lg bg-surface-container-low shadow-sm">
+<div class="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-4 py-8 text-center sm:px-6 sm:py-12">
+<div class="mb-3 inline-flex items-center gap-1.5 rounded-full bg-secondary-fixed/50 px-4 py-1 text-on-secondary-fixed">
+<span class="material-symbols-outlined text-label-sm" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Eylül Mutfak Atölyesi</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-primary">Doğal ve Dengeli Beslenme</h1>
+<p class="mt-2 font-headline-sm text-headline-sm text-secondary-container font-semibold">Sağlıklı Çocuklar, Mutlu Yarınlar</p>
+<p class="mt-3 max-w-2xl font-body-md text-body-md text-on-surface-variant">
+        Okulumuzda sunulan her öğün; uzman çocuk diyetisyenleri kontrolünde, yerel üreticilerden temin edilen taze ve mevsimsel besinlerle, mutfağımızda sevgiyle hazırlanır.
+      </p>
+<div class="relative mt-8 w-full overflow-hidden rounded-lg shadow-md">
+<img class="h-72 w-full object-cover object-center sm:h-96 md:h-[420px]" data-alt="A joyful 5-year-old boy sitting at a bright wooden dining table in a cozy preschool cafeteria, happily eating fresh warm vegetable soup with a spoon. On the table are fresh colorful fruits, sliced cucumbers, and whole grain bread in natural ceramic bowls. Soft daylight streams through large windows, with warm amber, creamy porcelain, and leaf green hues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDPtPuOkoCFkx4vkNoJTLA0Ul1IQs_atMo-Mh2b-M4DK981siYIn5sPXDE7Z41c0lJrDUHSNWOtEC6jQE1mQAv-iYOxP69s4nGmJuMqRqamlIxH246wiGWbnCkw4h6tS-2on-7k5EygAAFeZagzxym3RSx0XZE11hkLk3Mc37UmdKrH5Z42tg_2DUENN6ADUzHkb8rP80gItK_k1kIvelwKiMCtZ6LyHO6MzPYMxMMSDKbPqUgZf-o"/>
+<div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/30 via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-DEFAULT bg-surface-container-lowest/90 px-4 py-2.5 backdrop-blur-md sm:bottom-6 sm:left-6 sm:right-6 sm:px-6 sm:py-3.5">
+<div class="flex items-center gap-3 text-left">
+<span class="material-symbols-outlined text-primary text-headline-sm" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<div>
+<p class="font-label-md text-label-md text-primary">GDO'suz &amp; Katkısız Mutfak Standartları</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Çocuklarımızın günlük enerji ve mikro-besin gereksinimlerine göre kalibre edilmiş öğünler.</p>
+</div>
+</div>
+<span class="hidden rounded-full bg-tertiary-fixed px-3 py-1 font-label-sm text-label-sm text-on-tertiary-fixed-variant sm:inline-block">%100 Doğal</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+<div class="group flex flex-col items-center rounded-lg bg-surface-container-lowest p-6 text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+<div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-secondary-fixed/40 text-secondary transition-transform duration-200 group-hover:scale-110">
+<span class="material-symbols-outlined text-headline-md" style="font-variation-settings: 'FILL' 1;">spa</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Taze ve Doğal</h2>
+<p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+        Mevsimine uygun organik sebze ve meyveler, soğuk sıkım zeytinyağı ve taze süt ürünleri kullanılır.
+      </p>
+</div>
+<div class="group flex flex-col items-center rounded-lg bg-surface-container-lowest p-6 text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+<div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary-fixed text-primary transition-transform duration-200 group-hover:scale-110">
+<span class="material-symbols-outlined text-headline-md" style="font-variation-settings: 'FILL' 1;">nutrition</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Diyetisyen Kontrolü</h2>
+<p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+        Aylık kalorik ve besin dengesi uzman çocuk beslenme danışmanımız tarafından onaylanır.
+      </p>
+</div>
+<div class="group flex flex-col items-center rounded-lg bg-surface-container-lowest p-6 text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+<div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-tertiary-fixed text-tertiary transition-transform duration-200 group-hover:scale-110">
+<span class="material-symbols-outlined text-headline-md" style="font-variation-settings: 'FILL' 1;">soup_kitchen</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Günlük Taze Pişirim</h2>
+<p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+        Dondurulmuş veya hazır konserve gıda yer almaz; her öğün aynı sabah okulumuzda pişirilir.
+      </p>
+</div>
+<div class="group flex flex-col items-center rounded-lg bg-surface-container-lowest p-6 text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+<div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-secondary-fixed text-secondary-container transition-transform duration-200 group-hover:scale-110">
+<span class="material-symbols-outlined text-headline-md" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Dengeli Menü</h2>
+<p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+        Gelişim çağındaki çocukların kemik, kas ve bilişsel gelişimini destekleyen özel porsiyon dengesi.
+      </p>
+</div>
+</div>
+<div class="mt-10 overflow-hidden rounded-lg bg-surface-container-lowest p-6 shadow-sm sm:p-8">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary">Haftalık Yemek Menüsü</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Haftalık değişen dengeli menülerimizi inceleyebilirsiniz</p>
+</div>
+<div class="mt-4 flex items-center gap-2 sm:mt-0">
+<span class="flex items-center gap-1 rounded-full bg-tertiary-fixed/60 px-3 py-1 font-label-sm text-label-sm text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined text-label-sm">check_circle</span>
+          Diyetisyen Onaylı
+        </span>
+</div>
+</div>
+<div class="mt-6 flex flex-wrap gap-2" id="meal-tabs">
+<button class="day-tab rounded-full bg-primary px-5 py-2 font-label-md text-label-md text-on-primary shadow-sm transition-all duration-150" id="tab-pazartesi" onclick="switchDay('pazartesi')">
+        Pazartesi
+      </button>
+<button class="day-tab rounded-full bg-surface-container-high px-5 py-2 font-label-md text-label-md text-on-surface-variant hover:bg-surface-variant transition-all duration-150" id="tab-sali" onclick="switchDay('sali')">
+        Salı
+      </button>
+<button class="day-tab rounded-full bg-surface-container-high px-5 py-2 font-label-md text-label-md text-on-surface-variant hover:bg-surface-variant transition-all duration-150" id="tab-carsamba" onclick="switchDay('carsamba')">
+        Çarşamba
+      </button>
+<button class="day-tab rounded-full bg-surface-container-high px-5 py-2 font-label-md text-label-md text-on-surface-variant hover:bg-surface-variant transition-all duration-150" id="tab-persembe" onclick="switchDay('persembe')">
+        Perşembe
+      </button>
+<button class="day-tab rounded-full bg-surface-container-high px-5 py-2 font-label-md text-label-md text-on-surface-variant hover:bg-surface-variant transition-all duration-150" id="tab-cuma" onclick="switchDay('cuma')">
+        Cuma
+      </button>
+</div>
+<div class="mt-6 space-y-3" id="menu-content">
+<div class="flex flex-col gap-2 rounded-lg bg-surface-container-low p-4 sm:flex-row sm:items-center sm:gap-6 sm:p-5">
+<div class="flex w-36 shrink-0 items-center gap-2 text-primary">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-secondary-fixed/50 text-secondary">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">bakery_dining</span>
+</div>
+<span class="font-headline-sm text-label-lg font-bold text-primary">Kahvaltı</span>
+</div>
+<div class="min-w-0 flex-1">
+<p class="font-body-md text-body-md text-on-surface" id="meal-breakfast">
+            Zeytin, peynir, domates, salatalık, yumurta, tam tahıl ekmeği
+          </p>
+</div>
+<span class="self-start rounded-full bg-surface-container px-2.5 py-1 font-label-sm text-label-sm text-on-surface-variant sm:self-center">08:45 - 09:30</span>
+</div>
+<div class="flex flex-col gap-2 rounded-lg bg-surface-container-low p-4 sm:flex-row sm:items-center sm:gap-6 sm:p-5">
+<div class="flex w-36 shrink-0 items-center gap-2 text-primary">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-tertiary-fixed/60 text-tertiary">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">lunch_dining</span>
+</div>
+<span class="font-headline-sm text-label-lg font-bold text-primary">Öğle Yemeği</span>
+</div>
+<div class="min-w-0 flex-1">
+<p class="font-body-md text-body-md text-on-surface" id="meal-lunch">
+            Sebze çorbası, zeytinyağlı taze fasulye &amp; bulgur pilavı, ev yapımı yoğurt, mevsim meyvesi
+          </p>
+</div>
+<span class="self-start rounded-full bg-surface-container px-2.5 py-1 font-label-sm text-label-sm text-on-surface-variant sm:self-center">12:00 - 13:00</span>
+</div>
+<div class="flex flex-col gap-2 rounded-lg bg-surface-container-low p-4 sm:flex-row sm:items-center sm:gap-6 sm:p-5">
+<div class="flex w-36 shrink-0 items-center gap-2 text-primary">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-fixed text-primary">
+<span class="material-symbols-outlined text-headline-sm" style="font-variation-settings: 'FILL' 1;">cookie</span>
+</div>
+<span class="font-headline-sm text-label-lg font-bold text-primary">İkindi</span>
+</div>
+<div class="min-w-0 flex-1">
+<p class="font-body-md text-body-md text-on-surface" id="meal-snack">
+            Günlük ılık süt, taze elma dilimleri, yulaflı fındıklı kurabiye
+          </p>
+</div>
+<span class="self-start rounded-full bg-surface-container px-2.5 py-1 font-label-sm text-label-sm text-on-surface-variant sm:self-center">15:30 - 16:00</span>
+</div>
+</div>
+<div class="mt-6 flex flex-col items-center justify-between gap-4 rounded-lg bg-surface-container-low px-5 py-4 sm:flex-row">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary-fixed text-secondary">
+<span class="material-symbols-outlined text-headline-sm">no_food</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary">Özel Diyet &amp; Alerjen Hassasiyeti</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Alerji ve özel beslenme ihtiyaçları için bireysel planlama yapılır.</p>
+</div>
+</div>
+<a class="inline-flex items-center justify-center gap-2 rounded-full bg-secondary-container px-5 py-2 font-label-md text-label-md text-on-secondary shadow-sm transition-all duration-150 hover:bg-secondary hover:shadow" href="#iletisim">
+<span>Diyetisyen İle Görüşün</span>
+<span class="material-symbols-outlined text-label-md">arrow_forward</span>
+</a>
+</div>
+</div>
+<div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+<div class="relative overflow-hidden rounded-lg bg-surface-container-lowest p-6 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-headline-md text-tertiary" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+<h3 class="font-headline-sm text-headline-sm text-primary">Doğal Sıvı Alımı</h3>
+</div>
+<p class="mt-3 font-body-sm text-body-sm text-on-surface-variant">
+        Okulumuzda paketli şekerli meyve suları ve asitli içecekler tüketilmez. Gün boyunca taze filtrelenmiş su, ayran ve bitki çayları sunulur.
+      </p>
+</div>
+<div class="relative overflow-hidden rounded-lg bg-surface-container-lowest p-6 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-headline-md text-secondary" style="font-variation-settings: 'FILL' 1;">garden_cart</span>
+<h3 class="font-headline-sm text-headline-sm text-primary">Ekolojik Bahçe</h3>
+</div>
+<p class="mt-3 font-body-sm text-body-sm text-on-surface-variant">
+        Çocuklarımız anaokulu bahçemizdeki bostanda kendi nane, çilek ve domateslerini yetiştirerek topraktan sofraya gıda farkındalığı kazanırlar.
+      </p>
+</div>
+<div class="relative overflow-hidden rounded-lg bg-surface-container-lowest p-6 shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-headline-md text-primary" style="font-variation-settings: 'FILL' 1;">psychology_alt</span>
+<h3 class="font-headline-sm text-headline-sm text-primary">Pozitif Sofra Kültürü</h3>
+</div>
+<p class="mt-3 font-body-sm text-body-sm text-on-surface-variant">
+        Yemek saatleri baskıdan uzak, arkadaşça paylaşım ve sofra adabı kazanım anlarıdır. Kendi porsiyonunu seçme ve deneme cesareti teşvik edilir.
+      </p>
+</div>
+</div>
+</div>
+<script>
+  const mealData = {
+    pazartesi: {
+      breakfast: "Zeytin, peynir, domates, salatalık, yumurta, tam tahıl ekmeği",
+      lunch: "Sebze çorbası, zeytinyağlı taze fasulye & bulgur pilavı, ev yapımı yoğurt, mevsim meyvesi",
+      snack: "Günlük ılık süt, taze elma dilimleri, yulaflı fındıklı kurabiye"
+    },
+    sali: {
+      breakfast: "Kaşar peyniri, ev yapımı reçel, tereyağı, ceviz içi, omlet, çavdar ekmeği",
+      lunch: "Mercimek çorbası, fırında köfte & patates, mevsim yeşillikleri salatası, ayran",
+      snack: "Kefir, muz dilimleri, kuru üzüm & badem tabağı"
+    },
+    carsamba: {
+      breakfast: "Labne peynir, haşlanmış yumurta, siyah-yeşil zeytin, taze nane, köy ekmeği",
+      lunch: "Ezogelin çorbası, nohut yemeği & siyez bulguru pilavı, ev turşusu, yoğurt",
+      snack: "Taze sıkılmış portakal & elma suyu, ev yapımı havuçlu tarçınlı kek"
+    },
+    persembe: {
+      breakfast: "Menemen, beyaz peynir, domates söğüş, simit, doğal adaçayı",
+      lunch: "Balkabağı çorbası, fırında sebzeli somon balığı, patates püresi, yeşil salata",
+      snack: "Organik yoğurt & taze çilek püresi, tam buğday grissini"
+    },
+    cuma: {
+      breakfast: "Beyaz peynir, kaşar peyniri, kuru kayısı, ceviz, krep, taze süt",
+      lunch: "Tarhana çorbası, kıymalı ıspanak yemeği, fırın makarna, komposto",
+      snack: "Ilık süt, ev yapımı elmalı turta, kavrulmamış fındık"
+    }
+  };
+
+  function switchDay(day) {
+    const days = ['pazartesi', 'sali', 'carsamba', 'persembe', 'cuma'];
+    days.forEach(d => {
+      const btn = document.getElementById('tab-' + d);
+      if (btn) {
+        if (d === day) {
+          btn.className = "day-tab rounded-full bg-primary px-5 py-2 font-label-md text-label-md text-on-primary shadow-sm transition-all duration-150";
+        } else {
+          btn.className = "day-tab rounded-full bg-surface-container-high px-5 py-2 font-label-md text-label-md text-on-surface-variant hover:bg-surface-variant transition-all duration-150";
+        }
+      }
+    });
+
+    const data = mealData[day];
+    if (data) {
+      document.getElementById('meal-breakfast').textContent = data.breakfast;
+      document.getElementById('meal-lunch').textContent = data.lunch;
+      document.getElementById('meal-snack').textContent = data.snack;
+    }
+  }
+</script></main>
+<!-- END: MainContent -->
+<!-- BEGIN: SimpleFooter -->
+<footer class="w-full border-t border-amber-100/70 bg-amber-50/40 py-6 text-center text-xs text-slate-500">
+<div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="font-extrabold text-brand-blue tracking-tight">EYLÜL ÇOCUK AKADEMİSİ</span>
+<span>© 2024 Tüm Hakları Saklıdır.</span>
+</div>
+<div class="flex gap-4">
+<a class="hover:text-brand-blue transition-colors" href="#">Gizlilik Politikası</a>
+<a class="hover:text-brand-blue transition-colors" href="#">KVKK Aydınlatma Metni</a>
+<a class="hover:text-brand-blue transition-colors" href="#">İletişim</a>
+</div>
+</div>
+</footer>
+<!-- END: SimpleFooter -->
+</body></html>
