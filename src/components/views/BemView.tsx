@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { BemPageData } from '@/types/cms';
 
@@ -10,6 +10,7 @@ interface BemViewProps {
 
 export const BemView: React.FC<BemViewProps> = ({ data }) => {
   const { header, showcase } = data || {};
+  const [imgFailed, setImgFailed] = useState(false);
   const outcomes = showcase?.outcomes;
 
   return (
@@ -176,14 +177,18 @@ export const BemView: React.FC<BemViewProps> = ({ data }) => {
                 <div className="md:col-span-7 relative group">
                   <div className="absolute -inset-2 bg-gradient-to-tr from-secondary-container/20 to-tertiary/10 rounded-2xl blur-lg transition duration-500 group-hover:scale-105" />
                   <div className="relative w-full h-[360px] sm:h-[440px] rounded-2xl overflow-hidden shadow-[0_12px_36px_rgba(0,62,128,0.08)] bg-surface-container">
-                    <img
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      alt={showcase?.imageAlt || 'Oyun Temelli Keşif'}
-                      src={
-                        showcase?.image ||
-                        'https://lh3.googleusercontent.com/aida-public/AB6AXuA_HUJ8Dk0I5-9-CcAVN-23EtmKiHOp7uF7iJTio35lPh-RVt2Ww3BzorxwMjJCNw6-6J3RjPlIUZfiZPQqxBzublamKjRz0wCD7IXo6qX8F_35XYKa_eUaYfvau2j1sffb6E8wDPNa9Uak8ftkjp5WfYtaN4mv58_zTpEwiApJP9Cie23W1J1G_wIQp4-L2WSE8A7B9FraFpJuirTRQOaK_08d1Dwe4biK2A2tzfjBJj-bxe06lsLs'
-                      }
-                    />
+                    {showcase?.image && !imgFailed ? (
+                      <img
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        alt={showcase?.imageAlt || 'Oyun Temelli Keşif'}
+                        src={showcase.image}
+                        onError={() => setImgFailed(true)}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-amber-100 via-orange-50 to-sky-100 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-[96px] text-secondary/40">toys</span>
+                      </div>
+                    )}
                     {/* Floating Quote Overlay Card */}
                     <div className="absolute bottom-4 left-4 right-4 sm:left-6 sm:right-auto sm:max-w-xs bg-surface-container-lowest/90 backdrop-blur-md p-space-sm rounded-xl shadow-lg">
                       <div className="flex items-center gap-space-xs text-secondary mb-1">
