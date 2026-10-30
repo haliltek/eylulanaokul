@@ -8,6 +8,20 @@ interface AboutViewProps {
   data: AboutPageData;
 }
 
+/** Okul binası fotoğrafı: /images/okul-bina.jpg dosyası varsa gösterilir, yoksa hiç yer kaplamaz. */
+const SchoolPhoto: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
+  const [ok, setOk] = React.useState(true);
+  if (!ok) return null;
+  return (
+    <div className="relative w-full mb-6 lg:mb-10">
+      <div className="relative rounded-3xl overflow-hidden shadow-md aspect-[16/8] sm:aspect-[16/6]">
+        <img src={src} alt={alt} className="w-full h-full object-cover" onError={() => setOk(false)} />
+        <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-background to-transparent" />
+      </div>
+    </div>
+  );
+};
+
 export const AboutView: React.FC<AboutViewProps> = ({ data }) => {
   const { header, stats, values, showcase } = data || {};
 
@@ -23,8 +37,9 @@ export const AboutView: React.FC<AboutViewProps> = ({ data }) => {
             <div className="pointer-events-none absolute bottom-10 -left-20 w-80 h-80 bg-primary-fixed/20 rounded-full blur-3xl opacity-60" />
 
             <div className="relative max-w-6xl mx-auto px-margin-mobile lg:px-margin flex flex-col items-center">
+              <SchoolPhoto src={(header as any)?.heroImage || '/images/okul-bina.jpg'} alt="Eylül Çocuk Akademisi okul binası" />
               {/* Overline Tag */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-high/60 backdrop-blur-sm text-primary mb-4 shadow-sm">
+              <div className="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-high/60 backdrop-blur-sm text-primary mb-4 shadow-sm">
                 <span className="material-symbols-outlined text-[18px] text-secondary">psychiatry</span>
                 <span className="font-label-sm text-label-sm tracking-wider uppercase">
                   {header?.badge || 'Biz Kimiz?'}
@@ -46,66 +61,66 @@ export const AboutView: React.FC<AboutViewProps> = ({ data }) => {
               </div>
 
               {/* Stats Grid (4 Cards) */}
-              <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 mt-12 mb-16">
+              <div className="w-full grid grid-cols-4 gap-2 sm:gap-4 lg:gap-6 mt-8 sm:mt-12 mb-10 sm:mb-16">
                 {/* Stat Card 1 */}
-                <div className="bg-surface-container-lowest rounded-2xl p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-                  <div className="w-14 h-14 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-secondary mb-4 group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined text-[30px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                <div className="bg-surface-container-lowest rounded-2xl p-2.5 sm:p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4 group-hover:scale-110 transition-transform">
+                    <span className="material-symbols-outlined text-[22px] sm:text-[30px]" style={{ fontVariationSettings: "'FILL' 0" }}>
                       workspace_premium
                     </span>
                   </div>
-                  <span className="font-headline-md text-headline-md text-primary font-extrabold mb-1">
+                  <span className="font-headline-md text-base sm:text-headline-md text-primary font-extrabold mb-0.5 sm:mb-1">
                     {stats?.[0]?.value || '12+'}
                   </span>
-                  <span className="font-label-md text-label-md text-on-surface-variant font-medium">
+                  <span className="font-label-md text-[10px] sm:text-label-md leading-tight text-on-surface-variant font-medium">
                     {stats?.[0]?.label || 'Yıllık Deneyim'}
                   </span>
                 </div>
 
                 {/* Stat Card 2 */}
-                <div className="bg-surface-container-lowest rounded-2xl p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-                  <div className="w-14 h-14 rounded-full bg-primary-fixed/60 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined text-[30px]">meeting_room</span>
+                <div className="bg-surface-container-lowest rounded-2xl p-2.5 sm:p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4 group-hover:scale-110 transition-transform">
+                    <span className="material-symbols-outlined text-[22px] sm:text-[30px]">meeting_room</span>
                   </div>
-                  <span className="font-headline-md text-headline-md text-primary font-extrabold mb-1">
+                  <span className="font-headline-md text-base sm:text-headline-md text-primary font-extrabold mb-0.5 sm:mb-1">
                     {stats?.[1]?.value || '4'}
                   </span>
-                  <span className="font-label-md text-label-md text-on-surface-variant font-medium">
+                  <span className="font-label-md text-[10px] sm:text-label-md leading-tight text-on-surface-variant font-medium">
                     {stats?.[1]?.label || 'Sınıf'}
                   </span>
                 </div>
 
                 {/* Stat Card 3 */}
-                <div className="bg-surface-container-lowest rounded-2xl p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-                  <div className="w-14 h-14 rounded-full bg-tertiary-fixed/60 flex items-center justify-center text-tertiary mb-4 group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined text-[30px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                <div className="bg-surface-container-lowest rounded-2xl p-2.5 sm:p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4 group-hover:scale-110 transition-transform">
+                    <span className="material-symbols-outlined text-[22px] sm:text-[30px]" style={{ fontVariationSettings: "'FILL' 0" }}>
                       child_care
                     </span>
                   </div>
-                  <span className="font-headline-md text-headline-md text-primary font-extrabold mb-1">
+                  <span className="font-headline-md text-base sm:text-headline-md text-primary font-extrabold mb-0.5 sm:mb-1">
                     {stats?.[2]?.value || '3-6'}
                   </span>
-                  <span className="font-label-md text-label-md text-on-surface-variant font-medium">
+                  <span className="font-label-md text-[10px] sm:text-label-md leading-tight text-on-surface-variant font-medium">
                     {stats?.[2]?.label || 'Yaş'}
                   </span>
                 </div>
 
                 {/* Stat Card 4 */}
-                <div className="bg-surface-container-lowest rounded-2xl p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-                  <div className="w-14 h-14 rounded-full bg-secondary-fixed/50 flex items-center justify-center text-secondary mb-4 group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined text-[30px]">supervisor_account</span>
+                <div className="bg-surface-container-lowest rounded-2xl p-2.5 sm:p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4 group-hover:scale-110 transition-transform">
+                    <span className="material-symbols-outlined text-[22px] sm:text-[30px]">supervisor_account</span>
                   </div>
-                  <span className="font-headline-md text-headline-md text-primary font-extrabold mb-1">
+                  <span className="font-headline-md text-base sm:text-headline-md text-primary font-extrabold mb-0.5 sm:mb-1">
                     {stats?.[3]?.value || 'Uzman'}
                   </span>
-                  <span className="font-label-md text-label-md text-on-surface-variant font-medium">
+                  <span className="font-label-md text-[10px] sm:text-label-md leading-tight text-on-surface-variant font-medium">
                     {stats?.[3]?.label || 'Kadro'}
                   </span>
                 </div>
               </div>
 
               {/* Values Section */}
-              <div className="w-full flex flex-col items-center mb-20">
+              <div className="w-full flex flex-col items-center mb-12 sm:mb-20">
                 <div className="flex items-center gap-3 mb-8">
                   <span className="w-8 h-[2px] bg-secondary/30 rounded-full" />
                   <h2 className="font-headline-lg text-headline-lg text-primary tracking-tight">Değerlerimiz</h2>
@@ -113,72 +128,72 @@ export const AboutView: React.FC<AboutViewProps> = ({ data }) => {
                 </div>
 
                 {/* 5 Value Cards */}
-                <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-5">
+                <div className="w-full grid grid-cols-5 gap-2 sm:gap-4 lg:gap-5">
                   {/* Value 1: Sevgi */}
-                  <div className="bg-surface-container-lowest rounded-2xl p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="w-14 h-14 rounded-full bg-secondary-fixed/40 flex items-center justify-center text-secondary mb-4">
-                      <span className="material-symbols-outlined text-[28px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  <div className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
+                      <span className="material-symbols-outlined text-[22px] sm:text-[28px]" style={{ fontVariationSettings: "'FILL' 0" }}>
                         favorite
                       </span>
                     </div>
-                    <h3 className="font-headline-sm text-headline-sm text-primary mb-1">
+                    <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0 sm:mb-1">
                       {values?.[0]?.title || 'Sevgi'}
                     </h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant">
+                    <p className="hidden sm:block font-body-sm text-body-sm text-on-surface-variant">
                       {values?.[0]?.desc || 'Koşulsuz kabul ve güven'}
                     </p>
                   </div>
 
                   {/* Value 2: İlgi */}
-                  <div className="bg-surface-container-lowest rounded-2xl p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="w-14 h-14 rounded-full bg-primary-fixed/50 flex items-center justify-center text-primary mb-4">
-                      <span className="material-symbols-outlined text-[28px]">search</span>
+                  <div className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
+                      <span className="material-symbols-outlined text-[22px] sm:text-[28px]">visibility</span>
                     </div>
-                    <h3 className="font-headline-sm text-headline-sm text-primary mb-1">
+                    <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0 sm:mb-1">
                       {values?.[1]?.title || 'İlgi'}
                     </h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant">
+                    <p className="hidden sm:block font-body-sm text-body-sm text-on-surface-variant">
                       {values?.[1]?.desc || 'Bireysel gelişim odağı'}
                     </p>
                   </div>
 
                   {/* Value 3: Özen */}
-                  <div className="bg-surface-container-lowest rounded-2xl p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="w-14 h-14 rounded-full bg-tertiary-fixed/50 flex items-center justify-center text-tertiary mb-4">
-                      <span className="material-symbols-outlined text-[28px]">volunteer_activism</span>
+                  <div className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
+                      <span className="material-symbols-outlined text-[22px] sm:text-[28px]">volunteer_activism</span>
                     </div>
-                    <h3 className="font-headline-sm text-headline-sm text-primary mb-1">
+                    <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0 sm:mb-1">
                       {values?.[2]?.title || 'Özen'}
                     </h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant">
+                    <p className="hidden sm:block font-body-sm text-body-sm text-on-surface-variant">
                       {values?.[2]?.desc || 'Her detayda hassasiyet'}
                     </p>
                   </div>
 
                   {/* Value 4: Saygı */}
-                  <div className="bg-surface-container-lowest rounded-2xl p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="w-14 h-14 rounded-full bg-secondary-fixed/40 flex items-center justify-center text-secondary mb-4">
-                      <span className="material-symbols-outlined text-[28px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  <div className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
+                      <span className="material-symbols-outlined text-[22px] sm:text-[28px]" style={{ fontVariationSettings: "'FILL' 0" }}>
                         spa
                       </span>
                     </div>
-                    <h3 className="font-headline-sm text-headline-sm text-primary mb-1">
+                    <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0 sm:mb-1">
                       {values?.[3]?.title || 'Saygı'}
                     </h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant">
+                    <p className="hidden sm:block font-body-sm text-body-sm text-on-surface-variant">
                       {values?.[3]?.desc || 'Farklılıklara değer'}
                     </p>
                   </div>
 
                   {/* Value 5: Güvenli Ortam */}
-                  <div className="col-span-2 sm:col-span-1 bg-surface-container-lowest rounded-2xl p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="w-14 h-14 rounded-full bg-primary-fixed/50 flex items-center justify-center text-primary mb-4">
-                      <span className="material-symbols-outlined text-[28px]">shield</span>
+                  <div className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
+                      <span className="material-symbols-outlined text-[22px] sm:text-[28px]">shield_with_house</span>
                     </div>
-                    <h3 className="font-headline-sm text-headline-sm text-primary mb-1">
+                    <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0 sm:mb-1">
                       {values?.[4]?.title || 'Güvenli Ortam'}
                     </h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant">
+                    <p className="hidden sm:block font-body-sm text-body-sm text-on-surface-variant">
                       {values?.[4]?.desc || 'Huzurlu ve korunaklı yuva'}
                     </p>
                   </div>
@@ -197,7 +212,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ data }) => {
 
                 <div className="relative grid grid-cols-1 lg:grid-cols-12 items-center">
                   {/* Image Container (Child holding leaf) */}
-                  <div className="lg:col-span-6 relative h-[360px] sm:h-[420px] lg:h-[480px] w-full overflow-hidden">
+                  <div className="lg:col-span-6 relative h-[300px] sm:h-[420px] lg:h-[480px] w-full overflow-hidden">
                     <img
                       className="w-full h-full object-cover object-center"
                       alt={showcase?.imageAlt || 'Eylül Çocuk Akademisi sevgi dolu çocuk'}
@@ -206,23 +221,23 @@ export const AboutView: React.FC<AboutViewProps> = ({ data }) => {
                         'https://lh3.googleusercontent.com/aida-public/AB6AXuAbHkyHF6gL2zHQy7ObwfbgqCVc0_IKOCb4j-2Kklgs1gQijyvNd1VnVRubKPthFi0RtL23koQd23NOsuO1clIZyRH0kl0SmlUXKmDX9CtoDvFWDFlX07rXo4aJS9Gr744f8uJw0CZ6m5tw1lmqhYU-pKbv5VME3y5LhQQKATG80IDyvRvix4XUoImO67rtQTAj6ai8FFw7YF7pA5HLPjslswNbRGTkZqwO1Q9zw3FCxbtNVOsEzlsC'
                       }
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-surface-container-lowest via-transparent to-transparent opacity-80 lg:opacity-40" />
+                    <div className="absolute inset-0 max-sm:bg-gradient-to-l sm:bg-gradient-to-t lg:bg-gradient-to-r from-surface-container-lowest via-transparent to-transparent opacity-80 lg:opacity-40" />
                   </div>
 
                   {/* Quote & Inspiration Content */}
-                  <div className="lg:col-span-6 p-8 sm:p-12 lg:p-14 flex flex-col justify-center items-start relative z-10">
-                    <div className="w-12 h-12 rounded-2xl bg-secondary-fixed/50 flex items-center justify-center text-secondary mb-6 shadow-sm">
+                  <div className="lg:col-span-6 p-8 sm:p-12 lg:p-14 flex flex-col justify-center items-start relative z-10 max-sm:absolute max-sm:inset-y-0 max-sm:right-0 max-sm:w-1/2 max-sm:p-3 max-sm:items-center">
+                    <div className="max-sm:hidden w-12 h-12 rounded-2xl bg-secondary-fixed/50 flex items-center justify-center text-secondary mb-6 shadow-sm">
                       <span className="material-symbols-outlined text-[32px]">format_quote</span>
                     </div>
-                    <blockquote className="font-headline-lg text-headline-lg text-primary tracking-tight leading-snug mb-6 font-bold">
+                    <blockquote className="font-headline-lg text-headline-lg max-sm:text-[16px] max-sm:italic max-sm:text-center max-sm:mb-0 text-primary tracking-tight leading-snug mb-6 font-bold">
                       “{showcase?.quote || 'Her çocuk, doğru destekle kendi ışığını keşfeder.'}”
                     </blockquote>
-                    <div className="w-16 h-1 bg-secondary rounded-full mb-6" />
-                    <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-8">
+                    <div className="max-sm:hidden w-16 h-1 bg-secondary rounded-full mb-6" />
+                    <p className="max-sm:hidden font-body-md text-body-md text-on-surface-variant leading-relaxed mb-8">
                       {showcase?.description ||
                         'Çocuklarımızın içindeki sonsuz potansiyeli; doğayı, sanatı, bilimi ve sosyal ilişkileri harmanlayan sıcak bir çatı altında sevgiyle yeşertiyoruz.'}
                     </p>
-                    <div className="flex flex-wrap items-center gap-4">
+                    <div className="max-sm:hidden flex flex-wrap items-center gap-4">
                       <Link
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-secondary-container text-on-secondary font-label-md text-label-md shadow-[0_4px_16px_rgba(252,143,52,0.35)] hover:bg-secondary hover:shadow-[0_6px_20px_rgba(148,74,0,0.4)] transition-all"
                         href="/kayit-ve-basvuru"
