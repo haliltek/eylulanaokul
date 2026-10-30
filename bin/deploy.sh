@@ -24,7 +24,7 @@ echo "=== 3/5 Kod indiriliyor ==="
 git fetch origin main
 git checkout main
 git merge --ff-only origin/main
-git log --oneline | head -3
+git log --oneline -3
 
 echo "=== 4/5 Derleme ve yeniden baslatma ==="
 $DC up -d --build
