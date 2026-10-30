@@ -163,6 +163,77 @@ export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
             </div>
           </div>
         </section>
+
+        {/* Ek avantajlar: 5 sütunun altındaki ikinci satır */}
+        <section aria-label="Okulumuzun Avantajları" className="mt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-y-1 rounded-3xl bg-white/80 backdrop-blur-sm border border-amber-100/70 shadow-sm px-2 py-2 sm:px-3">
+            <div className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
+              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+                <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M7 3v8M4 3v5a3 3 0 003 3 3 3 0 003-3V3M7 11v10M17 21V3c-2.2 1.2-3.5 4-3.5 7.5 0 2 1.2 3 3.5 3" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug">
+                  Sağlıklı ve Dengeli<br />Beslenme
+                </h3>
+                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">Uzmanlar eşliğinde özenle hazırlanan menüler.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
+              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z" strokeLinecap="round" strokeLinejoin="round" /><path d="M8.5 12l2.5 2.5 4.5-5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug">
+                  Hijyenik ve Güvenli<br />Ortam
+                </h3>
+                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">Temiz, sağlıklı ve çocuk dostu ortamlar.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
+              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center">
+                <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M12 20.5S3.5 15.3 3.5 9.2A4.7 4.7 0 0112 6.6a4.7 4.7 0 018.5 2.6c0 6.100-8.500 11.300-8.500 11.300z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug">
+                  Sevecen ve Uzman<br />Öğretmen Kadrosu
+                </h3>
+                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">Her çocuğa özel ilgi ve rehberlik.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
+              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-sky-100 text-brand-blue flex items-center justify-center">
+                <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M12 20c-3.500-2-5-4.500-5-7.500 2.500.5 4.200 1.800 5 4 .8-2.200 2.500-3.500 5-4 0 3-1.500 5.500-5 7.500z" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 16.500C10.500 13.500 10.500 9.500 12 5c1.500 4.500 1.500 8.500 0 11.500zM4 11c2 0 3.500 1 4.500 2.500M20 11c-2 0-3.500 1-4.500 2.500" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug">
+                  Fiziksel ve Ruhsal<br />Gelişim Desteği
+                </h3>
+                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">Oyun, hareket ve sanatla bütün gelişim.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
+              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
+                <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <circle cx="12" cy="8" r="2.800" strokeLinecap="round" strokeLinejoin="round" /><circle cx="5.500" cy="10" r="2.200" strokeLinecap="round" strokeLinejoin="round" /><circle cx="18.500" cy="10" r="2.200" strokeLinecap="round" strokeLinejoin="round" /><path d="M7 20v-1.500a5 5 0 0110 0V20M2 19v-1a3.500 3.500 0 013.500-3.500M22 19v-1a3.500 3.500 0 00-3.500-3.500" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug">
+                  Aile Katılımı<br />ve İletişimi
+                </h3>
+                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">Güçlü veli iş birliği ile daha ileriye.</p>
+              </div>
+            </div>
+          </div>
+        </section>
         {/* END: CorePillarsFeatures */}
 
         {/* BEGIN: VideoFeatureCard */}
