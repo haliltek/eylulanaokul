@@ -150,11 +150,6 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ settings }) => {
                   Hakkımızda & 12 Yıllık Deneyim
                 </Link>
               </li>
-              <li>
-                <Link href="/admin" className="text-slate-400 hover:text-[#0E4984] transition-colors">
-                  Yönetim Paneli Girişi
-                </Link>
-              </li>
             </ul>
           </div>
 
