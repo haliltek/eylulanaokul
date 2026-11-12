@@ -1,13 +1,11 @@
 import React from 'react';
-import { Metadata } from 'next';
 import { EnglishView } from '@/components/views/EnglishView';
 import db from '@/lib/db';
+import { pageMetadata } from '@/lib/seoMeta';
 
-export const metadata: Metadata = {
-  title: 'All Day English - Tam Gün İngilizce | Eylül Çocuk Akademisi Anaokulu',
-  description:
-    'Native ve çift dilli eğitimciler eşliğinde gün boyu doğal akışta İngilizce. Şarkılar, masallar, drama ve günlük iletişimle yabancı dili ana dili gibi benimserler.',
-};
+export async function generateMetadata() {
+  return pageMetadata('english', '/egitim-modeli/all-day-english');
+}
 
 export const revalidate = 0;
 

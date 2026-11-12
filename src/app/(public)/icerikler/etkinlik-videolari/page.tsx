@@ -1,13 +1,13 @@
 import React from 'react';
 import { ActivityVideosView } from '@/components/views/ActivityVideosView';
 import db from '@/lib/db';
+import { pageMetadata } from '@/lib/seoMeta';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: 'Etkinlik Videoları | Özel Eylül Anaokulu Kars',
-  description: 'Özel Eylül Anaokulu öğrencilerimizin müzik, sanat, drama ve İngilizce etkinlik videoları.',
-};
+export async function generateMetadata() {
+  return pageMetadata('videos', '/icerikler/etkinlik-videolari');
+}
 
 export default async function ActivityVideosPage() {
   return <ActivityVideosView data={await db.getPage('videos')} />;

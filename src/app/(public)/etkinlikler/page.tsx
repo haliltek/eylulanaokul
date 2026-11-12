@@ -1,13 +1,11 @@
 import React from 'react';
-import { Metadata } from 'next';
 import { ActivitiesView } from '@/components/views/ActivitiesView';
 import db from '@/lib/db';
+import { pageMetadata } from '@/lib/seoMeta';
 
-export const metadata: Metadata = {
-  title: 'Zengin Etkinlik Dünyası | Eylül Çocuk Akademisi Anaokulu',
-  description:
-    'Piyano, resim, jimnastik, satranç, fen ve doğa, drama, ritim & orff, robotik kodlama ve değerler eğitimi atölyeleri.',
-};
+export async function generateMetadata() {
+  return pageMetadata('activities', '/etkinlikler');
+}
 
 export const revalidate = 0;
 

@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
 import { BlogPostView } from '@/components/views/BlogPostView';
+import { buildMetadata } from '@/lib/seoMeta';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,19 +21,17 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     };
   }
 
-  return {
-    title: `${post.seo?.metaTitle || post.title} | Özel Eylül Anaokulu`,
+  return buildMetadata({
+    title: post.seo?.metaTitle || post.title,
     description: post.seo?.metaDescription || post.excerpt,
-    keywords: post.seo?.focusKeyword ? [post.seo.focusKeyword, 'Özel Eylül Anaokulu', 'Kars anaokulu'] : undefined,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      images: [post.coverImage],
-      type: 'article',
-      publishedTime: post.publishedAt,
-      authors: [post.author],
-    },
-  };
+    keywords: [...(post.seo?.focusKeyword ? [post.seo.focusKeyword] : []), ...(post.seo?.keywords || [])],
+    ogImage: post.coverImage,
+    noindex: post.status !== 'published',
+    path: `/blog/${post.slug}`,
+    type: 'article',
+    publishedTime: post.publishedAt,
+    authors: [post.author],
+  });
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -43,8 +42,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  // Ziyaret sayacını artır (asenkron arka plan)
-  db.incrementBlogPostViews(slug).catch(() => {});
 
   const allBlogData = await db.getBlogData();
   const relatedPosts = (allBlogData.posts || []).filter((p) => p.slug !== slug);

@@ -1,201 +1,140 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
-import fs from 'fs';
-import path from 'path';
+import type { UnlighthousePageAudit } from '@/types/cms';
 
-// Sitedeki tüm alt sayfalar listesi
-const TARGET_ROUTES = [
+/**
+ * Gerçek teknik SEO taraması: sitenin sayfalarını sunucunun kendisinden indirir ve HTML'i denetler
+ * (başlık, açıklama, H1, görsel alt metinleri, canonical, dizinlenebilirlik, dil, mobil uyum, paylaşım etiketleri,
+ * yanıt süresi ve sayfa boyutu). Puan, geçilen kontrollerin oranıdır.
+ */
+export const dynamic = 'force-dynamic';
+
+const ROUTES = [
   { path: '/', title: 'Anasayfa' },
   { path: '/hakkimizda', title: 'Hakkımızda' },
-  { path: '/okulumuz', title: 'Okulumuz ve Kampüs' },
+  { path: '/okulumuz', title: 'Okulumuz' },
   { path: '/egitim-modeli/bem', title: 'BEM Eğitim Modeli' },
   { path: '/egitim-modeli/all-day-english', title: 'All Day English' },
-  { path: '/etkinlikler', title: 'Etkinlikler & Branşlar' },
-  { path: '/beslenme', title: 'Doğal Beslenme' },
+  { path: '/etkinlikler', title: 'Etkinlikler' },
+  { path: '/beslenme', title: 'Beslenme' },
   { path: '/velilerimiz-icin', title: 'Velilerimiz İçin' },
   { path: '/kayit-ve-basvuru', title: 'Kayıt ve Başvuru' },
-  { path: '/iletisim', title: 'İletişim & Lokasyon' },
-  { path: '/blog', title: 'Blog & Rehberlik' },
+  { path: '/iletisim', title: 'İletişim' },
+  { path: '/blog', title: 'Blog' },
   { path: '/icerikler/etkinlik-videolari', title: 'Etkinlik Videoları' },
   { path: '/icerikler/ders-programi', title: 'Ders Programı' },
-  { path: '/icerikler/aylik-yemek-listesi', title: 'Aylık Yemek Listesi' }
+  { path: '/icerikler/aylik-yemek-listesi', title: 'Aylık Yemek Listesi' },
 ];
 
-export async function POST(request: Request) {
+const decode = (s: string) =>
+  s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim();
+
+function metaContent(html: string, attr: 'name' | 'property', key: string): string | null {
+  const tags = html.match(/<meta\b[^>]*>/gi) || [];
+  for (const t of tags) {
+    const k = t.match(new RegExp(`${attr}=["']([^"']+)["']`, 'i'))?.[1];
+    if (k?.toLowerCase() === key) return decode(t.match(/content=["']([^"']*)["']/i)?.[1] || '');
+  }
+  return null;
+}
+
+function auditHtml(path: string, fallbackTitle: string, html: string, status: number, ms: number, bytes: number): UnlighthousePageAudit {
+  const head = html.split(/<\/head>/i)[0] || html;
+  const title = decode(head.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] || '');
+  const desc = metaContent(head, 'name', 'description') || '';
+  const robots = (metaContent(head, 'name', 'robots') || '').toLowerCase();
+  const canonical = /<link\b[^>]*rel=["']canonical["'][^>]*>/i.test(head);
+  const viewport = !!metaContent(head, 'name', 'viewport');
+  const ogTitle = !!metaContent(head, 'property', 'og:title');
+  const lang = /<html\b[^>]*\blang=["'][^"']+["']/i.test(html);
+  const h1Count = (html.match(/<h1\b/gi) || []).length;
+  const imgs = html.match(/<img\b[^>]*>/gi) || [];
+  const missingAlt = imgs.filter((t) => !/\balt=["'][^"']+["']/i.test(t) && !/aria-hidden=["']true["']/i.test(t)).length;
+  const indexable = status === 200 && !robots.includes('noindex');
+
+  const checks: [boolean, string][] = [
+    [status === 200, `Sayfa HTTP ${status} döndü`],
+    [!!title, 'Sayfa başlığı (title) yok'],
+    [title.length >= 30 && title.length <= 65, `Başlık uzunluğu ${title.length} karakter (önerilen 30-65)`],
+    [!!desc, 'Meta açıklama (description) yok'],
+    [desc.length >= 110 && desc.length <= 165, `Meta açıklama ${desc.length} karakter (önerilen 110-165)`],
+    [h1Count === 1, h1Count === 0 ? 'H1 başlığı yok' : `${h1Count} adet H1 var (1 olmalı)`],
+    [missingAlt === 0, `${missingAlt} görselde alternatif metin (alt) yok`],
+    [canonical, 'Canonical etiketi yok'],
+    [indexable, 'Sayfa arama motorlarına kapalı (noindex)'],
+    [lang, 'HTML dil (lang) etiketi yok'],
+    [viewport, 'Mobil görünüm (viewport) etiketi yok'],
+    [ogTitle, 'Sosyal medya paylaşım etiketi (og:title) yok'],
+  ];
+  const passed = checks.filter(([ok]) => ok).length;
+  // Uzunluk kontrolleri, etiket hiç yoksa ayrıca sorun olarak yazılmasın
+  const issues = checks
+    .filter(([ok], i) => !ok && !((i === 2 && !title) || (i === 4 && !desc)))
+    .map(([, msg]) => msg);
+
+  return {
+    path,
+    title: title || fallbackTitle,
+    seoScore: Math.round((passed / checks.length) * 100),
+    performanceScore: 0,
+    accessibilityScore: 0,
+    bestPracticesScore: 0,
+    lcpMs: 0,
+    responseTimeMs: ms,
+    statusCode: status,
+    pageSizeKb: Math.round(bytes / 1024),
+    titleLength: title.length,
+    metaDescriptionLength: desc.length,
+    h1Count,
+    imagesMissingAlt: missingAlt,
+    canonicalValid: canonical,
+    indexable,
+    issues,
+  };
+}
+
+async function auditRoute(base: string, path: string, fallbackTitle: string): Promise<UnlighthousePageAudit> {
+  const start = Date.now();
   try {
-    const seoData = await db.getSeoData();
-    const auditedPages = [];
-
-    // Gerçek veya simüle yerel HTTP kontrolü
-    for (const r of TARGET_ROUTES) {
-      const responseTime = Math.floor(Math.random() * 25) + 55; // 55ms - 80ms arası
-      const lcp = Math.floor(Math.random() * 200) + 700; // 700ms - 900ms
-      const seoScore = Math.floor(Math.random() * 4) + 97; // 97 - 100
-      const perfScore = Math.floor(Math.random() * 6) + 94; // 94 - 100
-
-      auditedPages.push({
-        path: r.path,
-        title: `${r.title} | Eylül Çocuk Akademisi Kars`,
-        seoScore,
-        performanceScore: perfScore,
-        accessibilityScore: 100,
-        bestPracticesScore: 98,
-        lcpMs: lcp,
-        responseTimeMs: responseTime,
-        titleLength: (r.title.length + 32),
-        metaDescriptionLength: 154,
-        h1Count: 1,
-        imagesMissingAlt: 0,
-        canonicalValid: true,
-        indexable: true,
-        issues: []
-      });
-    }
-
-    const avgSeo = Math.round(auditedPages.reduce((acc, p) => acc + p.seoScore, 0) / auditedPages.length);
-    const avgPerf = Math.round(auditedPages.reduce((acc, p) => acc + p.performanceScore, 0) / auditedPages.length);
-    const avgAcc = 100;
-    const avgBest = 99;
-
-    seoData.unlighthouse = {
-      lastScanAt: new Date().toISOString(),
-      reportUrl: '/unlighthouse/index.html',
-      summary: {
-        seo: avgSeo,
-        performance: avgPerf,
-        accessibility: avgAcc,
-        bestPractices: avgBest,
-        totalPages: auditedPages.length
-      },
-      pages: auditedPages
+    const res = await fetch(base + path, { cache: 'no-store', headers: { 'user-agent': 'EylulSeoAudit/1.0 (bot)' }, signal: AbortSignal.timeout(20000) });
+    const html = await res.text();
+    return auditHtml(path, fallbackTitle, html, res.status, Date.now() - start, Buffer.byteLength(html));
+  } catch (e: any) {
+    return {
+      path, title: fallbackTitle, seoScore: 0, performanceScore: 0, accessibilityScore: 0, bestPracticesScore: 0, lcpMs: 0,
+      responseTimeMs: Date.now() - start, statusCode: 0, pageSizeKb: 0, titleLength: 0, metaDescriptionLength: 0, h1Count: 0,
+      imagesMissingAlt: 0, canonicalValid: false, indexable: false, issues: [`Sayfaya ulaşılamadı: ${e?.message || 'bilinmeyen hata'}`],
     };
+  }
+}
 
-    await db.updateSeoData({ unlighthouse: seoData.unlighthouse });
-
-    // public/unlighthouse/index.html dosyasını güncelle
-    const unlighthouseDir = path.resolve(process.cwd(), 'public', 'unlighthouse');
-    if (!fs.existsSync(unlighthouseDir)) {
-      fs.mkdirSync(unlighthouseDir, { recursive: true });
+export async function POST() {
+  try {
+    const base = `http://127.0.0.1:${process.env.PORT || 3000}`;
+    const blog = await db.getBlogData();
+    const routes = [
+      ...ROUTES,
+      ...(blog.posts || []).filter((p) => p.status === 'published').map((p) => ({ path: `/blog/${p.slug}`, title: p.title })),
+    ];
+    const pages: UnlighthousePageAudit[] = [];
+    for (let i = 0; i < routes.length; i += 4) {
+      pages.push(...(await Promise.all(routes.slice(i, i + 4).map((r) => auditRoute(base, r.path, r.title)))));
     }
-
-    const htmlContent = generateUnlighthouseReportHtml(seoData.unlighthouse);
-    fs.writeFileSync(path.join(unlighthouseDir, 'index.html'), htmlContent, 'utf-8');
-
-    return NextResponse.json({
-      success: true,
-      message: 'Unlighthouse tam site denetimi tamamlandı.',
-      data: seoData.unlighthouse
-    });
+    const avg = Math.round(pages.reduce((s, p) => s + p.seoScore, 0) / (pages.length || 1));
+    const unlighthouse = {
+      lastScanAt: new Date().toISOString(),
+      reportUrl: '',
+      summary: { seo: avg, performance: 0, accessibility: 0, bestPractices: 0, totalPages: pages.length },
+      pages,
+    };
+    await db.updateSeoData({ unlighthouse });
+    return NextResponse.json({ success: true, message: `${pages.length} sayfa tarandı.`, data: unlighthouse });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
 export async function GET() {
-  try {
-    const seoData = await db.getSeoData();
-    return NextResponse.json({ success: true, data: seoData.unlighthouse });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
-  }
-}
-
-function generateUnlighthouseReportHtml(data: any): string {
-  const scanTime = new Date().toLocaleString('tr-TR');
-  const rows = data.pages
-    .map(
-      (p: any) => `
-    <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
-      <td class="py-3 px-4 font-mono text-xs font-semibold text-slate-800">${p.path}</td>
-      <td class="py-3 px-4 text-xs text-slate-600 max-w-xs truncate">${p.title}</td>
-      <td class="py-3 px-4 text-center font-bold text-xs"><span class="px-2 py-1 rounded bg-emerald-100 text-emerald-800">${p.seoScore}</span></td>
-      <td class="py-3 px-4 text-center font-bold text-xs"><span class="px-2 py-1 rounded bg-emerald-100 text-emerald-800">${p.performanceScore}</span></td>
-      <td class="py-3 px-4 text-center font-bold text-xs"><span class="px-2 py-1 rounded bg-emerald-100 text-emerald-800">${p.accessibilityScore}</span></td>
-      <td class="py-3 px-4 text-center text-xs font-mono text-slate-600">${p.responseTimeMs} ms</td>
-      <td class="py-3 px-4 text-center text-xs font-bold text-emerald-600">Tam Uyumlu</td>
-    </tr>`
-    )
-    .join('');
-
-  return `<!DOCTYPE html>
-<html lang="tr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unlighthouse Audit Report | Eylül Çocuk Akademisi</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  </style>
-</head>
-<body class="bg-slate-50 text-slate-900 p-4 sm:p-8">
-  <div class="max-w-6xl mx-auto space-y-6">
-    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold bg-slate-900 text-white uppercase tracking-wider">Unlighthouse v0.10</span>
-          <span class="text-xs text-slate-400">Son Tarama: ${scanTime}</span>
-        </div>
-        <h1 class="text-xl font-black text-slate-900 mt-1">Eylül Çocuk Akademisi - Tüm Site Kalite ve SEO Raporu</h1>
-        <p class="text-xs text-slate-500">Google Lighthouse & Core Web Vitals standartlarına tam uyumlu 14 alt sayfa denetimi</p>
-      </div>
-      <div class="flex items-center gap-3">
-        <span class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-xs">
-          %100 Dizinlenebilir (Indexable)
-        </span>
-      </div>
-    </div>
-
-    <!-- Skor Kartları -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-sm">
-        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">SEO Skoru</p>
-        <div class="text-3xl font-black text-emerald-600 mt-1">${data.summary.seo} / 100</div>
-        <p class="text-[11px] text-slate-400 mt-1">Meta, H1, Başlıklar, Canonical</p>
-      </div>
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-sm">
-        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Performans / Hız</p>
-        <div class="text-3xl font-black text-emerald-600 mt-1">${data.summary.performance} / 100</div>
-        <p class="text-[11px] text-slate-400 mt-1">LCP, FID, CLS, Asset Optimizasyonu</p>
-      </div>
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-sm">
-        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Erişilebilirlik</p>
-        <div class="text-3xl font-black text-emerald-600 mt-1">${data.summary.accessibility} / 100</div>
-        <p class="text-[11px] text-slate-400 mt-1">WCAG 2.1 AAA, Kontrast, Aria</p>
-      </div>
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 text-center shadow-sm">
-        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">En İyi Uygulamalar</p>
-        <div class="text-3xl font-black text-emerald-600 mt-1">${data.summary.bestPractices} / 100</div>
-        <p class="text-[11px] text-slate-400 mt-1">HTTPS, Güvenlik Başlıkları, Doctype</p>
-      </div>
-    </div>
-
-    <!-- Sayfa Tablosu -->
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-      <div class="p-4 border-b border-slate-100 flex items-center justify-between">
-        <h3 class="font-bold text-sm text-slate-800">Taranan Tüm Alt Rotalar (${data.pages.length} Sayfa)</h3>
-        <span class="text-xs text-slate-400">Tüm rotalar HTTP 200 OK yanıt verdi</span>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left">
-          <thead class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-100">
-            <tr>
-              <th class="py-3 px-4">Rota (Path)</th>
-              <th class="py-3 px-4">Başlık (Title)</th>
-              <th class="py-3 px-4 text-center">SEO</th>
-              <th class="py-3 px-4 text-center">Hız</th>
-              <th class="py-3 px-4 text-center">Erişilebilirlik</th>
-              <th class="py-3 px-4 text-center">Sunucu Yanıtı</th>
-              <th class="py-3 px-4 text-center">Durum</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</body>
-</html>`;
+  const seoData = await db.getSeoData();
+  return NextResponse.json({ success: true, data: seoData.unlighthouse });
 }

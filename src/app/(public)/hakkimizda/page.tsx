@@ -1,13 +1,11 @@
 import React from 'react';
-import { Metadata } from 'next';
 import { AboutView } from '@/components/views/AboutView';
 import db from '@/lib/db';
+import { pageMetadata } from '@/lib/seoMeta';
 
-export const metadata: Metadata = {
-  title: 'Hakkımızda | Eylül Çocuk Akademisi Anaokulu',
-  description:
-    '12 yıllık deneyimimiz, uzman eğitim kadromuz ve sevgi, ilgi, özen değerlerimizle çocuklarımızın özgürce keşfettiği güvenli bir eğitim yuvası sunuyoruz.',
-};
+export async function generateMetadata() {
+  return pageMetadata('about', '/hakkimizda');
+}
 
 export const revalidate = 0;
 

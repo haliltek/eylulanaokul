@@ -1,5 +1,15 @@
 # Eylül Çocuk Akademisi - İlerleme ve Durum Raporu (PROGRESS.md)
 
+## [2026-11-12] Sayfa bazlı SEO + gerçek analitik (demo veriler sıfırlandı)
+
+- **Sayfa SEO alanları:** Sayfa Editörü'nde her sayfanın en altında "SEO Ayarları": başlık, açıklama (karakter sayaçlı), anahtar kelimeler (yazıp Enter), paylaşım görseli, noindex, Google önizlemesi. "Genel SEO Ayarları (Tüm Site)": site adı/alan adı, varsayılan başlık-açıklama, genel anahtar kelimeler, Google/Bing/Yandex doğrulama kodları, dizinleme izni. Değerler `generateMetadata` ile sayfalara uygulanır (`src/lib/seoMeta.ts`); `sitemap.xml` ve `robots.txt` otomatik üretilir.
+- **Blog SEO:** odak kelime, meta başlık/açıklama, anahtar kelime etiketleri; SEO puanı içerikten gerçek kontrol listesiyle hesaplanır (`src/lib/seo.ts`).
+- **Demo veriler silindi:** SEO/analitik demo sayıları ve blog okunma sayıları açılışta bir kez sıfırlanır (`2026-11-seo-sifirlama` yaması).
+- **Gerçek ölçüm:** ziyaretçi, oturum, sayfa görüntüleme, kalma süresi, hemen çıkma, trafik kaynağı ve tıklamalar (`AnalyticsTracker` → `/api/analytics`, botlar hariç). Teknik SEO taraması sayfaların gerçek HTML'ini denetler. Google sıralamaları yalnız SerpBear bağlantısı girilirse çekilir.
+- `/api/seo` uçları artık tamamen yönetici girişi ister.
+
+---
+
 ## [2026-11-12] Tüm site içeriği yönetim panelinden düzenlenebilir + müşteri düzeltmeleri
 
 ### Ne değişti

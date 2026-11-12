@@ -5,6 +5,8 @@ import { ADMIN_COOKIE, authEnabled, verifySessionToken } from '@/lib/adminAuth';
 const PROTECTED_WRITE_API = ['/api/cms', '/api/blog', '/api/media', '/api/meals', '/api/settings', '/api/social', '/api/hr', '/api/seo'];
 // Okuması da kişisel veri içeren API'ler
 const PROTECTED_READ_API = ['/api/crm'];
+// Tüm yöntemleri yönetici girişi gerektiren API'ler (SEO ayarları, API anahtarları)
+const PROTECTED_ALL_API = ['/api/seo'];
 
 export async function middleware(req: NextRequest) {
   if (!authEnabled()) return NextResponse.next();
@@ -17,7 +19,9 @@ export async function middleware(req: NextRequest) {
   // Ziyaretçi formu: POST /api/crm herkese açık; diğer yöntemler korumalı
   const isCrmProtected = PROTECTED_READ_API.some((p) => pathname.startsWith(p)) && method !== 'POST';
 
-  if (!isAdminPage && !isWriteApi && !isCrmProtected) return NextResponse.next();
+  const isAllProtected = PROTECTED_ALL_API.some((p) => pathname.startsWith(p));
+
+  if (!isAdminPage && !isWriteApi && !isCrmProtected && !isAllProtected) return NextResponse.next();
 
   const ok = await verifySessionToken(req.cookies.get(ADMIN_COOKIE)?.value);
   if (ok) return NextResponse.next();

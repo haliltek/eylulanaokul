@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getSeoGlobal, siteBaseUrl } from '@/lib/seoMeta';
 import { Nunito, Comfortaa, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 
@@ -23,11 +24,22 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: 'Eylül Çocuk Akademisi Anaokulu | Güvenle Bugüne, Umutla Yarına',
-  description:
-    'Eylül Çocuk Akademisi; 3-6 yaş butik sınıfları, Bütünleştirilmiş Eğitim Modeli (BEM), All Day English tam gün İngilizce, zengin etkinlik dünyası ve doğal beslenme felsefesiyle geleceğe sevgiyle hazırlıyor.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const g = await getSeoGlobal();
+  const other: Record<string, string> = {};
+  if (g.bingVerification) other['msvalidate.01'] = g.bingVerification;
+  return {
+    metadataBase: new URL(siteBaseUrl(g)),
+    title: { default: g.defaultTitle, template: g.titleTemplate || '%s' },
+    description: g.defaultDescription,
+    applicationName: g.siteName,
+    verification: {
+      google: g.googleVerification || undefined,
+      yandex: g.yandexVerification || undefined,
+      other: Object.keys(other).length ? other : undefined,
+    },
+  };
+}
 
 export default function RootLayout({
   children,

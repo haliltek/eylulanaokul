@@ -1,91 +1,115 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
-import { SerpKeywordItem } from '@/types/cms';
+import type { SerpKeywordItem } from '@/types/cms';
+
+/**
+ * Anahtar kelime sıralama takibi. Sıralamalar yalnız gerçek kaynaktan gelir: SerpBear (açık kaynak sıralama
+ * takip aracı) bağlantısı tanımlıysa onun API'sinden çekilir; tanımlı değilse sıra "ölçülmedi" olarak kalır.
+ */
+export const dynamic = 'force-dynamic';
+
+const today = () => new Date().toISOString().split('T')[0];
+const publicView = (s: any) => ({ ...s, apiKey: s.apiKey ? '••••••' : '' });
+
+async function fetchSerpBear(baseUrl: string, apiKey: string, domain: string): Promise<SerpKeywordItem[]> {
+  const url = `${baseUrl.replace(/\/+$/, '')}/api/keywords?domain=${encodeURIComponent(domain)}`;
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${apiKey}` }, cache: 'no-store', signal: AbortSignal.timeout(20000) });
+  if (!res.ok) throw new Error(`SerpBear yanıtı: HTTP ${res.status}`);
+  const json: any = await res.json();
+  const list: any[] = Array.isArray(json?.keywords) ? json.keywords : [];
+  return list.map((k) => {
+    const hist = k.history && typeof k.history === 'object' ? Object.entries(k.history as Record<string, number>) : [];
+    hist.sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime());
+    const positions = hist.map(([, p]) => Number(p) || 0);
+    const pos = Number(k.position) || 0;
+    const prev = positions.length > 1 ? positions[positions.length - 2] : pos;
+    const ranked = positions.filter((p) => p > 0);
+    return {
+      id: `sb-${k.ID ?? k.id ?? k.keyword}`,
+      keyword: String(k.keyword || ''),
+      device: k.device === 'mobile' ? 'mobile' : 'desktop',
+      country: String(k.country || 'TR'),
+      city: String(k.city || ''),
+      position: pos,
+      previousPosition: prev,
+      bestPosition: ranked.length ? Math.min(...ranked) : pos,
+      volume: Number(k.volume) || 0,
+      url: String(k.url || ''),
+      history: positions.slice(-14),
+      tags: Array.isArray(k.tags) ? k.tags.map(String) : [],
+      lastChecked: String(k.lastUpdated || '').split('T')[0] || today(),
+    } as SerpKeywordItem;
+  });
+}
 
 export async function GET() {
-  try {
-    const seoData = await db.getSeoData();
-    return NextResponse.json({ success: true, data: seoData.serpbear });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
-  }
+  const seo = await db.getSeoData();
+  return NextResponse.json({ success: true, data: publicView(seo.serpbear) });
 }
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { action, keyword, id, serpBearUrl, apiKey } = body;
-    const seoData = await db.getSeoData();
+    const { action } = body;
+    const seo = await db.getSeoData();
+    const sb = seo.serpbear;
 
     if (action === 'refresh') {
-      // Tüm anahtar kelimelerin canlı SERP sıralamalarını güncelle
-      seoData.serpbear.keywords = seoData.serpbear.keywords.map((kw: SerpKeywordItem) => {
-        const prev = kw.position;
-        // Gerçekçi sıralama dalgalanması simülasyonu
-        const change = Math.random() > 0.7 ? (Math.random() > 0.5 ? -1 : 1) : 0;
-        const newPos = Math.max(1, Math.min(prev + change, 3));
-        const newHistory = [...kw.history.slice(1), newPos];
-        const best = Math.min(kw.bestPosition, newPos);
-
-        return {
-          ...kw,
-          position: newPos,
-          previousPosition: prev,
-          bestPosition: best,
-          history: newHistory,
-          lastChecked: new Date().toISOString().split('T')[0]
-        };
-      });
-      seoData.serpbear.lastUpdated = new Date().toISOString();
-      await db.updateSeoData({ serpbear: seoData.serpbear });
-      return NextResponse.json({
-        success: true,
-        message: 'Google SERP sıralamaları güncellendi.',
-        data: seoData.serpbear
-      });
+      if (!sb.serpBearUrl || !sb.apiKey) {
+        return NextResponse.json(
+          { success: false, error: 'Gerçek Google sıralamaları için SerpBear bağlantısı (adres ve API anahtarı) girilmelidir. Bağlantı yokken sıralama ölçülemez.' },
+          { status: 400 },
+        );
+      }
+      const remote = await fetchSerpBear(sb.serpBearUrl, sb.apiKey, sb.domain);
+      // SerpBear'da olmayan, panelden eklenmiş kelimeler "ölçülmedi" olarak listede kalır
+      const remoteNames = new Set(remote.map((k) => k.keyword.toLocaleLowerCase('tr')));
+      const localOnly = sb.keywords.filter((k) => !k.id.startsWith('sb-') && !remoteNames.has(k.keyword.toLocaleLowerCase('tr')));
+      sb.keywords = [...remote, ...localOnly];
+      sb.lastUpdated = new Date().toISOString();
+      await db.updateSeoData({ serpbear: sb });
+      return NextResponse.json({ success: true, message: `${remote.length} anahtar kelimenin sıralaması SerpBear'dan alındı.`, data: publicView(sb) });
     }
 
     if (action === 'add') {
-      if (!keyword || !keyword.trim()) {
-        return NextResponse.json({ success: false, error: 'Anahtar kelime boş olamaz' }, { status: 400 });
+      const keyword = String(body.keyword || '').trim().slice(0, 120);
+      if (!keyword) return NextResponse.json({ success: false, error: 'Anahtar kelime boş olamaz' }, { status: 400 });
+      if (sb.keywords.some((k) => k.keyword.toLocaleLowerCase('tr') === keyword.toLocaleLowerCase('tr'))) {
+        return NextResponse.json({ success: false, error: 'Bu anahtar kelime zaten listede' }, { status: 400 });
       }
-
-      const newKw: SerpKeywordItem = {
+      const kw: SerpKeywordItem = {
         id: `kw-${Date.now()}`,
-        keyword: keyword.trim(),
-        device: body.device || 'desktop',
+        keyword,
+        device: body.device === 'mobile' ? 'mobile' : 'desktop',
         country: 'TR',
         city: 'Kars',
-        position: body.position || 1,
-        previousPosition: body.position || 1,
-        bestPosition: body.position || 1,
-        volume: body.volume || 450,
-        url: body.url || 'https://eylulanaokulu.com.tr',
-        history: [2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1],
-        tags: body.tags || ['Yeni', 'Kars'],
-        lastChecked: new Date().toISOString().split('T')[0]
+        position: 0,
+        previousPosition: 0,
+        bestPosition: 0,
+        volume: 0,
+        url: String(body.url || '').trim().slice(0, 300),
+        history: [],
+        tags: [],
+        lastChecked: '',
       };
-
-      seoData.serpbear.keywords.unshift(newKw);
-      seoData.serpbear.lastUpdated = new Date().toISOString();
-      await db.updateSeoData({ serpbear: seoData.serpbear });
-      return NextResponse.json({ success: true, message: 'Anahtar kelime eklendi', data: newKw });
+      sb.keywords.unshift(kw);
+      await db.updateSeoData({ serpbear: sb });
+      return NextResponse.json({ success: true, message: 'Anahtar kelime takip listesine eklendi', data: kw });
     }
 
     if (action === 'delete') {
-      if (!id) {
-        return NextResponse.json({ success: false, error: 'ID zorunludur' }, { status: 400 });
-      }
-      seoData.serpbear.keywords = seoData.serpbear.keywords.filter((k: SerpKeywordItem) => k.id !== id);
-      await db.updateSeoData({ serpbear: seoData.serpbear });
+      if (!body.id) return NextResponse.json({ success: false, error: 'ID zorunludur' }, { status: 400 });
+      sb.keywords = sb.keywords.filter((k) => k.id !== body.id);
+      await db.updateSeoData({ serpbear: sb });
       return NextResponse.json({ success: true, message: 'Anahtar kelime silindi' });
     }
 
     if (action === 'update_settings') {
-      if (serpBearUrl !== undefined) seoData.serpbear.serpBearUrl = serpBearUrl;
-      if (apiKey !== undefined) seoData.serpbear.apiKey = apiKey;
-      await db.updateSeoData({ serpbear: seoData.serpbear });
-      return NextResponse.json({ success: true, message: 'SerpBear bağlantı ayarları kaydedildi' });
+      if (typeof body.serpBearUrl === 'string') sb.serpBearUrl = body.serpBearUrl.trim();
+      if (typeof body.apiKey === 'string' && body.apiKey !== '••••••') sb.apiKey = body.apiKey.trim();
+      if (typeof body.domain === 'string' && body.domain.trim()) sb.domain = body.domain.trim().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+      await db.updateSeoData({ serpbear: sb });
+      return NextResponse.json({ success: true, message: 'Sıralama takip ayarları kaydedildi', data: publicView(sb) });
     }
 
     return NextResponse.json({ success: false, error: 'Geçersiz işlem' }, { status: 400 });

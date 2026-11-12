@@ -35,6 +35,8 @@ import { SITE_CONTENT, type SiteContent, type PageKey } from '../data/content';
 import { deepMerge } from './content';
 import { applyContentPatches } from './contentPatches';
 import { initialBlogData, initialSeoSuiteData } from '../data/initial-seo-blog';
+import { createEmptySeoData } from './seo';
+import type { AnalyticsEvent } from './analyticsEvent';
 
 // Kalıcı JSON veri deposu dosya yolu
 const DATA_DIR = path.resolve(process.cwd(), 'data');
@@ -245,12 +247,7 @@ class CmsDatabase {
     const store = await this.getStore();
     if (!store.blog) store.blog = initialBlogData;
     const post = store.blog.posts.find(p => p.slug === slug);
-    if (post) {
-      post.views += 1;
-      await this.persist();
-      return post;
-    }
-    return null;
+    return post || null;
   }
 
   public async incrementBlogPostViews(slug: string): Promise<void> {
@@ -349,44 +346,94 @@ class CmsDatabase {
     return store.seo;
   }
 
-  public async recordAnalyticsEvent(event: { type: 'pageview' | 'click'; path?: string; label?: string; targetPath?: string; category?: string }): Promise<void> {
+  /** Ziyaretçi olaylarını kaydeder (yalnız gerçek ölçüm; bkz. components/common/AnalyticsTracker). */
+  public async recordAnalyticsEvent(event: AnalyticsEvent): Promise<void> {
     const store = await this.getStore();
-    if (!store.seo) store.seo = initialSeoSuiteData;
-    const analytics = store.seo.analytics;
+    if (!store.seo) store.seo = createEmptySeoData('eylulanaokulu.com.tr');
+    const a = store.seo.analytics;
+    const c = (a.counters ||= { since: new Date().toISOString(), bounces: 0, totalTimeSec: 0, timeSamples: 0, sources: {} });
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Istanbul' }).format(new Date());
+    const day = () => {
+      let d = a.dailyTraffic.find((x) => x.date === today);
+      if (!d) {
+        d = { date: today, visitors: 0, pageViews: 0, organic: 0 };
+        a.dailyTraffic.push(d);
+        a.dailyTraffic.sort((x, y) => x.date.localeCompare(y.date));
+        if (a.dailyTraffic.length > 60) a.dailyTraffic.splice(0, a.dailyTraffic.length - 60);
+      }
+      return d;
+    };
+    const page = (path: string, label?: string) => {
+      let m = a.pageMetrics.find((p) => p.path === path);
+      if (!m) {
+        if (a.pageMetrics.length >= 300) return null;
+        m = { path, label: label || path, views: 0, uniqueVisitors: 0, avgTimeSec: 0, bounceRate: 0, totalTimeSec: 0, timeSamples: 0, entrances: 0, bounces: 0 };
+        a.pageMetrics.push(m);
+      }
+      if (label) m.label = label;
+      return m;
+    };
+    const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 1000) / 10 : 0);
 
     if (event.type === 'pageview') {
-      analytics.summary.totalPageViews += 1;
-      const path = event.path || '/';
-      const metric = analytics.pageMetrics.find(p => p.path === path);
-      if (metric) {
-        metric.views += 1;
-      } else {
-        analytics.pageMetrics.push({
-          path,
-          label: path,
-          views: 1,
-          uniqueVisitors: 1,
-          avgTimeSec: 60,
-          bounceRate: 30
-        });
+      const m = page(event.path, event.title);
+      const d = day();
+      a.summary.totalPageViews += 1;
+      d.pageViews += 1;
+      if (event.newVisitor) a.summary.uniqueVisitors += 1;
+      if (event.newSession) {
+        a.summary.totalVisitors += 1;
+        d.visitors += 1;
+        c.bounces += 1;
+        c.sources[event.source] = (c.sources[event.source] || 0) + 1;
+        if (event.source === 'Google Arama' || event.source === 'Diğer Arama Motorları') d.organic += 1;
+        if (m) { m.entrances = (m.entrances || 0) + 1; m.bounces = (m.bounces || 0) + 1; }
       }
+      if (event.secondPage) {
+        c.bounces = Math.max(0, c.bounces - 1);
+        const entry = event.entryPath ? a.pageMetrics.find((p) => p.path === event.entryPath) : null;
+        if (entry) entry.bounces = Math.max(0, (entry.bounces || 0) - 1);
+      }
+      if (m) {
+        m.views += 1;
+        if (event.newPageInSession) m.uniqueVisitors += 1;
+      }
+      const slug = event.path.startsWith('/blog/') ? event.path.slice(6) : '';
+      const post = slug ? store.blog?.posts?.find((p) => p.slug === slug) : undefined;
+      if (post) post.views = (post.views || 0) + 1;
+    } else if (event.type === 'leave') {
+      const m = a.pageMetrics.find((p) => p.path === event.path);
+      if (m) {
+        m.totalTimeSec = (m.totalTimeSec || 0) + event.seconds;
+        m.timeSamples = (m.timeSamples || 0) + 1;
+      }
+      c.totalTimeSec += event.seconds;
+      c.timeSamples += 1;
     } else if (event.type === 'click') {
-      const label = event.label || event.targetPath || 'Tıklama';
-      let clk = analytics.clickEvents.find(c => c.label === label || c.targetPath === event.targetPath);
-      if (clk) {
-        clk.count += 1;
-        clk.lastClickedAt = new Date().toISOString();
-      } else {
-        analytics.clickEvents.push({
-          id: `clk-${Date.now()}`,
-          label,
-          targetPath: event.targetPath || '#',
-          category: event.category || 'Etkileşim',
-          count: 1,
-          lastClickedAt: new Date().toISOString()
-        });
+      let clk = a.clickEvents.find((x) => x.label === event.label);
+      if (!clk) {
+        if (a.clickEvents.length >= 200) return;
+        clk = { id: `clk-${Date.now()}`, label: event.label, targetPath: event.targetPath, category: event.category, count: 0, lastClickedAt: '' };
+        a.clickEvents.push(clk);
       }
+      clk.count += 1;
+      clk.lastClickedAt = new Date().toISOString();
+      a.clickEvents.sort((x, y) => y.count - x.count);
+      if (['Telefon', 'WhatsApp', 'Form'].includes(event.category)) a.summary.conversionCount += 1;
     }
+
+    // Türetilmiş değerler
+    for (const m of a.pageMetrics) {
+      m.avgTimeSec = m.timeSamples ? Math.round((m.totalTimeSec || 0) / m.timeSamples) : 0;
+      m.bounceRate = pct(m.bounces || 0, m.entrances || 0);
+    }
+    a.pageMetrics.sort((x, y) => y.views - x.views);
+    a.summary.bounceRate = pct(c.bounces, a.summary.totalVisitors);
+    a.summary.avgSessionDurationSec = a.summary.totalVisitors ? Math.round(c.totalTimeSec / a.summary.totalVisitors) : 0;
+    const totalSessions = Object.values(c.sources).reduce((x, y) => x + y, 0);
+    a.trafficSources = Object.entries(c.sources)
+      .map(([source, sessions]) => ({ source, sessions, percentage: pct(sessions, totalSessions) }))
+      .sort((x, y) => y.sessions - x.sessions);
     await this.persist();
   }
 
@@ -427,14 +474,6 @@ class CmsDatabase {
   public async getWebAnalytics(): Promise<WebAnalyticsData> {
     const seo = await this.getSeoData();
     return seo.analytics;
-  }
-
-  public async trackPageView(path: string): Promise<void> {
-    await this.recordAnalyticsEvent({ type: 'pageview', path });
-  }
-
-  public async trackClickEvent(clickId: string): Promise<void> {
-    await this.recordAnalyticsEvent({ type: 'click', label: clickId, targetPath: clickId });
   }
 
   // --- MEDYA KÜTÜPHANESİ ---

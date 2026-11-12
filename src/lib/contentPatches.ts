@@ -7,6 +7,7 @@
  * duruyorsa değiştirir — yönetim panelinden sonradan düzenlenmiş metinlere dokunmaz.
  */
 import type { CmsStore, BlogPostItem } from '../types/cms';
+import { createEmptySeoData } from './seo';
 
 type Replacement = [from: string, to: string];
 interface Patch {
@@ -81,6 +82,16 @@ export const CONTENT_PATCHES: Patch[] = [
       const slug = '3-6-yas-doneminde-bireysel-ilgi-ve-yetenek-kesfi';
       if (posts.some((p) => p.slug === slug)) return false;
       posts.push(POST_6);
+      return true;
+    },
+  },
+  {
+    // Demo SEO/analitik verilerini sıfırla; bundan sonra yalnız gerçek ölçümler birikir.
+    id: '2026-11-seo-sifirlama',
+    replacements: [],
+    run: (store) => {
+      store.seo = createEmptySeoData(store.seo?.serpbear?.domain || 'eylulanaokulu.com.tr');
+      for (const p of store.blog?.posts || []) p.views = 0;
       return true;
     },
   },

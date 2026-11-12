@@ -1,12 +1,11 @@
 import React from 'react';
-import { Metadata } from 'next';
 import { PortalInfoView } from '@/components/views/PortalInfoView';
 import db from '@/lib/db';
+import { pageMetadata } from '@/lib/seoMeta';
 
-export const metadata: Metadata = {
-  title: 'Veli Portalı | Eylül Çocuk Akademisi Anaokulu',
-  description: 'Eylül Çocuk Akademisi veli portalı: duyurular, günlük akış, gelişim notları ve öğretmen iletişimi.',
-};
+export async function generateMetadata() {
+  return pageMetadata('portal', '/veli-portali');
+}
 
 export const dynamic = 'force-dynamic';
 

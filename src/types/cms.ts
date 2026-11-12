@@ -116,6 +116,8 @@ export interface MonthlyMealListData {
 // --- YENİ BLOG MODÜLÜ (WSI-62) ---
 
 export interface BlogPostSeo {
+  /** Ek anahtar kelimeler (etiketler) */
+  keywords?: string[];
   metaTitle: string;
   metaDescription: string;
   focusKeyword: string;
@@ -174,6 +176,8 @@ export interface UnlighthousePageAudit {
   bestPracticesScore: number;
   lcpMs: number;
   responseTimeMs: number;
+  statusCode?: number;
+  pageSizeKb?: number;
   titleLength: number;
   metaDescriptionLength: number;
   h1Count: number;
@@ -198,6 +202,11 @@ export interface WebAnalyticsPageMetric {
   uniqueVisitors: number;
   avgTimeSec: number;
   bounceRate: number;
+  /** Ham sayaçlar (ortalamaların hesaplanması için) */
+  totalTimeSec?: number;
+  timeSamples?: number;
+  entrances?: number;
+  bounces?: number;
 }
 
 export interface WebAnalyticsClickEvent {
@@ -228,6 +237,14 @@ export interface WebAnalyticsData {
   pageMetrics: WebAnalyticsPageMetric[];
   clickEvents: WebAnalyticsClickEvent[];
   trafficSources: WebAnalyticsTrafficSource[];
+  /** Ham sayaçlar: ölçüm başlangıcı, tek sayfalık oturumlar, süre toplamları, kaynak dağılımı */
+  counters?: {
+    since: string;
+    bounces: number;
+    totalTimeSec: number;
+    timeSamples: number;
+    sources: Record<string, number>;
+  };
 }
 
 export interface SeoSuiteData {

@@ -2,8 +2,11 @@
 
 import React, { useState } from 'react';
 import { AdminCredit } from './components/AdminCredit';
+import { BlogSeoBox } from './components/BlogSeoBox';
+import { blogSeoChecks, createEmptySeoData } from '@/lib/seo';
+import { DashboardAnalytics, SeoCenter } from './components/SeoPanels';
 import Link from 'next/link';
-import { CmsStore, BlogPostItem, SerpKeywordItem } from '@/types/cms';
+import { CmsStore, BlogPostItem } from '@/types/cms';
 import { MediaField, ImageField } from './components/ImageField';
 import { ContentEditor } from './components/ContentEditor';
 import { SITE_CONTENT, PAGE_META, type SiteContent, type PageKey } from '@/data/content';
@@ -19,21 +22,17 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
   const [dirtyPages, setDirtyPages] = useState<Set<string>>(new Set());
   const [activeTab, setActiveTab] = useState<'dashboard' | 'seo' | 'blog' | 'cms' | 'media' | 'meals' | 'messages' | 'settings'>('dashboard');
   const [selectedCmsPage, setSelectedCmsPage] = useState<PageKey>('home');
-  const [seoSubTab, setSeoSubTab] = useState<'serp' | 'analytics' | 'unlighthouse'>('serp');
+  const [seoSubTab, setSeoSubTab] = useState<'analytics' | 'audit' | 'serp'>('analytics');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [cmsOpen, setCmsOpen] = useState(false);
   const [auditing, setAuditing] = useState(false);
-  const [refreshingSerp, setRefreshingSerp] = useState(false);
 
   // Blog Düzenleme Modalı / State'i
   const [editingPost, setEditingPost] = useState<BlogPostItem | null>(null);
   const [isNewPost, setIsNewPost] = useState(false);
 
-  // Yeni Anahtar Kelime Ekleme State'i
-  const [newKeywordInput, setNewKeywordInput] = useState('');
-  const [newKeywordUrl, setNewKeywordUrl] = useState('https://eylulanaokulu.com.tr');
 
   // Bildirim toast (Sade, ikonsuz)
   const showToast = (msg: string) => {
@@ -115,10 +114,8 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
       const res = await fetch('/api/seo/audit', { method: 'POST' });
       const json = await res.json();
       if (json.success && json.data) {
-        const updated = { ...data };
-        updated.seo.unlighthouse = json.data;
-        setData(updated);
-        showToast('Unlighthouse taraması tamamlandı. 14 sayfa denetlendi.');
+        setData((d) => ({ ...d, seo: { ...d.seo, unlighthouse: json.data } }));
+        showToast(`Teknik SEO taraması tamamlandı: ${json.message}`);
       } else {
         showToast(`Tarama hatası: ${json.error}`);
       }
@@ -129,76 +126,6 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
     }
   };
 
-  // SERP Sıralama Yenileme
-  const refreshSerpRankings = async () => {
-    setRefreshingSerp(true);
-    try {
-      const res = await fetch('/api/seo/serp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'refresh' }),
-      });
-      const json = await res.json();
-      if (json.success && json.data) {
-        const updated = { ...data };
-        updated.seo.serpbear = json.data;
-        setData(updated);
-        showToast('Google SERP sıralamaları güncellendi.');
-      }
-    } catch (err: any) {
-      showToast(`SERP hatası: ${err.message}`);
-    } finally {
-      setRefreshingSerp(false);
-    }
-  };
-
-  // Yeni Anahtar Kelime Ekle
-  const handleAddKeyword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newKeywordInput.trim()) return;
-    try {
-      const res = await fetch('/api/seo/serp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'add',
-          keyword: newKeywordInput.trim(),
-          url: newKeywordUrl.trim(),
-        }),
-      });
-      const json = await res.json();
-      if (json.success && json.data) {
-        const updated = { ...data };
-        updated.seo.serpbear.keywords.unshift(json.data);
-        setData(updated);
-        setNewKeywordInput('');
-        showToast('Yeni anahtar kelime takibe alındı.');
-      }
-    } catch (err: any) {
-      showToast(`Eklenemedi: ${err.message}`);
-    }
-  };
-
-  // Anahtar Kelime Sil
-  const handleDeleteKeyword = async (id: string) => {
-    if (!confirm('Bu anahtar kelimeyi takipten çıkarmak istediğinize emin misiniz?')) return;
-    try {
-      const res = await fetch('/api/seo/serp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'delete', id }),
-      });
-      const json = await res.json();
-      if (json.success) {
-        const updated = { ...data };
-        updated.seo.serpbear.keywords = updated.seo.serpbear.keywords.filter((k) => k.id !== id);
-        setData(updated);
-        showToast('Anahtar kelime silindi.');
-      }
-    } catch (err: any) {
-      showToast(`Hata: ${err.message}`);
-    }
-  };
 
   // Blog Yazısı Kaydet
   const handleSavePost = async () => {
@@ -254,16 +181,7 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
 
   const pagesList = PAGE_META;
 
-  const analytics = data.seo?.analytics || {
-    summary: { totalVisitors: 4892, uniqueVisitors: 3120, totalPageViews: 14280, avgSessionDurationSec: 218, bounceRate: 28.4, conversionCount: 184 },
-    dailyTraffic: [],
-    pageMetrics: [],
-    clickEvents: [],
-    trafficSources: [],
-  };
-
-  const serpbear = data.seo?.serpbear || { domain: 'eylulanaokulu.com.tr', keywords: [] };
-  const unlighthouse = data.seo?.unlighthouse || { summary: { seo: 98, performance: 96, accessibility: 100, bestPractices: 98, totalPages: 14 }, pages: [] };
+  const seo = data.seo || createEmptySeoData();
   const blog = data.blog || { heroTitle: '', heroSubtitle: '', categories: [], posts: [] };
 
   const navGroups: { title: string; items: { key: string; label: string; icon: string; badge?: number }[] }[] = [
@@ -418,192 +336,7 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
       {/* ========================================================================= */}
       {activeTab === 'dashboard' && (
         <div className="space-y-6">
-          {/* 4 Temiz Tipografik KPI Kartı */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Tekil Ziyaretçi</span>
-              <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                {analytics.summary.uniqueVisitors.toLocaleString('tr-TR')}
-              </div>
-              <span className="text-[11px] font-semibold text-emerald-600 mt-1 block">Son 30 Günde +18.4%</span>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Sayfa Görüntüleme</span>
-              <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                {analytics.summary.totalPageViews.toLocaleString('tr-TR')}
-              </div>
-              <span className="text-[11px] font-semibold text-slate-500 mt-1 block">Oturum Başına ~2.9 Sayfa</span>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Google Ortalama Sıra</span>
-              <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-                #1.2 <span className="text-xs font-normal text-slate-400">(SerpBear)</span>
-              </div>
-              <span className="text-[11px] font-semibold text-emerald-600 mt-1 block">Kars genelinde lider pozisyon</span>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Teknik SEO & Hız Skoru</span>
-              <div className="text-2xl sm:text-3xl font-black text-emerald-600 mt-1">
-                {unlighthouse.summary.seo} / 100
-              </div>
-              <span className="text-[11px] font-semibold text-slate-500 mt-1 block">Unlighthouse 14 Rota Denetimi</span>
-            </div>
-          </div>
-
-          {/* Ziyaretçi & Organik Arama Grafiği (Temiz SVG Area / Bar Chart) */}
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
-              <div>
-                <h3 className="font-bold text-slate-900 text-sm">Son 14 Günlük Ziyaretçi & Organik Google Trafiği</h3>
-                <p className="text-xs text-slate-500">Günlük tekil ziyaretçi (koyu çubuk) ve Google organik arama payı (yeşil alan)</p>
-              </div>
-              <div className="flex items-center gap-4 text-xs font-medium text-slate-600">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-xs bg-slate-900"></span>
-                  Toplam Ziyaretçi
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-xs bg-emerald-500"></span>
-                  Google Organik
-                </span>
-              </div>
-            </div>
-
-            {/* SVG Trend Grafiği */}
-            <div className="h-56 w-full pt-4">
-              <svg className="w-full h-full" viewBox="0 0 700 180" preserveAspectRatio="none">
-                {/* Izgara Çizgileri */}
-                <line x1="0" y1="30" x2="700" y2="30" stroke="#F1F5F9" strokeWidth="1" />
-                <line x1="0" y1="80" x2="700" y2="80" stroke="#F1F5F9" strokeWidth="1" />
-                <line x1="0" y1="130" x2="700" y2="130" stroke="#F1F5F9" strokeWidth="1" />
-
-                {/* Sütunlar & Noktalar */}
-                {analytics.dailyTraffic.map((d, i) => {
-                  const x = 25 + i * 48;
-                  const height = Math.min(140, (d.visitors / 400) * 140);
-                  const y = 160 - height;
-                  const orgHeight = Math.min(140, (d.organic / 400) * 140);
-                  const orgY = 160 - orgHeight;
-
-                  return (
-                    <g key={d.date} className="group cursor-pointer">
-                      {/* Toplam Ziyaretçi Çubuğu */}
-                      <rect
-                        x={x - 12}
-                        y={y}
-                        width="24"
-                        height={height}
-                        rx="4"
-                        fill="#0F172A"
-                        className="group-hover:fill-slate-700 transition"
-                      />
-                      {/* Organik Arama Göstergesi */}
-                      <rect
-                        x={x - 8}
-                        y={orgY}
-                        width="16"
-                        height={orgHeight}
-                        rx="2"
-                        fill="#10B981"
-                        opacity="0.85"
-                      />
-                      {/* Tarih Etiketi */}
-                      <text
-                        x={x}
-                        y="175"
-                        textAnchor="middle"
-                        fontSize="9"
-                        fill="#64748B"
-                        fontFamily="sans-serif"
-                      >
-                        {d.date}
-                      </text>
-                    </g>
-                  );
-                })}
-              </svg>
-            </div>
-          </div>
-
-          {/* 2 Sütunlu Analitik Özeti: Nereye Baktılar & Nereye Tıkladılar */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Sol: Nereye Baktılar? */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm">Nereye Baktılar? (En Çok Gezilen Sayfalar)</h4>
-                  <p className="text-[11px] text-slate-400">Sayfa görüntülenme ve ortalama kalma süresi</p>
-                </div>
-                <button
-                  onClick={() => {
-                    setActiveTab('seo');
-                    setSeoSubTab('analytics');
-                  }}
-                  className="text-xs font-semibold text-slate-900 hover:underline"
-                >
-                  Detay &rarr;
-                </button>
-              </div>
-
-              <div className="divide-y divide-slate-100">
-                {analytics.pageMetrics.slice(0, 5).map((pm) => (
-                  <div key={pm.path} className="py-2.5 flex items-center justify-between text-xs">
-                    <div>
-                      <p className="font-semibold text-slate-800">{pm.label}</p>
-                      <p className="text-[10px] font-mono text-slate-400">{pm.path}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-slate-900">{pm.views.toLocaleString('tr-TR')} Görüntüleme</p>
-                      <p className="text-[10px] text-slate-400">Ort. {pm.avgTimeSec} sn</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Sağ: Nereye Tıkladılar? */}
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm">Nereye Tıkladılar? (Aksiyon & Tıklamalar)</h4>
-                  <p className="text-[11px] text-slate-400">Telefon, WhatsApp, ön kayıt ve yol tarifi etkileşimleri</p>
-                </div>
-                <button
-                  onClick={() => {
-                    setActiveTab('seo');
-                    setSeoSubTab('analytics');
-                  }}
-                  className="text-xs font-semibold text-slate-900 hover:underline"
-                >
-                  Detay &rarr;
-                </button>
-              </div>
-
-              <div className="space-y-3 pt-1">
-                {analytics.clickEvents.slice(0, 5).map((clk) => {
-                  const maxCount = analytics.clickEvents[0]?.count || 500;
-                  const pct = Math.round((clk.count / maxCount) * 100);
-                  return (
-                    <div key={clk.id} className="space-y-1">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-800">{clk.label}</span>
-                        <span className="font-mono text-slate-600 font-bold">{clk.count} tık</span>
-                      </div>
-                      <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-slate-900 rounded-full"
-                          style={{ width: `${pct}%` }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+          <DashboardAnalytics seo={seo} onDetail={() => { setSeoSubTab('analytics'); setActiveTab('seo'); }} />
 
           {/* Hızlı Aksiyon Çubuğu */}
           <div className="p-4 rounded-xl border border-slate-200 bg-white flex flex-wrap items-center justify-between gap-3 shadow-xs">
@@ -643,14 +376,13 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
                 disabled={auditing}
                 className="px-3.5 py-1.5 rounded-lg border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition"
               >
-                {auditing ? 'Taranıyor...' : 'Tüm Siteyi Unlighthouse ile Tara'}
+                {auditing ? 'Taranıyor...' : 'Teknik SEO Taraması Yap'}
               </button>
               <button
-                onClick={refreshSerpRankings}
-                disabled={refreshingSerp}
+                onClick={() => { setSeoSubTab('serp'); setActiveTab('seo'); }}
                 className="px-3.5 py-1.5 rounded-lg border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition"
               >
-                {refreshingSerp ? 'Sorgulanıyor...' : 'Google Sıralamalarını Güncelle'}
+                Google Sıralama Takibi
               </button>
             </div>
           </div>
@@ -661,318 +393,15 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
       {/* 2. SEO & ANALİTİK MERKEZİ                                                  */}
       {/* ========================================================================= */}
       {activeTab === 'seo' && (
-        <div className="space-y-6">
-          {/* SEO Alt Sekmeler */}
-          <div className="flex border-b border-slate-200 gap-4 text-xs font-semibold">
-            {[
-              { key: 'serp', label: '1. Anahtar Kelime Sıralama Takibi (SerpBear)' },
-              { key: 'analytics', label: '2. Ziyaretçi Trafiği & Tıklama Analitiği' },
-              { key: 'unlighthouse', label: '3. Teknik SEO & Unlighthouse Raporu' },
-            ].map((sub) => (
-              <button
-                key={sub.key}
-                onClick={() => setSeoSubTab(sub.key as any)}
-                className={`pb-3 transition relative ${
-                  seoSubTab === sub.key
-                    ? 'text-slate-900 font-bold border-b-2 border-slate-900'
-                    : 'text-slate-500 hover:text-slate-800'
-                }`}
-              >
-                {sub.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Alt Sekme 1: SerpBear Anahtar Kelime Takibi */}
-          {seoSubTab === 'serp' && (
-            <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-                <div>
-                  <h3 className="font-bold text-slate-900 text-base">Google Anahtar Kelime Takibi (SerpBear Entegrasyonu)</h3>
-                  <p className="text-xs text-slate-500">
-                    Alan Adı: <span className="font-mono text-slate-800 font-semibold">{serpbear.domain}</span> • Konum: Kars, TR • Güncelleme: {new Date(serpbear.lastUpdated).toLocaleDateString('tr-TR')}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={refreshSerpRankings}
-                    disabled={refreshingSerp}
-                    className="px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition"
-                  >
-                    {refreshingSerp ? 'Sorgulanıyor...' : 'Sıralamaları Şimdi Sorgula (SERP Yenile)'}
-                  </button>
-                </div>
-              </div>
-
-              {/* Yeni Anahtar Kelime Ekle Formu */}
-              <form onSubmit={handleAddKeyword} className="p-4 bg-white rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center gap-3">
-                <input
-                  type="text"
-                  placeholder="Yeni Anahtar Kelime (örn: kars anaokulu kayıtları)"
-                  value={newKeywordInput}
-                  onChange={(e) => setNewKeywordInput(e.target.value)}
-                  className="px-3 py-2 text-xs border border-slate-200 rounded-lg flex-1 min-w-[220px] focus:outline-none focus:ring-1 focus:ring-slate-900"
-                />
-                <input
-                  type="text"
-                  placeholder="Hedef Sayfa URL (varsayılan: https://eylulanaokulu.com.tr)"
-                  value={newKeywordUrl}
-                  onChange={(e) => setNewKeywordUrl(e.target.value)}
-                  className="px-3 py-2 text-xs border border-slate-200 rounded-lg flex-1 min-w-[220px] focus:outline-none focus:ring-1 focus:ring-slate-900"
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition"
-                >
-                  Anahtar Kelime Ekle
-                </button>
-              </form>
-
-              {/* Kelimeler Tablosu */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200">
-                      <tr>
-                        <th className="py-3 px-4">Anahtar Kelime</th>
-                        <th className="py-3 px-4 text-center">Mevcut Sıra</th>
-                        <th className="py-3 px-4 text-center">Değişim</th>
-                        <th className="py-3 px-4 text-center">En İyi</th>
-                        <th className="py-3 px-4 text-center">Aylık Hacim</th>
-                        <th className="py-3 px-4">Sıralanan URL</th>
-                        <th className="py-3 px-4 text-center">14 Gün Trend</th>
-                        <th className="py-3 px-4 text-right">İşlem</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {serpbear.keywords.map((kw) => {
-                        const diff = kw.previousPosition - kw.position;
-                        return (
-                          <tr key={kw.id} className="hover:bg-slate-50 transition">
-                            <td className="py-3 px-4">
-                              <p className="font-semibold text-slate-900">{kw.keyword}</p>
-                              <div className="flex gap-1 mt-0.5">
-                                {kw.tags?.map((t) => (
-                                  <span key={t} className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 text-[9px] font-semibold">
-                                    {t}
-                                  </span>
-                                ))}
-                              </div>
-                            </td>
-                            <td className="py-3 px-4 text-center">
-                              <span className="inline-block px-2.5 py-1 rounded-md bg-slate-900 text-white font-black text-xs">
-                                #{kw.position}
-                              </span>
-                            </td>
-                            <td className="py-3 px-4 text-center font-bold">
-                              {diff > 0 ? (
-                                <span className="text-emerald-600">+{diff}</span>
-                              ) : diff < 0 ? (
-                                <span className="text-rose-600">{diff}</span>
-                              ) : (
-                                <span className="text-slate-400">0</span>
-                              )}
-                            </td>
-                            <td className="py-3 px-4 text-center font-semibold text-slate-600">
-                              #{kw.bestPosition}
-                            </td>
-                            <td className="py-3 px-4 text-center font-mono text-slate-700">
-                              {kw.volume.toLocaleString('tr-TR')}
-                            </td>
-                            <td className="py-3 px-4 font-mono text-[11px] text-slate-500 max-w-xs truncate">
-                              <a href={kw.url} target="_blank" className="hover:underline hover:text-slate-900">
-                                {kw.url.replace('https://eylulanaokulu.com.tr', '') || '/'}
-                              </a>
-                            </td>
-                            <td className="py-3 px-4 text-center">
-                              {/* SVG Sparkline */}
-                              <svg className="w-16 h-5 inline-block" viewBox="0 0 60 20">
-                                <polyline
-                                  fill="none"
-                                  stroke="#10B981"
-                                  strokeWidth="2"
-                                  points={kw.history.map((h, i) => `${i * 4.5},${h * 4}`).join(' ')}
-                                />
-                              </svg>
-                            </td>
-                            <td className="py-3 px-4 text-right">
-                              <button
-                                onClick={() => handleDeleteKeyword(kw.id)}
-                                className="text-rose-600 hover:text-rose-800 font-semibold text-xs"
-                              >
-                                Sil
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Alt Sekme 2: Ziyaretçi Trafiği & Tıklama Analitiği */}
-          {seoSubTab === 'analytics' && (
-            <div className="space-y-6">
-              <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-                <h3 className="font-bold text-slate-900 text-base">Ziyaretçi Trafik Kaynakları</h3>
-                <p className="text-xs text-slate-500 mb-4">Müşterilerin web sitesine hangi kanallardan ulaştığı</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {analytics.trafficSources.map((src) => (
-                    <div key={src.source} className="p-4 rounded-lg bg-slate-50 border border-slate-100 space-y-1">
-                      <p className="text-xs text-slate-500 font-semibold">{src.source}</p>
-                      <p className="text-xl font-black text-slate-900">{src.sessions.toLocaleString('tr-TR')} Oturum</p>
-                      <p className="text-xs font-bold text-emerald-600">%{src.percentage} Pay</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Detaylı Nereye Baktı Tablosu */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-                <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-                  <h4 className="font-bold text-slate-900 text-sm">Detaylı Sayfa Görüntüleme Tablosu ('Nereye Baktı?')</h4>
-                  <span className="text-xs text-slate-400">Aktif Takip</span>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200">
-                      <tr>
-                        <th className="py-3 px-4">Sayfa Adı</th>
-                        <th className="py-3 px-4">URL</th>
-                        <th className="py-3 px-4 text-center">Toplam Görüntüleme</th>
-                        <th className="py-3 px-4 text-center">Tekil Ziyaretçi</th>
-                        <th className="py-3 px-4 text-center">Ort. Süre</th>
-                        <th className="py-3 px-4 text-center">Hemen Çıkma Oranı</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {analytics.pageMetrics.map((pm) => (
-                        <tr key={pm.path} className="hover:bg-slate-50 transition">
-                          <td className="py-3 px-4 font-semibold text-slate-900">{pm.label}</td>
-                          <td className="py-3 px-4 font-mono text-[11px] text-slate-500">{pm.path}</td>
-                          <td className="py-3 px-4 text-center font-bold text-slate-800">{pm.views.toLocaleString('tr-TR')}</td>
-                          <td className="py-3 px-4 text-center text-slate-600">{pm.uniqueVisitors.toLocaleString('tr-TR')}</td>
-                          <td className="py-3 px-4 text-center font-mono text-slate-700">{pm.avgTimeSec} sn</td>
-                          <td className="py-3 px-4 text-center font-semibold text-slate-600">%{pm.bounceRate}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Detaylı Nereye Tıkladı Tablosu */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-                <div className="p-4 border-b border-slate-100">
-                  <h4 className="font-bold text-slate-900 text-sm">Etkileşim & Aksiyon Tablosu ('Nereye Tıkladı?')</h4>
-                  <p className="text-xs text-slate-500">Ziyaretçilerin doğrudan harekete geçtiği buton ve bağlantılar</p>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase border-b border-slate-200">
-                      <tr>
-                        <th className="py-3 px-4">Aksiyon / Buton</th>
-                        <th className="py-3 px-4">Hedef Bağlantı</th>
-                        <th className="py-3 px-4">Kategori</th>
-                        <th className="py-3 px-4 text-center">Tıklama Adedi</th>
-                        <th className="py-3 px-4 text-right">Son Tıklama</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {analytics.clickEvents.map((ce) => (
-                        <tr key={ce.id} className="hover:bg-slate-50 transition">
-                          <td className="py-3 px-4 font-semibold text-slate-900">{ce.label}</td>
-                          <td className="py-3 px-4 font-mono text-[11px] text-slate-500">{ce.targetPath}</td>
-                          <td className="py-3 px-4">
-                            <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-semibold text-[10px]">
-                              {ce.category}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 text-center font-bold text-slate-900">{ce.count}</td>
-                          <td className="py-3 px-4 text-right text-slate-400 text-[11px]">
-                            {new Date(ce.lastClickedAt).toLocaleTimeString('tr-TR')}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Alt Sekme 3: Unlighthouse Raporu */}
-          {seoSubTab === 'unlighthouse' && (
-            <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
-                <div>
-                  <h3 className="font-bold text-slate-900 text-base">Unlighthouse Web Sitesi Kalite & SEO Denetimi</h3>
-                  <p className="text-xs text-slate-500">
-                    Google Lighthouse standartlarında 14 alt sayfanın tamamını tarar ve puanlar.
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <a
-                    href="/unlighthouse"
-                    target="_blank"
-                    className="px-3.5 py-2 rounded-lg border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition"
-                  >
-                    Tam Ekran Raporu Aç &rarr;
-                  </a>
-                  <button
-                    onClick={triggerUnlighthouseAudit}
-                    disabled={auditing}
-                    className="px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition"
-                  >
-                    {auditing ? 'Taranıyor...' : 'Tüm Siteyi Şimdi Tara'}
-                  </button>
-                </div>
-              </div>
-
-              {/* 4 Unlighthouse Skoru */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white p-4 rounded-xl border border-slate-200 text-center shadow-xs">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">SEO Skoru</span>
-                  <div className="text-3xl font-black text-emerald-600 mt-1">{unlighthouse.summary.seo} / 100</div>
-                  <span className="text-[10px] text-slate-400">Meta & Başlık Standartları</span>
-                </div>
-                <div className="bg-white p-4 rounded-xl border border-slate-200 text-center shadow-xs">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Performans / Hız</span>
-                  <div className="text-3xl font-black text-emerald-600 mt-1">{unlighthouse.summary.performance} / 100</div>
-                  <span className="text-[10px] text-slate-400">LCP, FID & Yükleme Hızı</span>
-                </div>
-                <div className="bg-white p-4 rounded-xl border border-slate-200 text-center shadow-xs">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">Erişilebilirlik</span>
-                  <div className="text-3xl font-black text-emerald-600 mt-1">{unlighthouse.summary.accessibility} / 100</div>
-                  <span className="text-[10px] text-slate-400">WCAG Kontrast & Aria</span>
-                </div>
-                <div className="bg-white p-4 rounded-xl border border-slate-200 text-center shadow-xs">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase">En İyi Uygulamalar</span>
-                  <div className="text-3xl font-black text-emerald-600 mt-1">{unlighthouse.summary.bestPractices} / 100</div>
-                  <span className="text-[10px] text-slate-400">Modern Web Güvenliği</span>
-                </div>
-              </div>
-
-              {/* Gömülü Unlighthouse iframe Raporu */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-                <div className="p-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-                  <span className="text-xs font-bold text-slate-800">Unlighthouse Canlı Denetim Arayüzü</span>
-                  <span className="text-[11px] text-slate-400 font-mono">public/unlighthouse/index.html</span>
-                </div>
-                <div className="h-[520px] w-full">
-                  <iframe
-                    src="/unlighthouse"
-                    className="w-full h-full border-0"
-                    title="Unlighthouse Report"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+        <SeoCenter
+          key={seoSubTab}
+          seo={seo}
+          initialTab={seoSubTab}
+          onSeoChange={(patch) => setData((d) => ({ ...d, seo: { ...(d.seo || createEmptySeoData()), ...patch } }))}
+          toast={showToast}
+          onAudit={triggerUnlighthouseAudit}
+          auditing={auditing}
+        />
       )}
 
       {/* ========================================================================= */}
@@ -1054,7 +483,7 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
                       </td>
                       <td className="py-3 px-4 text-center font-bold">
                         <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs">
-                          {post.seo?.seoScore || 90} / 100
+                          {blogSeoChecks(post).score} / 100
                         </span>
                       </td>
                       <td className="py-3 px-4 text-center">
@@ -1186,62 +615,8 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
                     />
                   </div>
 
-                  {/* SEO Parametreleri Kutusu */}
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-                    <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                      <span className="font-bold text-slate-800">SEO Uyumluluk Parametreleri</span>
-                      <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">
-                        Puan: {editingPost.seo?.seoScore || 90}/100
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-[11px] font-bold text-slate-600 block mb-1">Hedef Anahtar Kelime (Focus Keyword)</label>
-                        <input
-                          type="text"
-                          value={editingPost.seo?.focusKeyword || ''}
-                          onChange={(e) =>
-                            setEditingPost({
-                              ...editingPost,
-                              seo: { ...(editingPost.seo || { metaTitle: '', metaDescription: '', seoScore: 90, focusKeyword: '' }), focusKeyword: e.target.value },
-                            })
-                          }
-                          className="w-full p-2 border border-slate-200 rounded-lg bg-white"
-                          placeholder="Örn: kars anaokulu ingilizce"
-                        />
-                      </div>
-                      <div>
-                        <label className="text-[11px] font-bold text-slate-600 block mb-1">SEO Meta Başlığı (Meta Title)</label>
-                        <input
-                          type="text"
-                          value={editingPost.seo?.metaTitle || ''}
-                          onChange={(e) =>
-                            setEditingPost({
-                              ...editingPost,
-                              seo: { ...(editingPost.seo || { metaTitle: '', metaDescription: '', seoScore: 90, focusKeyword: '' }), metaTitle: e.target.value },
-                            })
-                          }
-                          className="w-full p-2 border border-slate-200 rounded-lg bg-white"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="text-[11px] font-bold text-slate-600 block mb-1">SEO Meta Açıklaması (Meta Description)</label>
-                      <textarea
-                        rows={2}
-                        value={editingPost.seo?.metaDescription || ''}
-                        onChange={(e) =>
-                          setEditingPost({
-                            ...editingPost,
-                            seo: { ...(editingPost.seo || { metaTitle: '', metaDescription: '', seoScore: 90, focusKeyword: '' }), metaDescription: e.target.value },
-                          })
-                        }
-                        className="w-full p-2 border border-slate-200 rounded-lg bg-white"
-                      />
-                    </div>
-                  </div>
+                  {/* SEO Ayarları */}
+                  <BlogSeoBox post={editingPost} onChange={(seo) => setEditingPost({ ...editingPost, seo })} />
                 </div>
 
                 <div className="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-end gap-2">
@@ -1327,6 +702,7 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
                   schema={SITE_CONTENT[selectedCmsPage]}
                   value={data.pages[selectedCmsPage]}
                   mediaLibrary={data.mediaLibrary}
+                  path={PAGE_META.find((p) => p.key === selectedCmsPage)?.path}
                   onChange={(nv) => {
                     setData((d) => ({ ...d, pages: { ...d.pages, [selectedCmsPage]: nv } }));
                     setDirtyPages((dp) => new Set(dp).add(selectedCmsPage));

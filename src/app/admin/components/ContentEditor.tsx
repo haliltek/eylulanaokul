@@ -70,6 +70,11 @@ const LABELS: Record<string, string> = {
   allCategoryLabel: '“Tümü” Kategori Yazısı', readMore: 'Devamını Oku Yazısı', listCta: 'Liste Altı Davet Kutusu', authorLabel: 'Yazar Etiketi', dateLabel: 'Tarih Etiketi',
   readTimeLabel: 'Okuma Süresi Etiketi', authorUnit: 'Yazar Birimi', relatedTitle: 'Önerilen Yazılar Başlığı', seeAll: 'Hepsini Gör Yazısı', readPost: 'Yazıyı Oku Yazısı',
   postCta: 'Yazı Altı Davet Kutusu', note: 'Bilgi Notu', loginButtonText: 'Giriş Butonu Yazısı', loginUrl: 'Veli Giriş Adresi (kullanılan uygulamanın bağlantısı)',
+  // SEO
+  seo: 'SEO Ayarları (Google)', keywords: 'Anahtar Kelimeler', ogImage: 'Paylaşım Görseli (Google / WhatsApp / sosyal medya)', noindex: 'Bu sayfayı Google’da gösterme (noindex)',
+  siteName: 'Site Adı', siteUrl: 'Sitenin Alan Adı (ör. https://eylulanaokulu.com.tr)', titleTemplate: 'Başlık Şablonu (%s = sayfa adı)', defaultTitle: 'Varsayılan Başlık',
+  defaultDescription: 'Varsayılan Açıklama', googleVerification: 'Google Search Console Doğrulama Kodu', bingVerification: 'Bing Doğrulama Kodu',
+  yandexVerification: 'Yandex Doğrulama Kodu', allowIndexing: 'Site arama motorlarında görünsün',
   noLoginText: 'Giriş Adresi Yokken Gösterilecek Metin', helpTitle: 'Destek Başlığı', helpButtonText: 'Destek Butonu Yazısı', helpButtonLink: 'Destek Butonu Bağlantısı',
 };
 const HIDDEN = new Set(['id', 'dayId']);
@@ -86,8 +91,9 @@ const kindOf = (key: string): 'image' | 'video' | 'file' | 'link' | 'long' | 'te
   if (/videoUrl$/i.test(key)) return 'video';
   if (key === 'file') return 'file';
   if (/(^image$|Image$|^thumbnail$|^coverImage$)/.test(key)) return 'image';
+  if (key === 'siteUrl') return 'text';
   if (/(^link$|^href$|Link$|Url$|^url$)/.test(key)) return 'link';
-  if (/(^description$|^desc$|^text$|^content$|^answer$|^about$|Text$|^quote$|^noteText$|^excerpt$|^allergyNote$)/.test(key)) return 'long';
+  if (/(^description$|^desc$|^text$|^content$|^answer$|^about$|Text$|^quote$|^noteText$|^excerpt$|^allergyNote$|^defaultDescription$)/.test(key)) return 'long';
   return 'text';
 };
 
@@ -117,7 +123,7 @@ const itemTitle = (v: Json, i: number) => {
 /* ----------------------------------------------------------------- alan bileşenleri */
 const inputCls = 'w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#0E4984]/20 focus:border-[#0E4984]';
 
-interface Ctx { media: MediaItem[] }
+interface Ctx { media: MediaItem[]; path?: string }
 
 function Field({ k, value, onChange, ctx }: { k: string; value: Json; onChange: (v: Json) => void; ctx: Ctx }) {
   const label = labelOf(k);
@@ -168,6 +174,86 @@ function Field({ k, value, onChange, ctx }: { k: string; value: Json; onChange: 
   );
 }
 
+/** Anahtar kelime girişi: kelimeyi yazıp Enter (veya virgül) ile ekleyin; × ile silin. */
+export function TagInput({ value, onChange, placeholder = 'Kelimeyi yazıp Enter’a basın' }: { value: string[]; onChange: (v: string[]) => void; placeholder?: string }) {
+  const [draft, setDraft] = useState('');
+  const add = (raw: string) => {
+    const parts = raw.split(',').map((x) => x.trim()).filter(Boolean);
+    if (!parts.length) return;
+    const lower = value.map((x) => x.toLocaleLowerCase('tr'));
+    const next = [...value];
+    for (const p of parts) if (!lower.includes(p.toLocaleLowerCase('tr'))) { next.push(p); lower.push(p.toLocaleLowerCase('tr')); }
+    onChange(next);
+    setDraft('');
+  };
+  return (
+    <div className="flex flex-wrap items-center gap-1.5 px-2 py-1.5 rounded-lg border border-slate-200 bg-white focus-within:ring-2 focus-within:ring-[#0E4984]/20 focus-within:border-[#0E4984]">
+      {value.map((t, i) => (
+        <span key={t + i} className="inline-flex items-center gap-1 pl-2.5 pr-1 py-0.5 rounded-full bg-[#0E4984]/10 text-[#0E4984] text-xs font-semibold">
+          {t}
+          <button type="button" aria-label={`${t} sil`} onClick={() => onChange(value.filter((_, x) => x !== i))} className="w-4 h-4 rounded-full leading-none hover:bg-[#0E4984]/20">×</button>
+        </span>
+      ))}
+      <input
+        value={draft}
+        onChange={(e) => (e.target.value.endsWith(',') ? add(e.target.value) : setDraft(e.target.value))}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') { e.preventDefault(); add(draft); }
+          else if (e.key === 'Backspace' && !draft && value.length) onChange(value.slice(0, -1));
+        }}
+        onBlur={() => add(draft)}
+        placeholder={value.length ? '' : placeholder}
+        className="flex-1 min-w-[160px] py-1 text-sm outline-none bg-transparent"
+      />
+    </div>
+  );
+}
+
+const counterCls = (n: number, min: number, max: number) => (n === 0 ? 'text-slate-400' : n >= min && n <= max ? 'text-emerald-600' : 'text-amber-600');
+
+/** Sayfa SEO alanları + Google arama sonucu önizlemesi. */
+function SeoPanel({ value, onChange, ctx, path }: { value: Obj; onChange: (v: Obj) => void; ctx: Ctx; path?: string }) {
+  const title = typeof value.title === 'string' ? value.title : '';
+  const desc = typeof value.description === 'string' ? value.description : '';
+  const keywords = Array.isArray(value.keywords) ? (value.keywords.filter((x) => typeof x === 'string') as string[]) : [];
+  const set = (k: string, v: Json) => onChange({ ...value, [k]: v });
+  return (
+    <fieldset className="rounded-xl border-2 border-emerald-200 bg-emerald-50/40 p-4 space-y-4">
+      <legend className="px-2 text-xs font-bold text-emerald-700 uppercase tracking-wide">SEO Ayarları (Google’da nasıl görünür?)</legend>
+      <div className="rounded-lg bg-white border border-slate-200 p-3">
+        <div className="text-[11px] text-slate-500 mb-1">Google önizlemesi</div>
+        <div className="text-[13px] text-emerald-800 truncate">{(path || '/').replace(/^\//, 'site › ').replace(/\//g, ' › ') || 'site'}</div>
+        <div className="text-[17px] leading-snug text-[#1a0dab] truncate">{title || 'Başlık girilmedi (genel SEO başlığı kullanılır)'}</div>
+        <div className="text-[13px] text-slate-600 line-clamp-2">{desc || 'Açıklama girilmedi (genel SEO açıklaması kullanılır)'}</div>
+      </div>
+      <div>
+        <div className="flex justify-between mb-1">
+          <label className="text-xs font-semibold text-slate-600">SEO Başlığı (title)</label>
+          <span className={`text-[11px] font-semibold ${counterCls(title.length, 30, 65)}`}>{title.length} / 30-65 karakter</span>
+        </div>
+        <input value={title} onChange={(e) => set('title', e.target.value)} className={inputCls} placeholder="ör. Kayıt ve Başvuru | Eylül Çocuk Akademisi" />
+      </div>
+      <div>
+        <div className="flex justify-between mb-1">
+          <label className="text-xs font-semibold text-slate-600">SEO Açıklaması (meta description)</label>
+          <span className={`text-[11px] font-semibold ${counterCls(desc.length, 110, 165)}`}>{desc.length} / 110-165 karakter</span>
+        </div>
+        <textarea value={desc} rows={3} onChange={(e) => set('description', e.target.value)} className={inputCls} placeholder="Google arama sonucunda başlığın altında görünen kısa tanıtım" />
+      </div>
+      <div>
+        <label className="block text-xs font-semibold text-slate-600 mb-1">Anahtar Kelimeler</label>
+        <TagInput value={keywords} onChange={(v) => set('keywords', v)} />
+        <p className="text-[11px] text-slate-400 mt-1">Kelimeyi yazıp Enter’a basın. Genel SEO ayarlarındaki kelimeler de otomatik eklenir.</p>
+      </div>
+      <MediaField label={labelOf('ogImage')} value={typeof value.ogImage === 'string' ? value.ogImage : ''} onChange={(u) => set('ogImage', u)} mediaLibrary={ctx.media} acceptType="image" />
+      <label className="flex items-center gap-2 text-sm text-slate-700">
+        <input type="checkbox" checked={value.noindex === true} onChange={(e) => set('noindex', e.target.checked)} className="w-4 h-4 rounded" />
+        {labelOf('noindex')}
+      </label>
+    </fieldset>
+  );
+}
+
 const btn = 'px-2 py-1 rounded-md text-[11px] font-semibold border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-40';
 
 function ListEditor({ k, schema, value, onChange, ctx, depth }: { k: string; schema: Json[]; value: Json[]; onChange: (v: Json[]) => void; ctx: Ctx; depth: number }) {
@@ -190,6 +276,16 @@ function ListEditor({ k, schema, value, onChange, ctx, depth }: { k: string; sch
     onChange([...value, blankFrom(tpl)]);
     setOpen(value.length);
   };
+
+  if (k === 'keywords') {
+    return (
+      <div>
+        <div className="text-xs font-semibold text-slate-600 mb-1">{labelOf(k)}</div>
+        <TagInput value={value.filter((x) => typeof x === 'string') as string[]} onChange={onChange} />
+        <p className="text-[11px] text-slate-400 mt-1">Kelimeyi yazıp Enter’a basın; silmek için × işaretine tıklayın.</p>
+      </div>
+    );
+  }
 
   // Basit metin listesi (ör. kazanımlar)
   if (typeof tpl === 'string') {
@@ -264,6 +360,9 @@ function ObjectEditor({ schema, value, onChange, ctx, depth }: { schema: Obj; va
       )}
       {complex.map((k) => {
         const sv = schema[k];
+        if (k === 'seo' && depth === 0 && isObj(sv)) {
+          return <SeoPanel key={k} value={{ ...sv, ...(isObj(value[k]) ? value[k] : {}) } as Obj} onChange={(nv) => set(k, nv)} ctx={ctx} path={ctx.path} />;
+        }
         if (Array.isArray(sv)) {
           return (
             <div key={k} className="rounded-xl bg-slate-50 border border-slate-200 p-3">
@@ -282,9 +381,10 @@ function ObjectEditor({ schema, value, onChange, ctx, depth }: { schema: Obj; va
   );
 }
 
-export const ContentEditor: React.FC<{ schema: unknown; value: unknown; onChange: (v: any) => void; mediaLibrary?: MediaItem[] }> = ({
+export const ContentEditor: React.FC<{ schema: unknown; value: unknown; onChange: (v: any) => void; mediaLibrary?: MediaItem[]; path?: string }> = ({
   schema,
   value,
   onChange,
   mediaLibrary = [],
-}) => <ObjectEditor schema={schema as Obj} value={(isObj(value) ? value : {}) as Obj} onChange={onChange} ctx={{ media: mediaLibrary }} depth={0} />;
+  path,
+}) => <ObjectEditor schema={schema as Obj} value={(isObj(value) ? value : {}) as Obj} onChange={onChange} ctx={{ media: mediaLibrary, path }} depth={0} />;
