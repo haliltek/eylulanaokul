@@ -42,23 +42,23 @@ export async function buildMetadata(input: SeoInput): Promise<Metadata> {
   const keywords = uniq([...(input.keywords || []), ...(g.keywords || [])]);
   const image = (input.ogImage || '').trim() || g.ogImage;
   const noindex = !!input.noindex || !g.allowIndexing;
+  const images = image ? [image] : undefined;
+  const ogBase = { title, description, url: input.path, siteName: g.siteName, locale: 'tr_TR', images };
+  const openGraph: Metadata['openGraph'] =
+    input.type === 'article'
+      ? { ...ogBase, type: 'article', publishedTime: input.publishedTime, authors: input.authors }
+      : { ...ogBase, type: 'website' };
+  const twitter: Metadata['twitter'] = image
+    ? { card: 'summary_large_image', title, description, images }
+    : { card: 'summary', title, description };
   return {
     title: { absolute: title },
     description,
     keywords: keywords.length ? keywords : undefined,
     alternates: { canonical: input.path },
     robots: noindex ? { index: false, follow: false } : { index: true, follow: true },
-    openGraph: {
-      title,
-      description,
-      url: input.path,
-      siteName: g.siteName,
-      locale: 'tr_TR',
-      type: input.type || 'website',
-      images: image ? [image] : undefined,
-      ...(input.type === 'article' ? { publishedTime: input.publishedTime, authors: input.authors } : {}),
-    },
-    twitter: { card: image ? 'summary_large_image' : 'summary', title, description, images: image ? [image] : undefined },
+    openGraph,
+    twitter,
   };
 }
 
