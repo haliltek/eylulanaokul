@@ -3,13 +3,18 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { BlogData, BlogPostItem } from '@/types/cms';
+import { formatDateTR } from '@/lib/content';
+import { blogPageContent } from '@/data/content/blogPage';
 
 interface BlogListViewProps {
   data: BlogData;
+  texts?: typeof blogPageContent;
 }
 
-export const BlogListView: React.FC<BlogListViewProps> = ({ data }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('Hepsi');
+export const BlogListView: React.FC<BlogListViewProps> = ({ data, texts }) => {
+  const T = texts || blogPageContent;
+  const ALL = T.allCategoryLabel || 'Hepsi';
+  const [selectedCategory, setSelectedCategory] = useState<string>(ALL);
 
   const { heroTitle, heroSubtitle, categories, posts } = data || {
     heroTitle: 'Özel Eylül Anaokulu Eğitim & Ebeveynlik Blogu',
@@ -18,7 +23,7 @@ export const BlogListView: React.FC<BlogListViewProps> = ({ data }) => {
     posts: [],
   };
 
-  const filteredPosts = selectedCategory === 'Hepsi'
+  const filteredPosts = selectedCategory === ALL
     ? posts
     : posts.filter((p) => p.category === selectedCategory);
 
@@ -31,7 +36,7 @@ export const BlogListView: React.FC<BlogListViewProps> = ({ data }) => {
         {/* Editoryal Başlık Bölümü (İkonsuz, Sade ve Şık) */}
         <header className="text-center max-w-3xl mx-auto pt-4 border-b border-amber-200/50 pb-8">
           <div className="inline-block px-3 py-1 rounded-full bg-amber-100/70 text-[#0A3B69] text-xs font-bold uppercase tracking-wider mb-3">
-            ÖZEL EYLÜL AKADEMİSİ YAYINLARI
+            {T.badge}
           </div>
           <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0A3B69] tracking-tight leading-tight">
             {heroTitle || 'Eğitim & Ebeveynlik Blogu'}
@@ -44,7 +49,7 @@ export const BlogListView: React.FC<BlogListViewProps> = ({ data }) => {
 
         {/* Kategori Filtreleme Sekmeleri (İkonsuz Editoryal Pill'ler) */}
         <nav aria-label="Blog Kategorileri" className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-          {['Hepsi', ...(categories || [])].filter((v, i, a) => a.indexOf(v) === i).map((cat) => (
+          {[ALL, ...(categories || []).filter((c) => c !== 'Tümü' && c !== 'Hepsi')].filter((v, i, a) => a.indexOf(v) === i).map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
@@ -79,7 +84,7 @@ export const BlogListView: React.FC<BlogListViewProps> = ({ data }) => {
               <div className="lg:col-span-5 p-6 sm:p-10 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-3 text-xs text-slate-500 font-medium mb-3">
-                    <span>{featuredPost.publishedAt}</span>
+                    <span>{formatDateTR(featuredPost.publishedAt)}</span>
                     <span>•</span>
                     <span>{featuredPost.readTime}</span>
                   </div>
@@ -100,7 +105,7 @@ export const BlogListView: React.FC<BlogListViewProps> = ({ data }) => {
                     href={`/blog/${featuredPost.slug}`}
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-[#E2AD50] hover:text-[#0A3B69] transition-colors"
                   >
-                    <span>Yazının Devamı</span>
+                    <span>{T.readMore}</span>
                     <span>→</span>
                   </Link>
                 </div>
@@ -132,7 +137,7 @@ export const BlogListView: React.FC<BlogListViewProps> = ({ data }) => {
                 </div>
                 <div className="p-5">
                   <div className="flex items-center gap-2 text-[11px] text-slate-400 font-medium mb-2">
-                    <span>{post.publishedAt}</span>
+                    <span>{formatDateTR(post.publishedAt)}</span>
                     <span>•</span>
                     <span>{post.readTime}</span>
                   </div>
@@ -165,17 +170,17 @@ export const BlogListView: React.FC<BlogListViewProps> = ({ data }) => {
             EĞİTİMDE BİLİNÇLİ ADIMLAR
           </span>
           <h2 className="font-serif text-2xl sm:text-3xl font-extrabold text-[#0A3B69]">
-            Çocuğunuzun Geleceğine Uzman Rehberliğiyle Yön Verin
+            {T.listCta.title}
           </h2>
           <p className="text-slate-600 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto">
-            Özel Eylül Anaokulu uzman kadrosunun hazırladığı ebeveynlik rehberlerini takip etmek ve okulumuzu yerinde görmek için randevu planlayabilirsiniz.
+            {T.listCta.text}
           </p>
           <div className="pt-2">
             <Link
-              href="/kayit-ve-basvuru"
+              href={T.listCta.buttonLink || '/kayit-ve-basvuru'}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#0A3B69] hover:bg-[#1A3358] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md"
             >
-              Okul Ziyareti Randevusu Alın
+              {T.listCta.buttonText}
             </Link>
           </div>
         </section>

@@ -3,13 +3,17 @@
 import React from 'react';
 import Link from 'next/link';
 import { BlogPostItem } from '@/types/cms';
+import { formatDateTR } from '@/lib/content';
+import { blogPageContent } from '@/data/content/blogPage';
 
 interface BlogPostViewProps {
   post: BlogPostItem;
   relatedPosts: BlogPostItem[];
+  texts?: typeof blogPageContent;
 }
 
-export const BlogPostView: React.FC<BlogPostViewProps> = ({ post, relatedPosts }) => {
+export const BlogPostView: React.FC<BlogPostViewProps> = ({ post, relatedPosts, texts }) => {
+  const T = texts || blogPageContent;
   // Schema.org Article Yapısal Verisi
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -63,11 +67,11 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({ post, relatedPosts }
             {post.title}
           </h1>
           <div className="flex items-center justify-center gap-4 text-xs text-slate-500 font-medium pt-2">
-            <span>Yazar: <strong className="text-slate-700">{post.author}</strong></span>
+            <span>{T.authorLabel} <strong className="text-slate-700">{post.author}</strong></span>
             <span>•</span>
-            <span>Tarih: {post.publishedAt}</span>
+            <span>{T.dateLabel} {formatDateTR(post.publishedAt)}</span>
             <span>•</span>
-            <span>Okuma Süresi: {post.readTime}</span>
+            <span>{T.readTimeLabel} {post.readTime}</span>
           </div>
         </header>
 
@@ -113,7 +117,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({ post, relatedPosts }
               </div>
               <div>
                 <h4 className="font-bold text-sm text-[#0A3B69]">{post.author}</h4>
-                <p className="text-xs text-slate-500">Özel Eylül Anaokulu Eğitim &amp; Rehberlik Birimi</p>
+                <p className="text-xs text-slate-500">{T.authorUnit}</p>
               </div>
             </div>
             <Link
@@ -130,10 +134,10 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({ post, relatedPosts }
           <section className="space-y-6 pt-6 border-t border-amber-200/50">
             <div className="flex items-center justify-between">
               <h3 className="font-serif text-xl sm:text-2xl font-bold text-[#0A3B69]">
-                Diğer Önerilen Makaleler
+                {T.relatedTitle}
               </h3>
               <Link href="/blog" className="text-xs font-bold text-[#E2AD50] hover:text-[#0A3B69]">
-                Hepsini Gör →
+                {T.seeAll}
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -155,7 +159,7 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({ post, relatedPosts }
                     href={`/blog/${rel.slug}`}
                     className="mt-3 text-xs font-bold text-primary hover:text-secondary-container"
                   >
-                    Yazıyı Oku →
+                    {T.readPost}
                   </Link>
                 </div>
               ))}
@@ -166,17 +170,17 @@ export const BlogPostView: React.FC<BlogPostViewProps> = ({ post, relatedPosts }
         {/* Alt Kayıt Çağrısı */}
         <div className="bg-[#0A3B69] text-white rounded-3xl p-8 sm:p-10 text-center space-y-4 shadow-xl">
           <h3 className="font-serif text-2xl font-bold">
-            Özel Eylül Anaokulu’nu Yerinde Ziyaret Edin
+            {T.postCta.title}
           </h3>
           <p className="text-xs sm:text-sm text-slate-200 max-w-lg mx-auto leading-relaxed">
-            Kars’taki geniş bahçeli ve güvenli kampüsümüzde pedagoglarımız eşliğinde okulumuzu tanımak için randevu oluşturun.
+            {T.postCta.text}
           </p>
           <div className="pt-2">
             <Link
-              href="/kayit-ve-basvuru"
+              href={T.postCta.buttonLink || '/kayit-ve-basvuru'}
               className="inline-block px-7 py-3 rounded-full bg-[#E2AD50] hover:bg-[#d49e42] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md"
             >
-              Tanıtım Randevusu Planla
+              {T.postCta.buttonText}
             </Link>
           </div>
         </div>

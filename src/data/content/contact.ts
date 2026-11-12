@@ -1,0 +1,58 @@
+/** İletişim içeriği */
+export const contactContent = {
+  header: {
+    badge: 'Birlikte Geleceği İnşa Edelim',
+    title: 'İletişim',
+    subtitle: 'Sizi Tanımaktan Mutluluk Duyarız',
+    description:
+      'Eylül Çocuk Akademisi ailesine katılmak, eğitim modelimiz hakkında ayrıntılı bilgi edinmek veya okulumuzu yerinde keşfetmek için bize her zaman ulaşabilirsiniz.',
+  },
+  infoCards: {
+    phoneTitle: 'Telefon',
+    phoneNumber: '0 (551) 589 32 12',
+    phoneHours: 'Hafta içi 08.00-17.00',
+    faxTitle: 'Faks',
+    faxNumber: '0 (474) 225 12 22',
+    faxNote: 'Kurumsal Belge Hattı',
+    emailTitle: 'E-Posta',
+    emailAddress: 'info@eylulanaokulu.com.tr',
+    emailNote: 'Hızlı Dönüş',
+    locationTitle: 'Konum',
+    locationCity: 'Villalar Bölgesi / KARS',
+    locationNote: 'Merkezi Ulaşım',
+  },
+  addressBox: {
+    title: 'Açık Adresimiz',
+    fullAddress: 'Şehitler mh. 108 Sokak, No: 8 AL (Villalar Bölgesi) KARS',
+    directionsNote: 'Özel Eylül Anaokulu - Kars Kreş ve Anaokulu yerleşkemiz geniş bahçeli ve güvenli müstakil villalar mevkiindedir.',
+  },
+  mapInfo: {
+    title: 'Özel Eylül Anaokulu - Kars',
+    mapQuery: 'Özel Eylül Anaokulu - Kars Kreş ve Anaokulu',
+    directionsText: 'Yol Tarifi Al',
+    visitingHours: 'Hafta içi 08.00 - 17.00',
+    hoursLabel: 'Çalışma Saatleri:',
+    badge: 'Randevulu Okul Tanıtımı',
+  },
+  campusImage: {
+    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBLTcFcP5lqXe6FlaDkYCXiyBz960GYtwkL5B3CnPmnU0BATMdea0vAAz_DMA_5USrA4-_e7kF0_0KX1FSz4XUXLkfw0Dsbv8G69wNNxzcmDkUl94iOK3v9TvGHu5n7Wcl0vj17K_5OgIK2aE_QBQDfb5B0OcJGKxqkzjoqF7foIS4nKSRHF2MI8qpQXArYcRcCkFHn_xBtJvo9wjaJqUBTqpK6kZf-vewwrV9S4RGsAjBe7FR81dVSnPmnU0BATMdea0vAAz_DMA_5USrA4-_e7kF0_0KX1FSz4XUXLkfw0Dsbv8G69wNNxzcmDkUl94iOK3v9TvGHu5n7Wcl0vj17K_5OgIK2aE_QBQDfb5B0OcJGKxqkzjoqF7foIS4nKSRHF2MI8qpQXArYcRcCkFHn_xBtJvo9wjaJqUBTqpK6kZf-vewwrV9S4RGsAjBe7FR81dVS',
+    badge: 'Yerleşkemiz',
+    title: 'Geniş Bahçeli Müstakil Kampüs',
+  },
+  formIntro: {
+    title: 'Bize Yazın',
+    description: 'Aklınıza takılan her türlü soru için formu doldurabilirsiniz. Koordinatörümüz gün içinde sizi arayacaktır.',
+    nameLabel: 'Ad Soyad *',
+    namePlaceholder: 'Adınız ve Soyadınız',
+    phoneLabel: 'Telefon Numarası *',
+    phonePlaceholder: '05XX XXX XX XX',
+    emailLabel: 'E-Posta Adresi',
+    emailPlaceholder: 'ornek@email.com',
+    messageLabel: 'Mesajınız',
+    messagePlaceholder: 'Çocuğunuzun yaşı, kayıt dönemi veya merak ettiğiniz konular...',
+    kvkkText: 'Kişisel verilerimin KVKK aydınlatma metni kapsamında okul tanıtımı ve iletişim amacıyla işlenmesini kabul ediyorum.',
+    buttonText: 'Mesajımı İlet',
+    successTitle: 'Mesajınız Alındı!',
+    successText: 'Bizimle iletişime geçtiğiniz için teşekkür ederiz. Koordinatörümüz en kısa sürede sizinle iletişime geçecektir.',
+  },
+};

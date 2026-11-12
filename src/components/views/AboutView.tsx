@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { AboutPageData } from '@/types/cms';
+import { list, unquote } from '@/lib/content';
 
 interface AboutViewProps {
   data: AboutPageData;
@@ -22,8 +23,11 @@ const SchoolPhoto: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
   );
 };
 
+const STAT_ICONS = ['workspace_premium', 'meeting_room', 'child_care', 'supervisor_account'];
+const VALUE_ICONS = ['favorite', 'visibility', 'volunteer_activism', 'spa', 'shield_with_house'];
+
 export const AboutView: React.FC<AboutViewProps> = ({ data }) => {
-  const { header, stats, values, showcase } = data || {};
+  const { header, stats, values, valuesTitle, showcase } = data || ({} as AboutPageData);
 
   return (
     <div className="w-full bg-background">
@@ -37,166 +41,60 @@ export const AboutView: React.FC<AboutViewProps> = ({ data }) => {
             <div className="pointer-events-none absolute bottom-10 -left-20 w-80 h-80 bg-primary-fixed/20 rounded-full blur-3xl opacity-60" />
 
             <div className="relative max-w-6xl mx-auto px-margin-mobile lg:px-margin flex flex-col items-center">
-              <SchoolPhoto src={(header as any)?.heroImage || '/images/okul-bina.jpg'} alt="Eylül Çocuk Akademisi okul binası" />
+              {header?.heroImage && <SchoolPhoto src={header.heroImage} alt={header.heroImageAlt} />}
               {/* Overline Tag */}
               <div className="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-high/60 backdrop-blur-sm text-primary mb-4 shadow-sm">
                 <span className="material-symbols-outlined text-[18px] text-secondary">psychiatry</span>
                 <span className="font-label-sm text-label-sm tracking-wider uppercase">
-                  {header?.badge || 'Biz Kimiz?'}
+                  {header?.badge}
                 </span>
               </div>
 
               {/* Main Heading Area */}
               <div className="max-w-3xl text-center flex flex-col items-center">
                 <h1 className="font-headline-xl text-headline-xl text-primary tracking-tight mb-2">
-                  {header?.title || 'Eylül Çocuk Akademisi'}
+                  {header?.title}
                 </h1>
                 <p className="font-headline-sm text-headline-sm text-secondary font-bold mb-6 tracking-normal">
-                  Daha Mutlu Çocuklar, Daha Güçlü Yarınlar
+                  {header?.subtitle}
                 </p>
                 <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed text-center max-w-2xl">
-                  {header?.description ||
-                    'Eylül Çocuk Akademisi, 3-6 yaş grubu çocuklar için sevgi, ilgi ve özenle tasarlanmış bütüncül bir eğitim ortamıdır. Çocuğun bireysel özelliklerini dikkate alan, oyunla öğrenmeyi merkeze alan ve geleceğe güvenli adımlarla hazırlayan bir yaklaşımla eğitim veririz.'}
+                  {header?.description}
                 </p>
               </div>
 
               {/* Stats Grid (4 Cards) */}
-              <div className="w-full grid grid-cols-4 gap-2 sm:gap-4 lg:gap-6 mt-8 sm:mt-12 mb-10 sm:mb-16">
-                {/* Stat Card 1 */}
-                <div className="bg-surface-container-lowest rounded-2xl p-2.5 sm:p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4 group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined text-[22px] sm:text-[30px]" style={{ fontVariationSettings: "'FILL' 0" }}>
-                      workspace_premium
-                    </span>
+              <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 lg:gap-6 mt-8 sm:mt-12 mb-10 sm:mb-16">
+                {list(stats).map((st, i) => (
+                  <div key={st.id || i} className="bg-surface-container-lowest rounded-2xl p-2.5 sm:p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4 group-hover:scale-110 transition-transform">
+                      <span className="material-symbols-outlined text-[22px] sm:text-[30px]">{STAT_ICONS[i % STAT_ICONS.length]}</span>
+                    </div>
+                    <span className="font-headline-md text-base sm:text-headline-md text-primary font-extrabold mb-0.5 sm:mb-1">{st.value}</span>
+                    <span className="font-label-md text-[10px] sm:text-label-md leading-tight text-on-surface-variant font-medium">{st.label}</span>
                   </div>
-                  <span className="font-headline-md text-base sm:text-headline-md text-primary font-extrabold mb-0.5 sm:mb-1">
-                    {stats?.[0]?.value || '12+'}
-                  </span>
-                  <span className="font-label-md text-[10px] sm:text-label-md leading-tight text-on-surface-variant font-medium">
-                    {stats?.[0]?.label || 'Yıllık Deneyim'}
-                  </span>
-                </div>
-
-                {/* Stat Card 2 */}
-                <div className="bg-surface-container-lowest rounded-2xl p-2.5 sm:p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4 group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined text-[22px] sm:text-[30px]">meeting_room</span>
-                  </div>
-                  <span className="font-headline-md text-base sm:text-headline-md text-primary font-extrabold mb-0.5 sm:mb-1">
-                    {stats?.[1]?.value || '4'}
-                  </span>
-                  <span className="font-label-md text-[10px] sm:text-label-md leading-tight text-on-surface-variant font-medium">
-                    {stats?.[1]?.label || 'Sınıf'}
-                  </span>
-                </div>
-
-                {/* Stat Card 3 */}
-                <div className="bg-surface-container-lowest rounded-2xl p-2.5 sm:p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4 group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined text-[22px] sm:text-[30px]" style={{ fontVariationSettings: "'FILL' 0" }}>
-                      child_care
-                    </span>
-                  </div>
-                  <span className="font-headline-md text-base sm:text-headline-md text-primary font-extrabold mb-0.5 sm:mb-1">
-                    {stats?.[2]?.value || '3-6'}
-                  </span>
-                  <span className="font-label-md text-[10px] sm:text-label-md leading-tight text-on-surface-variant font-medium">
-                    {stats?.[2]?.label || 'Yaş'}
-                  </span>
-                </div>
-
-                {/* Stat Card 4 */}
-                <div className="bg-surface-container-lowest rounded-2xl p-2.5 sm:p-6 flex flex-col items-center text-center shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4 group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined text-[22px] sm:text-[30px]">supervisor_account</span>
-                  </div>
-                  <span className="font-headline-md text-base sm:text-headline-md text-primary font-extrabold mb-0.5 sm:mb-1">
-                    {stats?.[3]?.value || 'Uzman'}
-                  </span>
-                  <span className="font-label-md text-[10px] sm:text-label-md leading-tight text-on-surface-variant font-medium">
-                    {stats?.[3]?.label || 'Kadro'}
-                  </span>
-                </div>
+                ))}
               </div>
 
               {/* Values Section */}
               <div className="w-full flex flex-col items-center mb-12 sm:mb-20">
                 <div className="flex items-center gap-3 mb-8">
                   <span className="w-8 h-[2px] bg-secondary/30 rounded-full" />
-                  <h2 className="font-headline-lg text-headline-lg text-primary tracking-tight">Değerlerimiz</h2>
+                  <h2 className="font-headline-lg text-headline-lg text-primary tracking-tight">{valuesTitle}</h2>
                   <span className="w-8 h-[2px] bg-secondary/30 rounded-full" />
                 </div>
 
                 {/* 5 Value Cards */}
-                <div className="w-full grid grid-cols-5 gap-2 sm:gap-4 lg:gap-5">
-                  {/* Value 1: Sevgi */}
-                  <div className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
-                      <span className="material-symbols-outlined text-[22px] sm:text-[28px]" style={{ fontVariationSettings: "'FILL' 0" }}>
-                        favorite
-                      </span>
+                <div className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4 lg:gap-5">
+                  {list(values).map((v, i) => (
+                    <div key={v.id || i} className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                      <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
+                        <span className="material-symbols-outlined text-[22px] sm:text-[28px]">{VALUE_ICONS[i % VALUE_ICONS.length]}</span>
+                      </div>
+                      <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0.5 sm:mb-1">{v.title}</h3>
+                      <p className="font-body-sm text-[10px] leading-tight sm:text-body-sm text-on-surface-variant">{v.desc}</p>
                     </div>
-                    <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0 sm:mb-1">
-                      {values?.[0]?.title || 'Sevgi'}
-                    </h3>
-                    <p className="hidden sm:block font-body-sm text-body-sm text-on-surface-variant">
-                      {values?.[0]?.desc || 'Koşulsuz kabul ve güven'}
-                    </p>
-                  </div>
-
-                  {/* Value 2: İlgi */}
-                  <div className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
-                      <span className="material-symbols-outlined text-[22px] sm:text-[28px]">visibility</span>
-                    </div>
-                    <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0 sm:mb-1">
-                      {values?.[1]?.title || 'İlgi'}
-                    </h3>
-                    <p className="hidden sm:block font-body-sm text-body-sm text-on-surface-variant">
-                      {values?.[1]?.desc || 'Bireysel gelişim odağı'}
-                    </p>
-                  </div>
-
-                  {/* Value 3: Özen */}
-                  <div className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
-                      <span className="material-symbols-outlined text-[22px] sm:text-[28px]">volunteer_activism</span>
-                    </div>
-                    <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0 sm:mb-1">
-                      {values?.[2]?.title || 'Özen'}
-                    </h3>
-                    <p className="hidden sm:block font-body-sm text-body-sm text-on-surface-variant">
-                      {values?.[2]?.desc || 'Her detayda hassasiyet'}
-                    </p>
-                  </div>
-
-                  {/* Value 4: Saygı */}
-                  <div className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
-                      <span className="material-symbols-outlined text-[22px] sm:text-[28px]" style={{ fontVariationSettings: "'FILL' 0" }}>
-                        spa
-                      </span>
-                    </div>
-                    <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0 sm:mb-1">
-                      {values?.[3]?.title || 'Saygı'}
-                    </h3>
-                    <p className="hidden sm:block font-body-sm text-body-sm text-on-surface-variant">
-                      {values?.[3]?.desc || 'Farklılıklara değer'}
-                    </p>
-                  </div>
-
-                  {/* Value 5: Güvenli Ortam */}
-                  <div className="bg-surface-container-lowest rounded-2xl p-2 sm:p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-xl border border-secondary/40 bg-secondary-fixed/20 flex items-center justify-center text-secondary mb-2 sm:mb-4">
-                      <span className="material-symbols-outlined text-[22px] sm:text-[28px]">shield_with_house</span>
-                    </div>
-                    <h3 className="font-headline-sm text-[11px] sm:text-headline-sm leading-tight text-primary mb-0 sm:mb-1">
-                      {values?.[4]?.title || 'Güvenli Ortam'}
-                    </h3>
-                    <p className="hidden sm:block font-body-sm text-body-sm text-on-surface-variant">
-                      {values?.[4]?.desc || 'Huzurlu ve korunaklı yuva'}
-                    </p>
-                  </div>
+                  ))}
                 </div>
               </div>
 
@@ -215,45 +113,52 @@ export const AboutView: React.FC<AboutViewProps> = ({ data }) => {
                   <div className="lg:col-span-6 relative h-[300px] sm:h-[420px] lg:h-[480px] w-full overflow-hidden">
                     <img
                       className="w-full h-full object-cover object-center"
-                      alt={showcase?.imageAlt || 'Eylül Çocuk Akademisi sevgi dolu çocuk'}
-                      src={
-                        showcase?.image ||
-                        'https://lh3.googleusercontent.com/aida-public/AB6AXuAbHkyHF6gL2zHQy7ObwfbgqCVc0_IKOCb4j-2Kklgs1gQijyvNd1VnVRubKPthFi0RtL23koQd23NOsuO1clIZyRH0kl0SmlUXKmDX9CtoDvFWDFlX07rXo4aJS9Gr744f8uJw0CZ6m5tw1lmqhYU-pKbv5VME3y5LhQQKATG80IDyvRvix4XUoImO67rtQTAj6ai8FFw7YF7pA5HLPjslswNbRGTkZqwO1Q9zw3FCxbtNVOsEzlsC'
-                      }
+                      alt={showcase?.imageAlt}
+                      src={showcase?.image}
                     />
                     <div className="absolute inset-0 max-sm:bg-gradient-to-l sm:bg-gradient-to-t lg:bg-gradient-to-r from-surface-container-lowest via-transparent to-transparent opacity-80 lg:opacity-40" />
                   </div>
 
                   {/* Quote & Inspiration Content */}
                   <div className="lg:col-span-6 p-8 sm:p-12 lg:p-14 flex flex-col justify-center items-start relative z-10 max-sm:absolute max-sm:inset-y-0 max-sm:right-0 max-sm:w-1/2 max-sm:p-3 max-sm:items-center">
-                    <div className="max-sm:hidden w-12 h-12 rounded-2xl bg-secondary-fixed/50 flex items-center justify-center text-secondary mb-6 shadow-sm">
-                      <span className="material-symbols-outlined text-[32px]">format_quote</span>
-                    </div>
                     <blockquote className="font-headline-lg text-headline-lg max-sm:text-[16px] max-sm:italic max-sm:text-center max-sm:mb-0 text-primary tracking-tight leading-snug mb-6 font-bold">
-                      “{showcase?.quote || 'Her çocuk, doğru destekle kendi ışığını keşfeder.'}”
+                      “{unquote(showcase?.quote)}”
                     </blockquote>
                     <div className="max-sm:hidden w-16 h-1 bg-secondary rounded-full mb-6" />
                     <p className="max-sm:hidden font-body-md text-body-md text-on-surface-variant leading-relaxed mb-8">
-                      {showcase?.description ||
-                        'Çocuklarımızın içindeki sonsuz potansiyeli; doğayı, sanatı, bilimi ve sosyal ilişkileri harmanlayan sıcak bir çatı altında sevgiyle yeşertiyoruz.'}
+                      {showcase?.description}
                     </p>
                     <div className="max-sm:hidden flex flex-wrap items-center gap-4">
                       <Link
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-secondary-container text-on-secondary font-label-md text-label-md shadow-[0_4px_16px_rgba(252,143,52,0.35)] hover:bg-secondary hover:shadow-[0_6px_20px_rgba(148,74,0,0.4)] transition-all"
-                        href="/kayit-ve-basvuru"
+                        href={showcase?.primaryButtonLink || '/kayit-ve-basvuru'}
                       >
                         <span className="material-symbols-outlined text-[20px]">calendar_month</span>
-                        <span>Okulumuzu Ziyaret Edin</span>
+                        <span>{showcase?.primaryButtonText}</span>
                       </Link>
                       <Link
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-surface-container-high text-primary font-label-md text-label-md hover:bg-surface-container-highest transition-all"
-                        href="/egitim-modeli/bem"
+                        href={showcase?.secondaryButtonLink || '/egitim-modeli/bem'}
                       >
-                        <span>Eğitim Modelimiz</span>
+                        <span>{showcase?.secondaryButtonText}</span>
                         <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
                       </Link>
                     </div>
                   </div>
+                </div>
+              </div>
+              {/* Mobilde açıklama ve butonlar (masaüstünde görselin yanında görünür) */}
+              <div className="sm:hidden w-full mt-4 space-y-3 text-center">
+                <p className="font-body-md text-sm text-on-surface-variant leading-relaxed">{showcase?.description}</p>
+                <div className="flex flex-col gap-2">
+                  <Link href={showcase?.primaryButtonLink || '/kayit-ve-basvuru'} className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-secondary-container text-on-secondary font-label-md text-label-md">
+                    <span className="material-symbols-outlined text-[20px]">calendar_month</span>
+                    <span>{showcase?.primaryButtonText}</span>
+                  </Link>
+                  <Link href={showcase?.secondaryButtonLink || '/egitim-modeli/bem'} className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-surface-container-high text-primary font-label-md text-label-md">
+                    <span>{showcase?.secondaryButtonText}</span>
+                    <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  </Link>
                 </div>
               </div>
             </div>

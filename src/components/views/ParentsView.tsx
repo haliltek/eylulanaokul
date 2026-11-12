@@ -3,27 +3,17 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { ParentsPageData } from '@/types/cms';
+import { list, unquote } from '@/lib/content';
 
 interface ParentsViewProps {
   data: ParentsPageData;
 }
 
 export const ParentsView: React.FC<ParentsViewProps> = ({ data }) => {
-  const { header, portalModules, storyBanner, quickHelp } = data;
-  const [selectedModule, setSelectedModule] = useState<any | null>(null);
-
-  const defaultModules = [
-    { id: 'p-1', title: 'Veli Portalı', subtitle: 'Giriş & Bilgi Sistemi', icon: 'badge', link: '/veli-portali', isPrimary: true },
-    { id: 'p-2', title: 'Duyurular', subtitle: 'Güncel Haberler', icon: 'campaign', link: '/veli-portali/duyurular' },
-    { id: 'p-3', title: 'Etkinlik Takvimi', subtitle: 'Aylık Programlar', icon: 'calendar_month', link: '/veli-portali/takvim' },
-    { id: 'p-4', title: 'Gelişim Portfolyosu', subtitle: 'Bireysel Raporlar', icon: 'assignment_ind', link: '/veli-portali/portfolyo' },
-    { id: 'p-5', title: 'Yemek Menüsü', subtitle: 'Haftalık & Doğal Beslenme', icon: 'restaurant_menu', link: '/beslenme' },
-    { id: 'p-6', title: 'Öğretmen İletişimi', subtitle: 'Birebir Mesajlaşma', icon: 'forum', link: '/veli-portali/mesajlar' },
-    { id: 'p-7', title: 'Görüşme Randevusu', subtitle: 'PDR & Yönetim', icon: 'event_available', link: '/kayit-ve-basvuru' },
-    { id: 'p-8', title: 'Belgeler & Formlar', subtitle: 'Dilekçe & İzin Belgeleri', icon: 'folder_open', link: '/veli-portali/belgeler' },
-  ];
-
-  const modulesToRender = portalModules && portalModules.length > 0 ? portalModules : defaultModules;
+  const { header, portalModules, storyBanner, quickHelp, moduleModal } = data;
+  type Mod = (typeof portalModules)[number];
+  const [selectedModule, setSelectedModule] = useState<Mod | null>(null);
+  const modulesToRender = list(portalModules);
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-16 space-y-9 sm:space-y-12">
@@ -48,20 +38,19 @@ export const ParentsView: React.FC<ParentsViewProps> = ({ data }) => {
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-secondary-fixed/50 text-secondary mb-3 shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
             <span className="font-label-sm text-label-sm uppercase tracking-wider font-semibold">
-              {header?.badge || 'Okul & Aile İş Birliği'}
+              {header?.badge}
             </span>
           </div>
 
           {/* Main Headings */}
           <h1 className="font-headline-xl text-headline-xl text-primary tracking-tight mb-2 font-comfortaa">
-            {header?.title || 'Velilerimiz İçin'}
+            {header?.title}
           </h1>
           <h2 className="font-headline-sm text-headline-sm text-secondary font-semibold mb-4">
-            {header?.subtitle || 'Birlikte Daha Güçlü Bir Eğitim Yolculuğu'}
+            {header?.subtitle}
           </h2>
           <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
-            {header?.description ||
-              'Eylül Çocuk Akademisi olarak çocuklarımızın potansiyelini ailelerimizle kurduğumuz şeffaf, güven dolu ve kesintisiz iletişimle açığa çıkarıyoruz. Dijital veli portalımız üzerinden öğrencinizin gelişim raporlarına, günlük etkinliklere ve okul duyurularına anında ulaşabilirsiniz.'}
+            {header?.description}
           </p>
         </section>
 
@@ -69,7 +58,7 @@ export const ParentsView: React.FC<ParentsViewProps> = ({ data }) => {
         <section className="w-full max-w-5xl mx-auto px-2 sm:px-4 mb-10 sm:mb-12">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
             {modulesToRender.map((mod, idx) => {
-              const isFirst = idx === 0 || mod.isPrimary;
+              const isFirst = !!mod.isPrimary;
 
               if (isFirst) {
                 return (
@@ -125,8 +114,8 @@ export const ParentsView: React.FC<ParentsViewProps> = ({ data }) => {
             <div className="relative w-full h-80 sm:h-96 md:h-[420px] overflow-hidden">
               <img
                 className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700 ease-out"
-                alt="Özel Eylül Anaokulu veli ve çocuk etkileşimi"
-                src={storyBanner?.image || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBW7JpjUGLG6hQ1lEt6ds6K-96oZG5vOoMlpAp8peVFLhkSS3vqBGKUVfDPPq57VhARMXTx8bCmgx4f3RihcjU_I3xN380pb1nOlb2CCImbUJJt_Vai7vhddVDS-uFupciZa0mymwk88vP9Qwx60W3Dww8FXPwFIMajg5W_EFQIoZBLbn36YjEd_cBB-4y59HYWzjDBb0amxJd05Gdu-AsxXx7QC_jR2_hCqh_AadN87GRGbLARQOz4'}
+                alt={storyBanner?.imageAlt}
+                src={storyBanner?.image}
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=800';
                 }}
@@ -137,7 +126,7 @@ export const ParentsView: React.FC<ParentsViewProps> = ({ data }) => {
               <div className="absolute bottom-6 left-6 hidden sm:flex items-center gap-3 bg-surface-container-lowest/90 backdrop-blur-md px-4 py-2.5 rounded-full shadow-md">
                 <span className="w-3 h-3 rounded-full bg-tertiary-container animate-pulse"></span>
                 <span className="font-label-md text-label-sm text-primary font-bold">
-                  {storyBanner?.badgeText || 'Birlikte Büyüyoruz'}
+                  {storyBanner?.badgeText}
                 </span>
               </div>
             </div>
@@ -153,10 +142,10 @@ export const ParentsView: React.FC<ParentsViewProps> = ({ data }) => {
                 <span className="h-[1px] w-12 bg-secondary-fixed-dim"></span>
               </div>
               <blockquote className="font-headline-md text-headline-sm sm:text-headline-md text-primary italic max-w-2xl mx-auto tracking-tight leading-snug">
-                {storyBanner?.quote || '“Aile desteği, çocuğun gelişiminde en güçlü adımdır.”'}
+                “{unquote(storyBanner?.quote)}”
               </blockquote>
               <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 font-medium">
-                {storyBanner?.author || 'Eylül Çocuk Akademisi Rehberlik ve Aile Danışmanlığı Birimi'}
+                {storyBanner?.author}
               </p>
             </div>
           </div>
@@ -173,19 +162,19 @@ export const ParentsView: React.FC<ParentsViewProps> = ({ data }) => {
               </div>
               <div>
                 <h3 className="font-headline-sm text-label-lg text-primary font-bold leading-tight">
-                  {quickHelp?.title || 'Veli İletişim Masası'}
+                  {quickHelp?.title}
                 </h3>
                 <p className="font-body-sm text-body-sm text-on-surface-variant">
-                  {quickHelp?.desc || 'Giriş şifreniz veya öğrenci takip sistemiyle ilgili sorularınız için bize hemen yazın.'}
+                  {quickHelp?.desc}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto justify-end">
               <Link
-                href="/iletisim"
+                href={quickHelp?.buttonLink || '/iletisim'}
                 className="inline-flex items-center justify-center px-5 py-2.5 rounded-full font-label-md text-label-md text-white bg-secondary-container hover:bg-secondary transition-all shadow-sm"
               >
-                {quickHelp?.buttonText || 'Destek Al'}
+                {quickHelp?.buttonText}
               </Link>
             </div>
           </div>
@@ -212,14 +201,14 @@ export const ParentsView: React.FC<ParentsViewProps> = ({ data }) => {
               </button>
             </div>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Bu modül velilerimize özel dijital portal altyapımıza bağlıdır. Öğrencinizin gelişim raporları, duyuruları veya formları için veli girişi yapabilir veya destek masamızla iletişime geçebilirsiniz.
+              {moduleModal?.text}
             </p>
             <div className="flex items-center justify-end gap-2 pt-2">
               <Link
-                href="/veli-portali"
+                href={selectedModule.link || '/veli-portali'}
                 className="px-4 py-2 rounded-xl bg-primary text-white text-xs font-bold shadow-sm hover:bg-primary/90 transition"
               >
-                Veli Portalına Git ↗
+                {moduleModal?.buttonText}
               </Link>
               <button
                 type="button"

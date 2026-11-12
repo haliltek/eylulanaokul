@@ -3,13 +3,61 @@
 import React from 'react';
 import Link from 'next/link';
 import { HomePageData } from '@/types/cms';
+import { list, hasLink } from '@/lib/content';
+
+import { VideoEmbed } from '@/components/common/VideoEmbed';
+
+const FEATURE_ICONS = [
+  (<svg className="w-10 h-10 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M12 3L2 8l10 5 10-5-10-5zm0 8.5L5 8.7V14c0 3.87 3.13 7 7 7s7-3.13 7-7V8.7l-7 2.8z" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="12" cy="13.5" fill="none" r="2.5" strokeWidth="1.4" />
+                </svg>),
+  (<svg className="w-10 h-10 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>),
+  (<svg className="w-10 h-10 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <circle cx="12" cy="6" r="3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M12 11c-3.5 0-6 2-6 5v2h12v-2c0-3-2.5-5-6-5z" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M6 18l-2 3h16l-2-3" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>),
+  (<svg className="w-10 h-10 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <rect height="15" rx="2" strokeLinecap="round" strokeLinejoin="round" width="18" x="3" y="6" />
+                  <path d="M16 2v4M8 2v4M3 10h18" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="8" cy="15" fill="currentColor" r="1.5" />
+                  <path d="M14 14l2 3" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>),
+  (<svg className="w-10 h-10 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M12 21V11" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M12 11c0-4 4-7 8-7 0 5-4 7-8 7z" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M12 15c0-3-3-5-6-5 0 4 3 5 6 5z" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M5 21h14" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>),
+];
+const ADVANTAGE_ICONS: { cls: string; svg: React.ReactNode }[] = [
+  { cls: 'shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center', svg: (<svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M7 3v8M4 3v5a3 3 0 003 3 3 3 0 003-3V3M7 11v10M17 21V3c-2.2 1.2-3.5 4-3.5 7.5 0 2 1.2 3 3.5 3" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>) },
+  { cls: 'shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center', svg: (<svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z" strokeLinecap="round" strokeLinejoin="round" /><path d="M8.5 12l2.5 2.5 4.5-5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>) },
+  { cls: 'shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center', svg: (<svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M12 20.5S3.5 15.3 3.5 9.2A4.7 4.7 0 0112 6.6a4.7 4.7 0 018.5 2.6c0 6.100-8.500 11.300-8.500 11.300z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>) },
+  { cls: 'shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-sky-100 text-brand-blue flex items-center justify-center', svg: (<svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <path d="M12 20c-3.500-2-5-4.500-5-7.500 2.500.5 4.200 1.800 5 4 .8-2.200 2.500-3.500 5-4 0 3-1.500 5.500-5 7.500z" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 16.500C10.500 13.500 10.500 9.500 12 5c1.500 4.500 1.500 8.500 0 11.500zM4 11c2 0 3.500 1 4.500 2.500M20 11c-2 0-3.500 1-4.500 2.500" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>) },
+  { cls: 'shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center', svg: (<svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
+                  <circle cx="12" cy="8" r="2.800" strokeLinecap="round" strokeLinejoin="round" /><circle cx="5.500" cy="10" r="2.200" strokeLinecap="round" strokeLinejoin="round" /><circle cx="18.500" cy="10" r="2.200" strokeLinecap="round" strokeLinejoin="round" /><path d="M7 20v-1.500a5 5 0 0110 0V20M2 19v-1a3.500 3.500 0 013.500-3.500M22 19v-1a3.500 3.500 0 00-3.500-3.500" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>) },
+];
 
 interface HomeViewProps {
   data: HomePageData;
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
-  const { hero } = data;
+  const { hero, featureCards, advantages, dayVideo, discovery } = data;
+  const [videoOpen, setVideoOpen] = React.useState(false);
 
   return (
     <div className="relative overflow-hidden">
@@ -22,9 +70,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
             {/* Background classroom girl image */}
             <div className="absolute inset-0 z-0">
               <img
-                alt={hero?.heroImageAlt || "Eylül Çocuk Akademisi'nde mutlu öğrenci"}
+                alt={hero?.heroImageAlt}
                 className="w-full h-full object-cover object-right sm:object-center transform scale-105"
-                src={hero?.heroImage || "https://lh3.googleusercontent.com/aida-public/AB6AXuAqqBvvgnitjIqoyH1pgnXbj3o4-F3EBt82a3u3eV1xvAXVhj6tXut0hX99r3X7k_NL9HykxwyoMAfDckVWNsua-e_pXcB3R84YrYxEZsoajqTAQxZT2l7p_1kSPuizUpKsEFIGHQbrMYEY_QZhoG4pm2RfCOqHIRe9NRR4maYaukvni2me_eE2Pj1a4XRvgH6ZiN9V771zsExQa-dWdT3CSSFClq1DC-CDQukG6_6r6u5t4Je3cqAu"}
+                src={hero?.heroImage}
               />
               {/* Gentle cream/white gradient mask favoring the left side for crisp text contrast */}
               <div className="absolute inset-0 bg-gradient-to-r from-amber-50/95 via-amber-50/85 to-transparent sm:via-amber-50/60 sm:to-transparent" />
@@ -37,16 +85,16 @@ export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
               {/* Decorative Quote Tagline */}
               <div className="mb-4">
                 <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-extrabold tracking-tight text-brand-navy leading-[1.2]">
-                  <span className="block italic font-sans text-brand-blue font-black">“Güvenle</span>
-                  <span className="block italic font-sans text-brand-blue font-black ml-4 sm:ml-6">Bugüne,</span>
-                  <span className="block italic font-sans text-brand-blue font-black">Umutla</span>
-                  <span className="block italic font-sans text-brand-blue font-black ml-4 sm:ml-6">Yarına...”</span>
+                  <span className="block italic font-sans text-brand-blue font-black">{hero?.quotePart1}</span>
+                  <span className="block italic font-sans text-brand-blue font-black ml-4 sm:ml-6">{hero?.quotePart2}</span>
+                  <span className="block italic font-sans text-brand-blue font-black">{hero?.quotePart3}</span>
+                  <span className="block italic font-sans text-brand-blue font-black ml-4 sm:ml-6">{hero?.quotePart4}</span>
                 </h1>
               </div>
 
               {/* Description paragraph */}
               <p className="text-slate-700 text-sm sm:text-base lg:text-lg font-medium leading-relaxed max-w-md mb-8">
-                {hero?.description || 'Sevgi, ilgi ve özenle her çocuğun potansiyelini destekleyen bütüncül bir eğitim yaklaşımı.'}
+                {hero?.description}
               </p>
 
               {/* Call to Action */}
@@ -55,7 +103,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
                   className="inline-flex items-center justify-center px-7 py-3 rounded-full text-sm sm:text-base font-bold text-white bg-brand-accent hover:bg-brand-orange shadow-lg shadow-brand-accent/30 hover:shadow-xl hover:shadow-brand-accent/40 transition-all duration-200 transform hover:-translate-y-0.5"
                   href={hero?.ctaPrimaryLink || '/okulumuz'}
                 >
-                  {hero?.ctaPrimaryText || 'Okulumuzu Keşfedin'}
+                  {hero?.ctaPrimaryText}
                 </Link>
               </div>
             </div>
@@ -74,176 +122,52 @@ export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
         {/* 5 Clean white pillar cards with outline icons and 2-line titles */}
         <section aria-label="Eğitim Yaklaşımı ve Ayrıcalıklarımız" className="py-2">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3.5 sm:gap-4 lg:gap-5">
-            {/* Pillar 1: BEM Modeli */}
-            <Link
-              href="/egitim-modeli/bem"
-              className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group"
-            >
-              <div className="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
-                {/* Graduation / Crest Icon */}
-                <svg className="w-10 h-10 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
-                  <path d="M12 3L2 8l10 5 10-5-10-5zm0 8.5L5 8.7V14c0 3.87 3.13 7 7 7s7-3.13 7-7V8.7l-7 2.8z" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="12" cy="13.5" fill="none" r="2.5" strokeWidth="1.4" />
-                </svg>
-              </div>
-              <h3 className="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
-                BEM<br />
-                <span className="font-bold text-[11px] sm:text-xs text-slate-700">Bütünleştirilmiş Eğitim Modeli</span>
-              </h3>
-            </Link>
-
-            {/* Pillar 2: All Day English */}
-            <Link
-              href="/egitim-modeli/all-day-english"
-              className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group"
-            >
-              <div className="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
-                {/* Speech bubbles / bilingual icon */}
-                <svg className="w-10 h-10 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
-                  <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <h3 className="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
-                All Day<br />
-                <span className="font-bold text-[11px] sm:text-xs text-slate-700">English</span>
-              </h3>
-            </Link>
-
-            {/* Pillar 3: İlkokula Hazırlık */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group">
-              <div className="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
-                {/* Learning Child / Book Icon */}
-                <svg className="w-10 h-10 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
-                  <circle cx="12" cy="6" r="3" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M12 11c-3.5 0-6 2-6 5v2h12v-2c0-3-2.5-5-6-5z" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M6 18l-2 3h16l-2-3" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <h3 className="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
-                İlkokula<br />
-                <span className="font-bold text-[11px] sm:text-xs text-slate-700">Hazırlık</span>
-              </h3>
-            </div>
-
-            {/* Pillar 4: Zengin Etkinlik Dünyası */}
-            <Link
-              href="/etkinlikler"
-              className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group"
-            >
-              <div className="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
-                {/* Activity / Shapes / Toys Icon */}
-                <svg className="w-10 h-10 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
-                  <rect height="15" rx="2" strokeLinecap="round" strokeLinejoin="round" width="18" x="3" y="6" />
-                  <path d="M16 2v4M8 2v4M3 10h18" strokeLinecap="round" strokeLinejoin="round" />
-                  <circle cx="8" cy="15" fill="currentColor" r="1.5" />
-                  <path d="M14 14l2 3" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <h3 className="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
-                Zengin<br />
-                <span className="font-bold text-[11px] sm:text-xs text-slate-700">Etkinlik Dünyası</span>
-              </h3>
-            </Link>
-
-            {/* Pillar 5: Doğa ile Öğrenme */}
-            <div className="col-span-2 md:col-span-1 bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group">
-              <div className="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
-                {/* Nature & Sprout / Tree Icon */}
-                <svg className="w-10 h-10 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
-                  <path d="M12 21V11" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M12 11c0-4 4-7 8-7 0 5-4 7-8 7z" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M12 15c0-3-3-5-6-5 0 4 3 5 6 5z" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M5 21h14" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <h3 className="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
-                Doğa ile<br />
-                <span className="font-bold text-[11px] sm:text-xs text-slate-700">Öğrenme</span>
-              </h3>
-            </div>
+            {list(featureCards).map((c, i, arr) => {
+              const inner = (
+                <>
+                  <div className="w-13 h-13 sm:w-14 sm:h-14 mb-3 flex items-center justify-center text-brand-blue group-hover:scale-105 transition-transform duration-200">
+                    {FEATURE_ICONS[i % FEATURE_ICONS.length]}
+                  </div>
+                  <h3 className="text-xs sm:text-sm font-extrabold text-brand-navy leading-snug">
+                    {c.title}<br />
+                    <span className="font-bold text-[11px] sm:text-xs text-slate-700">{c.subtitle}</span>
+                  </h3>
+                </>
+              );
+              const cls = `${arr.length % 2 === 1 && i === arr.length - 1 ? 'col-span-2 md:col-span-1 ' : ''}bg-white/90 backdrop-blur-sm rounded-2xl p-4 sm:p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md border border-slate-100 hover:border-amber-200 transition-all duration-200 group`;
+              return hasLink(c.link) ? (
+                <Link key={c.id || i} href={c.link} className={cls}>{inner}</Link>
+              ) : (
+                <div key={c.id || i} className={cls}>{inner}</div>
+              );
+            })}
           </div>
         </section>
 
         {/* Ek avantajlar: 5 sütunun altındaki ikinci satır */}
         <section aria-label="Okulumuzun Avantajları" className="mt-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-y-1 rounded-3xl bg-white/80 backdrop-blur-sm border border-amber-100/70 shadow-sm px-2 py-2 sm:px-3">
-            <div className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
-              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
-                <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
-                  <path d="M7 3v8M4 3v5a3 3 0 003 3 3 3 0 003-3V3M7 11v10M17 21V3c-2.2 1.2-3.5 4-3.5 7.5 0 2 1.2 3 3.5 3" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+            {list(advantages).map((a, i) => (
+              <div key={a.id || i} className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
+                <div className={ADVANTAGE_ICONS[i % ADVANTAGE_ICONS.length].cls}>{ADVANTAGE_ICONS[i % ADVANTAGE_ICONS.length].svg}</div>
+                <div className="min-w-0">
+                  <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug whitespace-pre-line">{a.title}</h3>
+                  <p className="mt-0.5 text-[11px] leading-snug text-slate-500">{a.desc}</p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug">
-                  Sağlıklı ve Dengeli<br />Beslenme
-                </h3>
-                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">Uzmanlar eşliğinde özenle hazırlanan menüler.</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
-              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
-                <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
-                  <path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z" strokeLinecap="round" strokeLinejoin="round" /><path d="M8.5 12l2.5 2.5 4.5-5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <div className="min-w-0">
-                <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug">
-                  Hijyenik ve Güvenli<br />Ortam
-                </h3>
-                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">Temiz, sağlıklı ve çocuk dostu ortamlar.</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
-              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center">
-                <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
-                  <path d="M12 20.5S3.5 15.3 3.5 9.2A4.7 4.7 0 0112 6.6a4.7 4.7 0 018.5 2.6c0 6.100-8.500 11.300-8.500 11.300z" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <div className="min-w-0">
-                <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug">
-                  Sevecen ve Uzman<br />Öğretmen Kadrosu
-                </h3>
-                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">Her çocuğa özel ilgi ve rehberlik.</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
-              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-sky-100 text-brand-blue flex items-center justify-center">
-                <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
-                  <path d="M12 20c-3.500-2-5-4.500-5-7.500 2.500.5 4.200 1.800 5 4 .8-2.200 2.500-3.500 5-4 0 3-1.500 5.500-5 7.500z" strokeLinecap="round" strokeLinejoin="round" /><path d="M12 16.500C10.500 13.500 10.500 9.500 12 5c1.500 4.500 1.500 8.500 0 11.500zM4 11c2 0 3.500 1 4.500 2.500M20 11c-2 0-3.500 1-4.500 2.500" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <div className="min-w-0">
-                <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug">
-                  Fiziksel ve Ruhsal<br />Gelişim Desteği
-                </h3>
-                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">Oyun, hareket ve sanatla bütün gelişim.</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 px-3 py-3 lg:px-5 lg:border-l lg:border-slate-200/80 lg:first:border-l-0">
-              <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
-                <svg className="w-7 h-7 sm:w-8 sm:h-8 stroke-current" fill="none" strokeWidth="1.6" viewBox="0 0 24 24">
-                  <circle cx="12" cy="8" r="2.800" strokeLinecap="round" strokeLinejoin="round" /><circle cx="5.500" cy="10" r="2.200" strokeLinecap="round" strokeLinejoin="round" /><circle cx="18.500" cy="10" r="2.200" strokeLinecap="round" strokeLinejoin="round" /><path d="M7 20v-1.500a5 5 0 0110 0V20M2 19v-1a3.500 3.500 0 013.500-3.500M22 19v-1a3.500 3.500 0 00-3.500-3.500" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <div className="min-w-0">
-                <h3 className="text-xs sm:text-[13px] font-extrabold text-brand-navy leading-snug">
-                  Aile Katılımı<br />ve İletişimi
-                </h3>
-                <p className="mt-0.5 text-[11px] leading-snug text-slate-500">Güçlü veli iş birliği ile daha ileriye.</p>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
         {/* END: CorePillarsFeatures */}
 
         {/* BEGIN: VideoFeatureCard */}
         <section className="relative rounded-3xl overflow-hidden shadow-lg border border-amber-100" data-purpose="video-highlight-banner">
-          <div className="relative w-full h-52 sm:h-64 md:h-72 lg:h-80 group cursor-pointer">
+          <div className="relative w-full h-52 sm:h-64 md:h-72 lg:h-80 group cursor-pointer" onClick={() => dayVideo?.videoUrl && setVideoOpen(true)}>
             {/* Classroom Kids Playing Background Image */}
             <img
-              alt="Eylül Çocuk Akademisi sınıf içi etkinlikler ve oyun anları"
+              alt={dayVideo?.imageAlt}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMJOcMj_5ofmln-7zxjodxrkIggHEPizxtTm6fTxnlJg9orzRErxF4C5ICuonpZmqeFVsCoQN4U8gzVHTAyoWKzH6YVhlZxg2nyUAe7x8QfWnJJHPMtuZyG7g7DBiVPoyzftXbVbzN_TdtqPQIBPLU7VGIZvsWhBlNtYwxeF0QEa68LKcxh3xhE3DrgfO0l31wjXMOFnKZ3aCzvZTY8pmeNzQ1MZ2zu8brUXpubQfpQIsbqyZpma6h"
+              src={dayVideo?.image}
             />
             {/* Dark and warm gradient overlays for readability and warmth */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20" />
@@ -278,10 +202,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
             {/* Video Text Overlay Content */}
             <div className="absolute bottom-4 sm:bottom-6 left-6 sm:left-8 z-10 text-white">
               <h2 className="text-xl sm:text-2xl font-bold tracking-tight drop-shadow-md">
-                Eylül'de Bir Gün
+                {dayVideo?.title}
               </h2>
               <p className="text-xs sm:text-sm text-slate-200 font-medium drop-shadow-sm mt-0.5">
-                Okul yaşamımızı keşfedin.
+                {dayVideo?.subtitle}
               </p>
             </div>
           </div>
@@ -305,25 +229,33 @@ export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
           </div>
           {/* Section Title */}
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-brand-navy tracking-tight mb-4">
-            Her Çocuk Bir Keşif
+            {discovery?.title}
           </h2>
           {/* Turkish description paragraph */}
           <p className="text-slate-600 text-xs sm:text-sm md:text-base leading-relaxed max-w-2xl mx-auto mb-7">
-            Çocuklarımızın doğuştan gelen merak duygusunu besleyerek, deneyimleyerek öğrenmelerini ve kendi yeteneklerini güvenle keşfetmelerini sağlıyoruz. Uzman eğitim kadromuz ve doğayla iç içe öğrenme alanlarımızla geleceğe sevgiyle hazırlanıyoruz.
+            {discovery?.text}
           </p>
           {/* Action Button */}
           <div>
             <Link
               className="inline-flex items-center justify-center px-8 py-3 rounded-full text-xs sm:text-sm font-bold text-white bg-brand-accent hover:bg-brand-orange shadow-md shadow-brand-accent/25 hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
-              href="/egitim-modeli/bem"
+              href={discovery?.buttonLink || '/egitim-modeli/bem'}
             >
-              Eğitim Modelimizi İnceleyin
+              {discovery?.buttonText}
             </Link>
           </div>
         </section>
         {/* END: DiscoverySectionTeaser */}
       </main>
       {/* END: MainContent */}
+      {videoOpen && dayVideo?.videoUrl && (
+        <div className="fixed inset-0 z-[80] bg-black/80 flex items-center justify-center p-4" onClick={() => setVideoOpen(false)}>
+          <div className="w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
+            <VideoEmbed url={dayVideo.videoUrl} />
+            <button type="button" onClick={() => setVideoOpen(false)} className="mt-3 mx-auto block px-5 py-2 rounded-full bg-white text-slate-800 text-sm font-bold">Kapat</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

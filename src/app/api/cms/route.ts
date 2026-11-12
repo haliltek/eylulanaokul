@@ -1,131 +1,53 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { isPageKey } from '@/data/content';
+import { ADMIN_COOKIE, authEnabled, verifySessionToken } from '@/lib/adminAuth';
 
+export const dynamic = 'force-dynamic';
+
+async function isAdmin(request: Request): Promise<boolean> {
+  if (!authEnabled()) return true;
+  const cookie = request.headers.get('cookie') || '';
+  const token = cookie.split(/;\s*/).find((c) => c.startsWith(`${ADMIN_COOKIE}=`))?.slice(ADMIN_COOKIE.length + 1);
+  return verifySessionToken(token ? decodeURIComponent(token) : null);
+}
+
+/**
+ * GET /api/cms?section=<sayfa>   → sayfanın sitede görünen içeriği (herkese açık)
+ * GET /api/cms?section=settings  → site ayarları (herkese açık)
+ * GET /api/cms                   → tüm veri deposu (yalnız yönetici; veli başvuruları gibi kişisel veri içerir)
+ */
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const section = searchParams.get('section');
-
+    const section = new URL(request.url).searchParams.get('section');
     if (!section) {
-      const fullStore = await db.getStore();
-      return NextResponse.json({ success: true, data: fullStore });
+      if (!(await isAdmin(request))) {
+        return NextResponse.json({ success: false, error: 'Yetkisiz erişim.' }, { status: 401 });
+      }
+      return NextResponse.json({ success: true, data: { ...(await db.getStore()), pages: await db.getAllPages() } });
     }
-
-    let data;
-    switch (section) {
-      case 'settings':
-        data = await db.getSiteSettings();
-        break;
-      case 'home':
-        data = await db.getHomePage();
-        break;
-      case 'about':
-        data = await db.getAboutPage();
-        break;
-      case 'campus':
-        data = await db.getCampusPage();
-        break;
-      case 'bem':
-        data = await db.getBemPage();
-        break;
-      case 'english':
-        data = await db.getEnglishPage();
-        break;
-      case 'activities':
-        data = await db.getActivitiesPage();
-        break;
-      case 'nutrition':
-        data = await db.getNutritionPage();
-        break;
-      case 'parents':
-        data = await db.getParentsPage();
-        break;
-      case 'enrollment':
-        data = await db.getEnrollmentPage();
-        break;
-      case 'contact':
-        data = await db.getContactPage();
-        break;
-      case 'activityVideos':
-        data = await db.getActivityVideos();
-        break;
-      case 'courseSchedule':
-        data = await db.getCourseSchedule();
-        break;
-      case 'monthlyMealList':
-        data = await db.getMonthlyMealList();
-        break;
-      default:
-        return NextResponse.json({ success: false, error: 'Bilinmeyen bölüm' }, { status: 400 });
-    }
-
-    return NextResponse.json({ success: true, data });
+    if (section === 'settings') return NextResponse.json({ success: true, data: await db.getSiteSettings() });
+    if (isPageKey(section)) return NextResponse.json({ success: true, data: await db.getPage(section) });
+    return NextResponse.json({ success: false, error: 'Bilinmeyen bölüm' }, { status: 400 });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
+/** POST { section, data } — yazma işlemleri middleware'de yönetici oturumuyla korunur. */
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { section, data } = body;
-
-    if (!section || !data) {
+    const { section, data } = await request.json();
+    if (!section || data === undefined || data === null || typeof data !== 'object') {
       return NextResponse.json({ success: false, error: 'Bölüm ve veri zorunludur' }, { status: 400 });
     }
-
-    let updated;
-    switch (section) {
-      case 'settings':
-        updated = await db.updateSiteSettings(data);
-        break;
-      case 'home':
-        updated = await db.updateHomePage(data);
-        break;
-      case 'about':
-        updated = await db.updateAboutPage(data);
-        break;
-      case 'campus':
-        updated = await db.updateCampusPage(data);
-        break;
-      case 'bem':
-        updated = await db.updateBemPage(data);
-        break;
-      case 'english':
-        updated = await db.updateEnglishPage(data);
-        break;
-      case 'activities':
-        updated = await db.updateActivitiesPage(data);
-        break;
-      case 'nutrition':
-        updated = await db.updateNutritionPage(data);
-        break;
-      case 'parents':
-        updated = await db.updateParentsPage(data);
-        break;
-      case 'enrollment':
-        updated = await db.updateEnrollmentPage(data);
-        break;
-      case 'contact':
-        updated = await db.updateContactPage(data);
-        break;
-      case 'activityVideos': {
-        const store = await db.getStore();
-        store.activityVideos = data;
-        await (db as any).persist();
-        updated = store.activityVideos;
-        break;
-      }
-      case 'courseSchedule':
-        updated = await db.updateCourseSchedule(data);
-        break;
-      case 'monthlyMealList':
-        updated = await db.updateMonthlyMealList(data);
-        break;
-      default:
-        return NextResponse.json({ success: false, error: 'Bilinmeyen bölüm' }, { status: 400 });
+    if (JSON.stringify(data).length > 2_000_000) {
+      return NextResponse.json({ success: false, error: 'İçerik çok büyük' }, { status: 413 });
     }
-
+    let updated: unknown;
+    if (section === 'settings') updated = await db.updateSiteSettings(data);
+    else if (isPageKey(section)) updated = await db.updatePage(section, data);
+    else return NextResponse.json({ success: false, error: 'Bilinmeyen bölüm' }, { status: 400 });
     return NextResponse.json({ success: true, message: 'İçerik başarıyla güncellendi', data: updated });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

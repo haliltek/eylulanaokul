@@ -2,27 +2,31 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { layoutContent } from '@/data/content/layout';
 
 interface FloatingActionButtonsProps {
   whatsappNumber?: string;
   phoneNumber?: string;
+  texts?: typeof layoutContent.floating;
 }
 
 export const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
   whatsappNumber = '905555550123',
   phoneNumber = '02125550123',
+  texts,
 }) => {
+  const T = texts || layoutContent.floating;
   const cleanWhatsapp = whatsappNumber.replace(/[^0-9]/g, '');
 
   return (
     <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3 pointer-events-auto">
       {/* Quick Appointment Floating Pill */}
       <Link
-        href="/kayit-ve-basvuru"
+        href={T.appointmentLink || '/kayit-ve-basvuru'}
         className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/95 text-[#0E4984] font-bold text-xs shadow-lg border border-amber-200/80 hover:bg-amber-50 hover:shadow-xl hover:scale-105 transition-all duration-200 backdrop-blur-md group"
       >
         <span className="w-2 h-2 rounded-full bg-[#74B127] animate-ping" />
-        <span>Hızlı Randevu Al</span>
+        <span>{T.appointmentText}</span>
         <svg
           className="w-3.5 h-3.5 text-[#E5880B] group-hover:translate-x-0.5 transition-transform"
           fill="none"
@@ -35,14 +39,12 @@ export const FloatingActionButtons: React.FC<FloatingActionButtonsProps> = ({
 
       {/* WhatsApp Floating Action Button */}
       <a
-        href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
-          'Merhaba, Eylül Çocuk Akademisi hakkında bilgi almak ve okul ziyareti planlamak istiyorum.'
-        )}`}
+        href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(T.whatsappMessage)}`}
         target="_blank"
         rel="noopener noreferrer"
         className="w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-xl hover:scale-110 hover:shadow-2xl transition-all duration-200 group relative"
         aria-label="WhatsApp Danışma Hattı"
-        title="WhatsApp ile Bilgi Alın"
+        title={T.whatsappTitle}
       >
         {/* Glow effect */}
         <span className="absolute -inset-1 rounded-full bg-[#25D366]/40 blur-sm group-hover:blur-md -z-10 animate-pulse" />

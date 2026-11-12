@@ -31,6 +31,9 @@ import {
   SocialPostPlan
 } from '../types/cms';
 import { initialCmsData } from '../data/initial-cms-data';
+import { SITE_CONTENT, type SiteContent, type PageKey } from '../data/content';
+import { deepMerge } from './content';
+import { applyContentPatches } from './contentPatches';
 import { initialBlogData, initialSeoSuiteData } from '../data/initial-seo-blog';
 
 // Kalıcı JSON veri deposu dosya yolu
@@ -63,6 +66,11 @@ class CmsDatabase {
       } else {
         const raw = fs.readFileSync(STORE_FILE, 'utf-8');
         this.inMemoryCache = JSON.parse(raw);
+      }
+      // Bekleyen içerik düzeltme yamaları (bir kez uygulanır; önce yedek alınır)
+      if (this.inMemoryCache && applyContentPatches(this.inMemoryCache)) {
+        try { fs.copyFileSync(STORE_FILE, `${STORE_FILE}.yedek-${Date.now()}`); } catch {}
+        fs.writeFileSync(STORE_FILE, JSON.stringify(this.inMemoryCache, null, 2), 'utf-8');
       }
     } catch (error) {
       console.error('[CmsDatabase] Başlatma hatası, in-memory yedek açılıyor:', error);
@@ -119,127 +127,40 @@ class CmsDatabase {
     return store.navigation.sort((a, b) => a.order - b.order);
   }
 
-  // --- 10 SAYFA CMS GET & UPDATE METOTLARI ---
+  // --- SAYFA İÇERİKLERİ (varsayılan + panelde kaydedilen) ---
 
-  public async getHomePage(): Promise<HomePageData> {
+  /** Sayfanın sitede gösterilecek hâli: varsayılan içerik + panelde kaydedilen değerler. */
+  public async getPage<K extends PageKey>(key: K): Promise<SiteContent[K]> {
     const store = await this.getStore();
-    return store.pages.home;
+    return deepMerge(SITE_CONTENT[key], store.pages?.[key]);
   }
 
-  public async updateHomePage(data: Partial<HomePageData>): Promise<HomePageData> {
+  /** Sayfanın tamamını kaydeder (panel formu sayfanın tüm alanlarını gönderir). */
+  public async updatePage<K extends PageKey>(key: K, data: unknown): Promise<SiteContent[K]> {
     const store = await this.getStore();
-    store.pages.home = { ...store.pages.home, ...data };
+    if (!store.pages || typeof store.pages !== 'object') store.pages = {};
+    store.pages[key] = data;
     await this.persist();
-    return store.pages.home;
+    return this.getPage(key);
   }
 
-  public async getAboutPage(): Promise<AboutPageData> {
-    const store = await this.getStore();
-    return store.pages.about;
+  /** Tüm sayfaların birleştirilmiş hâli (yönetim paneli için). */
+  public async getAllPages(): Promise<SiteContent> {
+    const out = {} as Record<PageKey, unknown>;
+    for (const k of Object.keys(SITE_CONTENT) as PageKey[]) out[k] = await this.getPage(k);
+    return out as SiteContent;
   }
 
-  public async updateAboutPage(data: Partial<AboutPageData>): Promise<AboutPageData> {
-    const store = await this.getStore();
-    store.pages.about = { ...store.pages.about, ...data };
-    await this.persist();
-    return store.pages.about;
-  }
-
-  public async getCampusPage(): Promise<CampusPageData> {
-    const store = await this.getStore();
-    return store.pages.campus;
-  }
-
-  public async updateCampusPage(data: Partial<CampusPageData>): Promise<CampusPageData> {
-    const store = await this.getStore();
-    store.pages.campus = { ...store.pages.campus, ...data };
-    await this.persist();
-    return store.pages.campus;
-  }
-
-  public async getBemPage(): Promise<BemPageData> {
-    const store = await this.getStore();
-    return store.pages.bem;
-  }
-
-  public async updateBemPage(data: Partial<BemPageData>): Promise<BemPageData> {
-    const store = await this.getStore();
-    store.pages.bem = { ...store.pages.bem, ...data };
-    await this.persist();
-    return store.pages.bem;
-  }
-
-  public async getEnglishPage(): Promise<EnglishPageData> {
-    const store = await this.getStore();
-    return store.pages.english;
-  }
-
-  public async updateEnglishPage(data: Partial<EnglishPageData>): Promise<EnglishPageData> {
-    const store = await this.getStore();
-    store.pages.english = { ...store.pages.english, ...data };
-    await this.persist();
-    return store.pages.english;
-  }
-
-  public async getActivitiesPage(): Promise<ActivitiesPageData> {
-    const store = await this.getStore();
-    return store.pages.activities;
-  }
-
-  public async updateActivitiesPage(data: Partial<ActivitiesPageData>): Promise<ActivitiesPageData> {
-    const store = await this.getStore();
-    store.pages.activities = { ...store.pages.activities, ...data };
-    await this.persist();
-    return store.pages.activities;
-  }
-
-  public async getNutritionPage(): Promise<NutritionPageData> {
-    const store = await this.getStore();
-    return store.pages.nutrition;
-  }
-
-  public async updateNutritionPage(data: Partial<NutritionPageData>): Promise<NutritionPageData> {
-    const store = await this.getStore();
-    store.pages.nutrition = { ...store.pages.nutrition, ...data };
-    await this.persist();
-    return store.pages.nutrition;
-  }
-
-  public async getParentsPage(): Promise<ParentsPageData> {
-    const store = await this.getStore();
-    return store.pages.parents;
-  }
-
-  public async updateParentsPage(data: Partial<ParentsPageData>): Promise<ParentsPageData> {
-    const store = await this.getStore();
-    store.pages.parents = { ...store.pages.parents, ...data };
-    await this.persist();
-    return store.pages.parents;
-  }
-
-  public async getEnrollmentPage(): Promise<EnrollmentPageData> {
-    const store = await this.getStore();
-    return store.pages.enrollment;
-  }
-
-  public async updateEnrollmentPage(data: Partial<EnrollmentPageData>): Promise<EnrollmentPageData> {
-    const store = await this.getStore();
-    store.pages.enrollment = { ...store.pages.enrollment, ...data };
-    await this.persist();
-    return store.pages.enrollment;
-  }
-
-  public async getContactPage(): Promise<ContactPageData> {
-    const store = await this.getStore();
-    return store.pages.contact;
-  }
-
-  public async updateContactPage(data: Partial<ContactPageData>): Promise<ContactPageData> {
-    const store = await this.getStore();
-    store.pages.contact = { ...store.pages.contact, ...data };
-    await this.persist();
-    return store.pages.contact;
-  }
+  public getHomePage() { return this.getPage('home'); }
+  public getAboutPage() { return this.getPage('about'); }
+  public getCampusPage() { return this.getPage('campus'); }
+  public getBemPage() { return this.getPage('bem'); }
+  public getEnglishPage() { return this.getPage('english'); }
+  public getActivitiesPage() { return this.getPage('activities'); }
+  public getNutritionPage() { return this.getPage('nutrition'); }
+  public getParentsPage() { return this.getPage('parents'); }
+  public getEnrollmentPage() { return this.getPage('enrollment'); }
+  public getContactPage() { return this.getPage('contact'); }
 
   // --- 'İÇERİKLER' MENÜSÜ MODÜLLERİ ---
 

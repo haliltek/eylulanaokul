@@ -9,7 +9,7 @@ interface ContactViewProps {
 }
 
 export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
-  const { header, campusImage, formIntro } = data || {};
+  const { header, campusImage, formIntro, infoCards, addressBox, mapInfo } = data || ({} as ContactPageData);
 
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -73,18 +73,17 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                 favorite
               </span>
               <span className="font-label-sm text-label-sm tracking-wider uppercase font-semibold">
-                {header?.badge || 'Özel Eylül Anaokulu - Kars'}
+                {header?.badge}
               </span>
             </div>
             <h1 className="font-headline-xl text-headline-xl text-primary tracking-tight mb-3 font-comfortaa">
-              {header?.title || 'İletişim'}
+              {header?.title}
             </h1>
             <p className="font-headline-sm text-headline-sm text-secondary-container font-bold mb-4">
-              {header?.subtitle || 'Özel Eylül Anaokulu - Kars Kreş ve Anaokulu'}
+              {header?.subtitle}
             </p>
             <p className="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto leading-relaxed">
-              {header?.description ||
-                'Eylül Çocuk Akademisi ailesine katılmak, eğitim modelimiz hakkında ayrıntılı bilgi edinmek veya okulumuzu yerinde keşfetmek için bize her zaman ulaşabilirsiniz.'}
+              {header?.description}
             </p>
           </div>
 
@@ -97,7 +96,7 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                 {/* 1. Phone Card */}
                 <a
                   className="group flex flex-col items-center text-center p-4 sm:p-5 rounded-lg bg-surface-container-lowest shadow-sm hover:shadow-md transition-all duration-300"
-                  href="tel:05515893212"
+                  href={`tel:${(infoCards?.phoneNumber || '').replace(/[^0-9+]/g, '')}`}
                 >
                   <div className="w-11 h-11 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary group-hover:scale-110 transition-transform mb-2">
                     <span className="material-symbols-outlined text-label-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -105,20 +104,20 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                     </span>
                   </div>
                   <span className="font-label-sm text-[11px] text-outline uppercase tracking-wider mb-0.5 font-semibold">
-                    Telefon
+                    {infoCards?.phoneTitle}
                   </span>
                   <span className="font-label-md text-xs sm:text-sm text-primary font-bold group-hover:text-secondary-container transition-colors">
-                    0 (551) 589 32 12
+                    {infoCards?.phoneNumber}
                   </span>
                   <span className="font-body-sm text-[11px] text-on-surface-variant mt-0.5">
-                    Hafta İçi 08:00-17:00
+                    {infoCards?.phoneHours}
                   </span>
                 </a>
 
                 {/* 2. Fax Card */}
                 <a
                   className="group flex flex-col items-center text-center p-4 sm:p-5 rounded-lg bg-surface-container-lowest shadow-sm hover:shadow-md transition-all duration-300"
-                  href="tel:04742251222"
+                  href={`tel:${(infoCards?.faxNumber || '').replace(/[^0-9+]/g, '')}`}
                 >
                   <div className="w-11 h-11 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform mb-2">
                     <span className="material-symbols-outlined text-label-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -126,20 +125,20 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                     </span>
                   </div>
                   <span className="font-label-sm text-[11px] text-outline uppercase tracking-wider mb-0.5 font-semibold">
-                    Fax
+                    {infoCards?.faxTitle}
                   </span>
                   <span className="font-label-md text-xs sm:text-sm text-primary font-bold group-hover:text-secondary-container transition-colors">
-                    0 (474) 225 12 22
+                    {infoCards?.faxNumber}
                   </span>
                   <span className="font-body-sm text-[11px] text-on-surface-variant mt-0.5">
-                    Kurumsal Belge Hattı
+                    {infoCards?.faxNote}
                   </span>
                 </a>
 
                 {/* 3. Email Card */}
                 <a
                   className="group flex flex-col items-center text-center p-4 sm:p-5 rounded-lg bg-surface-container-lowest shadow-sm hover:shadow-md transition-all duration-300"
-                  href="mailto:info@eylulanaokulu.com.tr"
+                  href={`mailto:${infoCards?.emailAddress}`}
                 >
                   <div className="w-11 h-11 rounded-full bg-primary-fixed flex items-center justify-center text-primary group-hover:scale-110 transition-transform mb-2">
                     <span className="material-symbols-outlined text-label-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -147,13 +146,13 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                     </span>
                   </div>
                   <span className="font-label-sm text-[11px] text-outline uppercase tracking-wider mb-0.5 font-semibold">
-                    E-Posta
+                    {infoCards?.emailTitle}
                   </span>
                   <span className="font-label-md text-xs sm:text-sm text-primary font-bold group-hover:text-secondary-container transition-colors truncate max-w-full">
-                    info@eylulanaokulu.com.tr
+                    {infoCards?.emailAddress}
                   </span>
                   <span className="font-body-sm text-[11px] text-on-surface-variant mt-0.5">
-                    Hızlı Dönüş
+                    {infoCards?.emailNote}
                   </span>
                 </a>
 
@@ -165,13 +164,13 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                     </span>
                   </div>
                   <span className="font-label-sm text-[11px] text-outline uppercase tracking-wider mb-0.5 font-semibold">
-                    Konum
+                    {infoCards?.locationTitle}
                   </span>
                   <span className="font-label-md text-xs sm:text-sm text-primary font-bold">
-                    Villalar Bölgesi / KARS
+                    {infoCards?.locationCity}
                   </span>
                   <span className="font-body-sm text-[11px] text-on-surface-variant mt-0.5">
-                    Merkezi Ulaşım
+                    {infoCards?.locationNote}
                   </span>
                 </div>
               </div>
@@ -185,13 +184,13 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                 </div>
                 <div className="flex flex-col gap-1">
                   <h3 className="font-headline-sm text-label-lg text-primary font-bold">
-                    Açık Adresimiz
+                    {addressBox?.title}
                   </h3>
                   <p className="font-body-md text-body-md text-on-surface font-semibold leading-relaxed">
-                    Şehitler mh. 108 Sokak, No: 8 AL (Villalar Bölgesi) KARS
+                    {addressBox?.fullAddress}
                   </p>
                   <p className="font-body-sm text-body-sm text-on-surface-variant">
-                    Özel Eylül Anaokulu - Kars Kreş ve Anaokulu yerleşkemiz geniş bahçeli ve güvenli müstakil villalar mevkiindedir.
+                    {addressBox?.directionsNote}
                   </p>
                 </div>
               </div>
@@ -201,7 +200,7 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                 <div className="w-full h-80 sm:h-96 relative">
                   <iframe
                     title="Özel Eylül Anaokulu Kars Google Haritası"
-                    src="https://maps.google.com/maps?q=%C3%96zel%20Eyl%C3%BCl%20Anaokulu%20-%20Kars%20Kre%C5%9F%20ve%20Anaokulu&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(mapInfo?.mapQuery || 'Özel Eylül Anaokulu Kars')}&t=&z=16&ie=UTF8&iwloc=&output=embed`}
                     className="w-full h-full border-0"
                     loading="lazy"
                     allowFullScreen
@@ -211,16 +210,16 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                     <div className="flex items-center gap-2">
                       <span className="w-2.5 h-2.5 rounded-full bg-secondary-container animate-pulse" />
                       <span className="font-label-sm text-xs sm:text-sm text-primary font-bold">
-                        Özel Eylül Anaokulu - Kars
+                        {mapInfo?.title}
                       </span>
                     </div>
                     <a
                       className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-secondary-container hover:bg-secondary text-white font-label-sm text-xs sm:text-sm font-bold transition-all shadow-md"
-                      href="https://www.google.com/maps/search/?api=1&query=%C3%96zel+Eyl%C3%BCl+Anaokulu+-+Kars+Kre%C5%9F+ve+Anaokulu"
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapInfo?.mapQuery || 'Özel Eylül Anaokulu Kars')}`}
                       rel="noreferrer"
                       target="_blank"
                     >
-                      <span>Yol Tarifi Al</span>
+                      <span>{mapInfo?.directionsText}</span>
                       <span className="material-symbols-outlined text-sm">navigation</span>
                     </a>
                   </div>
@@ -231,10 +230,10 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                   <div className="flex items-center gap-2 text-on-surface-variant">
                     <span className="material-symbols-outlined text-label-md text-primary">schedule</span>
                     <span className="font-body-sm text-xs sm:text-sm">
-                      Çalışma Saatleri: <strong>Hafta içi 08.00 - 17.00</strong>
+                      {mapInfo?.hoursLabel} <strong>{mapInfo?.visitingHours}</strong>
                     </span>
                   </div>
-                  <span className="font-label-sm text-xs text-tertiary font-bold">Randevulu Okul Tanıtımı</span>
+                  <span className="font-label-sm text-xs text-tertiary font-bold">{mapInfo?.badge}</span>
                 </div>
               </div>
             </div>
@@ -246,11 +245,8 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                 <div className="w-full h-56 sm:h-64 overflow-hidden relative">
                   <img
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    alt={campusImage?.title || 'Özel Eylül Anaokulu Kars Yerleşkesi'}
-                    src={
-                      campusImage?.image ||
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuBLTcFcP5lqXe6FlaDkYCXiyBz960GYtwkL5B3CnPmnU0BATMdea0vAAz_DMA_5USrA4-_e7kF0_0KX1FSz4XUXLkfw0Dsbv8G69wNNxzcmDkUl94iOK3v9TvGHu5n7Wcl0vj17K_5OgIK2aE_QBQDfb5B0OcJGKxqkzgQZ'
-                    }
+                    alt={campusImage?.title}
+                    src={campusImage?.image}
                     onError={(e) => {
                       (e.currentTarget as HTMLImageElement).src =
                         'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800';
@@ -259,78 +255,77 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-75"></div>
                   <div className="absolute bottom-4 left-4 right-4 text-on-primary">
                     <p className="font-label-sm text-label-sm text-secondary-fixed font-semibold uppercase tracking-wider">
-                      Yerleşkemiz
+                      {campusImage?.badge}
                     </p>
                     <h4 className="font-headline-sm text-headline-sm font-bold">
-                      {campusImage?.title || 'Geniş Bahçeli Müstakil Kampüs'}
+                      {campusImage?.title}
                     </h4>
                   </div>
                 </div>
               </div>
 
               {/* Contact Message Form Card */}
-              <div className="p-6 sm:p-8 rounded-lg bg-surface-container-lowest shadow-sm border border-outline-variant/30">
+              <div id="iletisim-formu" className="scroll-mt-24 p-6 sm:p-8 rounded-lg bg-surface-container-lowest shadow-sm border border-outline-variant/30">
                 <div className="mb-6">
                   <h3 className="font-headline-sm text-headline-sm text-primary font-bold">
-                    {formIntro?.title || 'Bize Mesaj Gönderin'}
+                    {formIntro?.title}
                   </h3>
                   <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                    {formIntro?.description ||
-                      'Aklınıza takılan her türlü soru için formu doldurabilirsiniz. Uzman kadromuz gün içinde sizi arayacaktır.'}
+                    {formIntro?.description}
                   </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="block font-label-sm text-label-sm text-on-surface mb-1 font-semibold">
-                      Ad Soyad *
+                      {formIntro?.nameLabel}
                     </label>
                     <input
                       type="text"
                       required
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      placeholder="Adınız ve Soyadınız"
+                      placeholder={formIntro?.namePlaceholder}
                       className="w-full px-4 py-2.5 rounded-md border border-outline-variant/60 bg-surface-container-lowest focus:border-secondary-container focus:ring-1 focus:ring-secondary-container outline-none transition text-body-md"
                     />
                   </div>
 
                   <div>
                     <label className="block font-label-sm text-label-sm text-on-surface mb-1 font-semibold">
-                      Telefon Numarası *
+                      {formIntro?.phoneLabel}
                     </label>
                     <input
                       type="tel"
                       required
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      placeholder="05XX XXX XX XX"
+                      placeholder={formIntro?.phonePlaceholder}
                       className="w-full px-4 py-2.5 rounded-md border border-outline-variant/60 bg-surface-container-lowest focus:border-secondary-container focus:ring-1 focus:ring-secondary-container outline-none transition text-body-md"
                     />
                   </div>
 
                   <div>
                     <label className="block font-label-sm text-label-sm text-on-surface mb-1 font-semibold">
-                      E-Posta Adresi
+                      {formIntro?.emailLabel}
                     </label>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="ornek@email.com"
+                      placeholder={formIntro?.emailPlaceholder}
                       className="w-full px-4 py-2.5 rounded-md border border-outline-variant/60 bg-surface-container-lowest focus:border-secondary-container focus:ring-1 focus:ring-secondary-container outline-none transition text-body-md"
                     />
                   </div>
 
                   <div>
                     <label className="block font-label-sm text-label-sm text-on-surface mb-1 font-semibold">
-                      Mesajınız
+                      {formIntro?.messageLabel}
                     </label>
                     <textarea
                       rows={4}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Çocuğunuzun yaşı, kayıt dönemi veya merak ettiğiniz konular..."
+                      placeholder={formIntro?.messagePlaceholder}
                       className="w-full px-4 py-2.5 rounded-md border border-outline-variant/60 bg-surface-container-lowest focus:border-secondary-container focus:ring-1 focus:ring-secondary-container outline-none transition text-body-md resize-none"
                     ></textarea>
                   </div>
@@ -345,7 +340,7 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                       className="mt-1 rounded text-secondary-container focus:ring-secondary-container cursor-pointer"
                     />
                     <label htmlFor="kvkk" className="font-body-sm text-xs text-on-surface-variant cursor-pointer leading-tight">
-                      Kişisel verilerimin KVKK aydınlatma metni kapsamında okul tanıtımı ve iletişim amacıyla işlenmesini kabul ediyorum.
+                      {formIntro?.kvkkText}
                     </label>
                   </div>
 
@@ -354,7 +349,7 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
                     disabled={submitting}
                     className="w-full py-3 px-6 rounded-full bg-secondary-container hover:bg-secondary text-on-secondary font-label-md text-label-md font-bold shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 disabled:opacity-50"
                   >
-                    {submitting ? 'Gönderiliyor...' : 'Mesajımı İlet'}
+                    {submitting ? 'Gönderiliyor...' : formIntro?.buttonText}
                   </button>
                 </form>
               </div>
@@ -370,9 +365,9 @@ export const ContactView: React.FC<ContactViewProps> = ({ data }) => {
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-3xl">
               ✓
             </div>
-            <h3 className="text-xl font-bold text-slate-900">Mesajınız Alındı!</h3>
+            <h3 className="text-xl font-bold text-slate-900">{formIntro?.successTitle}</h3>
             <p className="text-sm text-slate-600">
-              Bizimle iletişime geçtiğiniz için teşekkür ederiz. Özel Eylül Anaokulu ekibimiz en kısa sürede sizinle iletişime geçecektir.
+              {formIntro?.successText}
             </p>
             <button
               onClick={() => setShowSuccessModal(false)}

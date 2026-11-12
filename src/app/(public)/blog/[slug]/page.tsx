@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { db } from '@/lib/db';
 import { BlogPostView } from '@/components/views/BlogPostView';
 
+export const dynamic = 'force-dynamic';
+
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -47,5 +49,5 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const allBlogData = await db.getBlogData();
   const relatedPosts = (allBlogData.posts || []).filter((p) => p.slug !== slug);
 
-  return <BlogPostView post={post} relatedPosts={relatedPosts} />;
+  return <BlogPostView post={post} relatedPosts={relatedPosts} texts={await db.getPage('blogPage')} />;
 }

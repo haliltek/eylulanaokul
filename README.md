@@ -4,7 +4,7 @@
 **Çalışma Alanı (CWD):** `D:\anaokulu`  
 **Yazılım Mimarisi:** Next.js 15+ (App Router, TypeScript), Tailwind CSS, Materio MUI Admin  
 **Tasarım Sistemi:** Warm Horizon Academy (`D:\anaokulu\warm_horizon_academy\DESIGN.md`)  
-**Dağıtım Sunucusu:** `142.93.104.78:8098` (Docker Standalone & Nginx Reverse Proxy)
+**Dağıtım Sunucusu:** `142.93.104.78:8089` (Docker Standalone & Nginx Reverse Proxy)
 
 ---
 

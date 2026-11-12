@@ -4,15 +4,20 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { CmsStore, BlogPostItem, SerpKeywordItem } from '@/types/cms';
 import { MediaField, ImageField } from './components/ImageField';
+import { ContentEditor } from './components/ContentEditor';
+import { SITE_CONTENT, PAGE_META, type SiteContent, type PageKey } from '@/data/content';
+
+type AdminData = Omit<CmsStore, 'pages'> & { pages: SiteContent };
 
 interface AdminDashboardClientProps {
-  initialData: CmsStore;
+  initialData: AdminData;
 }
 
 export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ initialData }) => {
-  const [data, setData] = useState<CmsStore>(initialData);
+  const [data, setData] = useState<AdminData>(initialData);
+  const [dirtyPages, setDirtyPages] = useState<Set<string>>(new Set());
   const [activeTab, setActiveTab] = useState<'dashboard' | 'seo' | 'blog' | 'cms' | 'media' | 'meals' | 'messages' | 'settings'>('dashboard');
-  const [selectedCmsPage, setSelectedCmsPage] = useState<string>('home');
+  const [selectedCmsPage, setSelectedCmsPage] = useState<PageKey>('home');
   const [seoSubTab, setSeoSubTab] = useState<'serp' | 'analytics' | 'unlighthouse'>('serp');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -46,7 +51,9 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
       });
       const json = await res.json();
       if (json.success) {
-        showToast(`${pageKey.toUpperCase()} sayfası başarıyla güncellendi.`);
+        const title = PAGE_META.find((p) => p.key === pageKey)?.title || pageKey;
+        showToast(`“${title}” kaydedildi. Değişiklikler sitede yayında.`);
+        setDirtyPages((d) => { const n = new Set(d); n.delete(pageKey); return n; });
       } else {
         showToast(`Hata: ${json.error}`);
       }
@@ -244,21 +251,7 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
     }
   };
 
-  const pagesList = [
-    { key: 'home', title: '1. Anasayfa', path: '/' },
-    { key: 'about', title: '2. Hakkımızda', path: '/hakkimizda' },
-    { key: 'campus', title: '3. Okulumuz', path: '/okulumuz' },
-    { key: 'bem', title: '4. BEM Eğitim Modeli', path: '/egitim-modeli/bem' },
-    { key: 'english', title: '5. All Day English', path: '/egitim-modeli/all-day-english' },
-    { key: 'activities', title: '6. Etkinlikler & Branşlar', path: '/etkinlikler' },
-    { key: 'nutrition', title: '7. Doğal ve Dengeli Beslenme', path: '/beslenme' },
-    { key: 'parents', title: '8. Velilerimiz İçin', path: '/velilerimiz-icin' },
-    { key: 'enrollment', title: '9. Kayıt ve Başvuru', path: '/kayit-ve-basvuru' },
-    { key: 'contact', title: '10. İletişim & Lokasyon', path: '/iletisim' },
-    { key: 'activityVideos', title: '11. Etkinlik Videoları', path: '/etkinlikler' },
-    { key: 'courseSchedule', title: '12. Ders Programı', path: '/egitim-modeli/bem' },
-    { key: 'monthlyMealList', title: '13. Aylık Yemek Listesi', path: '/beslenme' },
-  ];
+  const pagesList = PAGE_META;
 
   const analytics = data.seo?.analytics || {
     summary: { totalVisitors: 4892, uniqueVisitors: 3120, totalPageViews: 14280, avgSessionDurationSec: 218, bounceRate: 28.4, conversionCount: 184 },
@@ -1289,7 +1282,7 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
               <label className="text-xs font-semibold text-slate-600">Düzenlenecek Sayfa:</label>
               <select
                 value={selectedCmsPage}
-                onChange={(e) => setSelectedCmsPage(e.target.value)}
+                onChange={(e) => setSelectedCmsPage(e.target.value as PageKey)}
                 className="px-3.5 py-2 border border-slate-200 rounded-lg text-xs font-semibold bg-slate-50 text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-900"
               >
                 {pagesList.map((p) => (
@@ -1299,97 +1292,49 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
             </div>
           </div>
 
-          {/* Anasayfa Formu */}
-          {selectedCmsPage === 'home' && (
-            <div className="space-y-6">
-              <div className="p-5 rounded-xl border border-slate-200 bg-slate-50/50 space-y-4">
-                <h4 className="font-bold text-sm text-slate-900 border-b border-slate-200 pb-2">Hero (Giriş) Bölümü</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                  {['quotePart1', 'quotePart2', 'quotePart3', 'quotePart4'].map((qp, i) => (
-                    <div key={qp}>
-                      <label className="block text-[11px] font-semibold text-slate-600 mb-1">Motto Parça {i + 1}</label>
-                      <input
-                        type="text"
-                        value={(data.pages.home.hero as any)[qp]}
-                        onChange={(e) => {
-                          const updated = { ...data };
-                          (updated.pages.home.hero as any)[qp] = e.target.value;
-                          setData(updated);
-                        }}
-                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-xs bg-white"
-                      />
-                    </div>
-                  ))}
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">Açıklama Metni</label>
-                  <textarea
-                    rows={2}
-                    value={data.pages.home.hero.description}
-                    onChange={(e) => {
-                      const updated = { ...data };
-                      updated.pages.home.hero.description = e.target.value;
-                      setData(updated);
-                    }}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <MediaField
-                    label="Hero Ana Görseli"
-                    value={data.pages.home.hero.heroImage}
-                    mediaLibrary={data.mediaLibrary}
-                    onChange={(url) => {
-                      const updated = { ...data };
-                      updated.pages.home.hero.heroImage = url;
-                      setData(updated);
-                    }}
-                  />
-                  <div>
-                    <label className="block text-[11px] font-semibold text-slate-600 mb-1">Buton Metni</label>
-                    <input
-                      type="text"
-                      value={data.pages.home.hero.ctaPrimaryText}
-                      onChange={(e) => {
-                        const updated = { ...data };
-                        updated.pages.home.hero.ctaPrimaryText = e.target.value;
-                        setData(updated);
-                      }}
-                      className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs bg-white"
-                    />
-                  </div>
+          {(() => {
+            const meta = PAGE_META.find((p) => p.key === selectedCmsPage);
+            const dirty = dirtyPages.has(selectedCmsPage);
+            const saveBar = (
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <a href={meta?.path || '/'} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-[#0E4984] hover:underline">
+                  Sayfayı sitede aç ↗
+                </a>
+                <div className="flex items-center gap-3">
+                  {dirty && <span className="text-xs font-semibold text-amber-600">Kaydedilmemiş değişiklik var</span>}
+                  <button
+                    type="button"
+                    disabled={saving}
+                    onClick={() => saveCmsContent(selectedCmsPage, data.pages[selectedCmsPage])}
+                    className="px-6 py-2.5 rounded-lg bg-slate-900 text-white font-semibold text-xs shadow-xs hover:bg-slate-800 transition disabled:opacity-60"
+                  >
+                    {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
+                  </button>
                 </div>
               </div>
-
-              <div className="flex justify-end">
-                <button
-                  disabled={saving}
-                  onClick={() => saveCmsContent('home', data.pages.home)}
-                  className="px-6 py-2.5 rounded-lg bg-slate-900 text-white font-semibold text-xs shadow-xs hover:bg-slate-800 transition"
-                >
-                  {saving ? 'Kaydediliyor...' : 'Anasayfayı Kaydet'}
-                </button>
+            );
+            return (
+              <div className="space-y-5">
+                <div className="rounded-lg bg-sky-50 border border-sky-100 px-4 py-3 text-xs text-sky-900 leading-relaxed">
+                  Bu sayfadaki tüm yazılar, görseller, videolar, butonlar ve kartlar aşağıda. Kart/liste başlıklarına tıklayarak açın;
+                  <strong> + Yeni Ekle</strong> ile kart ekleyin, <strong>↑ ↓</strong> ile sıralayın, <strong>Sil</strong> ile kaldırın.
+                  Bitirince <strong>Değişiklikleri Kaydet</strong>’e basın.
+                </div>
+                {saveBar}
+                <ContentEditor
+                  key={selectedCmsPage}
+                  schema={SITE_CONTENT[selectedCmsPage]}
+                  value={data.pages[selectedCmsPage]}
+                  mediaLibrary={data.mediaLibrary}
+                  onChange={(nv) => {
+                    setData((d) => ({ ...d, pages: { ...d.pages, [selectedCmsPage]: nv } }));
+                    setDirtyPages((dp) => new Set(dp).add(selectedCmsPage));
+                  }}
+                />
+                <div className="sticky bottom-0 -mx-6 px-6 py-3 bg-white/95 backdrop-blur border-t border-slate-100">{saveBar}</div>
               </div>
-            </div>
-          )}
-
-          {/* Diğer sayfalar gerektiğinde dinamik olarak bu form motoruna bağlanır */}
-          {selectedCmsPage !== 'home' && (
-            <div className="p-8 text-center border-2 border-dashed border-slate-200 rounded-xl bg-slate-50 space-y-3">
-              <p className="text-slate-600 text-xs font-semibold">
-                {pagesList.find((p) => p.key === selectedCmsPage)?.title} sayfası görsel formları hazır.
-              </p>
-              <button
-                disabled={saving}
-                onClick={() => saveCmsContent(selectedCmsPage, (data.pages as any)[selectedCmsPage] || (data as any)[selectedCmsPage])}
-                className="px-5 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold"
-              >
-                {saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}
-              </button>
-            </div>
-          )}
+            );
+          })()}
         </div>
       )}
 

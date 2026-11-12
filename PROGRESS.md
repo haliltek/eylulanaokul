@@ -1,5 +1,17 @@
 # Eylül Çocuk Akademisi - İlerleme ve Durum Raporu (PROGRESS.md)
 
+## [2026-11-12] Tüm site içeriği yönetim panelinden düzenlenebilir + müşteri düzeltmeleri
+
+### Ne değişti
+- **İçerik mimarisi:** Sayfalardaki tüm yazı, görsel, video, buton, kart ve menüler `src/data/content/*.ts` altında varsayılan içerik olarak tanımlandı. Görünümler artık koda gömülü metin içermiyor; her şey bu veriden gelir. Panelde kaydedilen değerler `data/cms-store.json` → `pages.<sayfa>` altında tutulur ve varsayılanın üzerine bindirilir (`src/lib/content.ts → deepMerge`).
+- **Yönetim paneli → Sayfa Editörü:** Tüm sayfalar (Menü & Alt Bilgi, 10 kurumsal sayfa, Etkinlik Videoları, Ders Programı, Aylık Yemek Listesi, Blog sayfa yazıları, Veli Portalı) için formlar içerikten otomatik üretilir (`src/app/admin/components/ContentEditor.tsx`): metin, görsel/video/PDF yükleme, kart ekleme/silme/sıralama.
+- **Canlı içerik yaması:** `src/lib/contentPatches.ts` sunucudaki mevcut içerik dosyasına müşterinin istediği metin düzeltmelerini açılışta bir kez uygular (önce `cms-store.json.yedek-*` yedeği alır; panelden değiştirilmiş metinlere dokunmaz).
+- **Düzeltmeler:** Montessori/doğal ahşap ifadeleri kaldırıldı; atölye → sınıf/etkinlik; kauçuk → doğal çim; ön kayıt dönemi 2026-2027; saatler 08.00-17.00; servis imkânı yok; burs ifadesi kaldırıldı; "Türk sınıf öğretmeni" → "sınıf öğretmeni"; blog yazar isimleri → birim adları (PDR Servisi, Beslenme Birimi, İngilizce Birimi); "petalsen" → "altı yapraktan oluşmaktadır"; çift tırnak / 66-99 tırnak ikonları kaldırıldı; Kayıt adımları tıklanabilir; Sanal tur yerine tanıtım videosu; Etkinlik Videoları, Ders Programı ve Aylık Yemek Listesi panelden yönetilir; Veli Portalı sayfası yalnız bilgi notu gösterir.
+- **Hata düzeltmeleri:** "3-6 Yaş Döneminde Bireysel İlgi ve Yetenek Keşfi" yazısı 404 veriyordu (blog sayfaları derleme anında sabitleniyordu) — blog sayfaları dinamik yapıldı, eksik yazı geri eklendi. Tarihler okunur biçimde gösteriliyor.
+- **Güvenlik:** `GET /api/cms` (tüm veri deposu; veli başvuruları dahil) artık yalnız yönetici oturumuyla döner.
+
+---
+
 ## [2026-10-21] WSI-65: Docker Standalone Derleme İçin next.config.ts ve /api/health Uç Noktası
 
 ### 🎯 Amaç ve Yapılan İşlemler

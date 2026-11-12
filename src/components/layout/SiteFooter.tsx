@@ -2,12 +2,15 @@ import React from 'react';
 import Link from 'next/link';
 import { Logo } from '../common/Logo';
 import { SiteSettings } from '@/types/cms';
+import { layoutContent } from '@/data/content/layout';
 
 interface SiteFooterProps {
   settings?: Partial<SiteSettings>;
+  layout?: typeof layoutContent;
 }
 
-export const SiteFooter: React.FC<SiteFooterProps> = ({ settings }) => {
+export const SiteFooter: React.FC<SiteFooterProps> = ({ settings, layout }) => {
+  const F = (layout || layoutContent).footer;
   const currentYear = new Date().getFullYear();
   const phone = settings?.phone || '0 (551) 589 32 12';
   const phoneDisplay = settings?.phoneDisplay || '0 (551) 589 32 12';
@@ -25,7 +28,7 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ settings }) => {
           <div className="flex flex-col space-y-4">
             <Logo size="md" />
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans mt-2">
-              Çocuklarımızın doğuştan gelen merak duygusunu besleyerek, deneyimleyerek öğrenmelerini ve kendi yeteneklerini güvenle keşfetmelerini sağlıyoruz. Sevgi, ilgi ve pedagojik özenle geleceğe hazırlanıyoruz.
+              {F.about}
             </p>
             <div className="flex items-center gap-3 pt-2">
               {settings?.instagramUrl && (
@@ -70,93 +73,26 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ settings }) => {
             </div>
           </div>
 
-          {/* Col 2: Education & Model */}
-          <div>
-            <h4 className="font-extrabold text-[#0E4984] text-sm uppercase tracking-wider mb-4 font-comfortaa">
-              Eğitim & Yaklaşım
-            </h4>
-            <ul className="space-y-2.5 text-xs sm:text-sm">
-              <li>
-                <Link href="/egitim-modeli/bem" className="hover:text-[#E5880B] transition-colors">
-                  Bütünleştirilmiş Eğitim Modeli (BEM)
-                </Link>
-              </li>
-              <li>
-                <Link href="/egitim-modeli/all-day-english" className="hover:text-[#E5880B] transition-colors">
-                  All Day English (Tam Gün İngilizce)
-                </Link>
-              </li>
-              <li>
-                <Link href="/etkinlikler" className="hover:text-[#E5880B] transition-colors">
-                  Zengin Etkinlik Dünyası & Atölyeler
-                </Link>
-              </li>
-              <li>
-                <Link href="/beslenme" className="hover:text-[#E5880B] transition-colors">
-                  Doğal ve Dengeli Beslenme Menüsü
-                </Link>
-              </li>
-              <li>
-                <Link href="/okulumuz" className="hover:text-[#E5880B] transition-colors">
-                  360° Sanal Tur & Kampüs Alanları
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Col 3: Parents & Corporate */}
-          <div>
-            <h4 className="font-extrabold text-[#0E4984] text-sm uppercase tracking-wider mb-4 font-comfortaa">
-              Veliler & Kurumsal
-            </h4>
-            <ul className="space-y-2.5 text-xs sm:text-sm">
-              <li>
-                <Link href="/blog" className="font-semibold text-primary hover:text-[#E5880B] transition-colors">
-                  Eğitim &amp; Ebeveynlik Blogu
-                </Link>
-              </li>
-              <li>
-                <Link href="/icerikler/etkinlik-videolari" className="hover:text-[#E5880B] transition-colors">
-                  Etkinlik Videoları
-                </Link>
-              </li>
-              <li>
-                <Link href="/icerikler/ders-programi" className="hover:text-[#E5880B] transition-colors">
-                  Ders Programı Çizelgesi
-                </Link>
-              </li>
-              <li>
-                <Link href="/icerikler/aylik-yemek-listesi" className="hover:text-[#E5880B] transition-colors">
-                  Aylık Yemek Listesi
-                </Link>
-              </li>
-              <li>
-                <Link href="/velilerimiz-icin" className="hover:text-[#E5880B] transition-colors">
-                  Velilerimiz İçin Bilgi Rehberi
-                </Link>
-              </li>
-              <li>
-                <Link href="/beslenme" className="hover:text-[#E5880B] transition-colors">
-                  Haftalık Yemek Menüsü Takvimi
-                </Link>
-              </li>
-              <li>
-                <Link href="/kayit-ve-basvuru" className="hover:text-[#E5880B] transition-colors">
-                  Kayıt Süreci ve Okul Ziyareti
-                </Link>
-              </li>
-              <li>
-                <Link href="/hakkimizda" className="hover:text-[#E5880B] transition-colors">
-                  Hakkımızda & 12 Yıllık Deneyim
-                </Link>
-              </li>
-            </ul>
-          </div>
+          {/* Col 2-3: Panelden düzenlenen bağlantı sütunları */}
+          {(F.columns || []).map((col) => (
+            <div key={col.id || col.title}>
+              <h4 className="font-extrabold text-[#0E4984] text-sm uppercase tracking-wider mb-4 font-comfortaa">{col.title}</h4>
+              <ul className="space-y-2.5 text-xs sm:text-sm">
+                {(col.links || []).map((l) => (
+                  <li key={l.id || l.label}>
+                    <Link href={l.href || '#'} className="hover:text-[#E5880B] transition-colors">
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
           {/* Col 4: Contact & Visiting */}
           <div>
             <h4 className="font-extrabold text-[#0E4984] text-sm uppercase tracking-wider mb-4 font-comfortaa">
-              İletişim & Randevu
+              {F.contactTitle}
             </h4>
             <div className="space-y-3 text-xs sm:text-sm">
               <div className="flex items-start gap-2.5">
@@ -179,9 +115,9 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ settings }) => {
                 </a>
               </div>
               <div className="text-[11px] text-slate-500 pt-1 border-t border-amber-100">
-                <div className="font-semibold text-slate-700">Çalışma Saatleri:</div>
-                <div>Hafta İçi: {workingHoursWeekday}</div>
-                <div>Cumartesi: {workingHoursSaturday}</div>
+                <div className="font-semibold text-slate-700">{F.hoursTitle}</div>
+                <div>{F.weekdayLabel} {workingHoursWeekday}</div>
+                <div>{F.saturdayLabel} {workingHoursSaturday}</div>
               </div>
             </div>
           </div>
@@ -190,22 +126,15 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({ settings }) => {
         {/* Bottom Bar: Copyright & Legal */}
         <div className="pt-6 border-t border-amber-100 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
           <div className="flex items-center gap-2 text-center sm:text-left">
-            <span className="font-extrabold text-[#0E4984]">EYLÜL ÇOCUK AKADEMİSİ ANAOKULU</span>
-            <span>• © {currentYear} Tüm Hakları Saklıdır.</span>
+            <span className="font-extrabold text-[#0E4984]">{F.brandText}</span>
+            <span>• © {currentYear} {F.copyright}</span>
           </div>
           <div className="flex items-center gap-4 flex-wrap justify-center">
-            <Link href="/gizlilik-politikasi" className="hover:text-[#0E4984] transition-colors">
-              Gizlilik Politikası
-            </Link>
-            <Link href="/kvkk-aydinlatma-metni" className="hover:text-[#0E4984] transition-colors">
-              KVKK Aydınlatma Metni
-            </Link>
-            <Link href="/cerez-politikasi" className="hover:text-[#0E4984] transition-colors">
-              Çerezler
-            </Link>
-            <Link href="/iletisim" className="hover:text-[#0E4984] transition-colors">
-              İletişim
-            </Link>
+            {(F.legalLinks || []).map((l) => (
+              <Link key={l.id || l.label} href={l.href || '#'} className="hover:text-[#0E4984] transition-colors">
+                {l.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

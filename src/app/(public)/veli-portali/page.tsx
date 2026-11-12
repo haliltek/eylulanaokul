@@ -1,24 +1,15 @@
 import React from 'react';
 import { Metadata } from 'next';
-import { VeliPortaliView } from '@/components/views/VeliPortaliView';
+import { PortalInfoView } from '@/components/views/PortalInfoView';
 import db from '@/lib/db';
 
 export const metadata: Metadata = {
-  title: 'Veli-Öğretmen Portalı | Eylül Çocuk Akademisi Anaokulu',
-  description:
-    'Öğrencinizin günlük yoklama saati, dinlenme durumu, BEM gelişim gözlemleri, beslenme takip raporları ve sınıf duyuruları.',
+  title: 'Veli Portalı | Eylül Çocuk Akademisi Anaokulu',
+  description: 'Eylül Çocuk Akademisi veli portalı: duyurular, günlük akış, gelişim notları ve öğretmen iletişimi.',
 };
 
-export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export default async function VeliPortaliPage() {
-  const announcements = await db.getAnnouncements();
-  const portfolios = await db.getStudentPortfolios();
-
-  return (
-    <VeliPortaliView
-      initialAnnouncements={announcements}
-      initialPortfolios={portfolios}
-    />
-  );
+  return <PortalInfoView data={await db.getPage('portal')} />;
 }

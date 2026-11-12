@@ -6,7 +6,7 @@ import db from '@/lib/db';
 export const metadata: Metadata = {
   title: 'Okulumuz & Kampüsümüz | Eylül Çocuk Akademisi Anaokulu',
   description:
-    'Montessori ahşap atölyeleri, masal odası, güvenli açık hava oyun parkı, yemekhanemiz ve 360° sanal tur ile okulumuzu keşfedin.',
+    'Aydınlık sınıflarımız, masal köşemiz, doğal çim bahçemiz, yemekhanemiz ve tanıtım videolarıyla okulumuzu keşfedin.',
 };
 
 export const revalidate = 0;

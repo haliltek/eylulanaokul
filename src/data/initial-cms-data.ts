@@ -6,7 +6,7 @@ export const initialCmsData: CmsStore = {
   "siteSettings": {
     "schoolName": "Özel Eylül Anaokulu - Kars Kreş ve Anaokulu",
     "tagline": "Güvenle Bugüne, Umutla Yarına...",
-    "motto": "Güvenle Bugüne, Bilimle Yarına - QA Doğrulandı",
+    "motto": "Güvenle Bugüne, Umutla Yarına...",
     "phone": "+905515893212",
     "phoneDisplay": "0 (551) 589 32 12",
     "email": "info@eylulanaokulu.com.tr",
@@ -99,815 +99,7 @@ export const initialCmsData: CmsStore = {
       "isActive": true
     }
   ],
-  "pages": {
-    "home": {
-      "hero": {
-        "quotePart1": "“Güvenle",
-        "quotePart2": "Bugüne,",
-        "quotePart3": "Umutla",
-        "quotePart4": "Yarına...”",
-        "description": "Sevgi, ilgi ve özenle her çocuğun potansiyelini destekleyen bütüncül bir eğitim yaklaşımı.",
-        "ctaPrimaryText": "Okulumuzu Keşfedin",
-        "ctaPrimaryLink": "/okulumuz",
-        "heroImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuAqqBvvgnitjIqoyH1pgnXbj3o4-F3EBt82a3u3eV1xvAXVhj6tXut0hX99r3X7k_NL9HykxwyoMAfDckVWNsua-e_pXcB3R84YrYxEZsoajqTAQxZT2l7p_1kSPuizUpKsEFIGHQbrMYEY_QZhoG4pm2RfCOqHIRe9NRR4maYaukvni2me_eE2Pj1a4XRvgH6ZiN9V771zsExQa-dWdT3CSSFClq1DC-CDQukG6_6r6u5t4Je3cqAu",
-        "heroImageAlt": "Eylül Çocuk Akademisi mutlu öğrenci ve güvenli sınıf ortamı"
-      },
-      "pillars": [
-        {
-          "id": "bem",
-          "title": "BEM",
-          "subtitle": "Bütünleştirilmiş Eğitim Modeli",
-          "icon": "school",
-          "link": "/egitim-modeli/bem"
-        },
-        {
-          "id": "english",
-          "title": "All Day",
-          "subtitle": "English",
-          "icon": "forum",
-          "link": "/egitim-modeli/all-day-english"
-        },
-        {
-          "id": "primary-prep",
-          "title": "İlkokula",
-          "subtitle": "Hazırlık",
-          "icon": "child_care",
-          "link": "/egitim-modeli/bem"
-        },
-        {
-          "id": "activities",
-          "title": "Zengin",
-          "subtitle": "Etkinlikler",
-          "icon": "palette",
-          "link": "/etkinlikler"
-        },
-        {
-          "id": "nutrition",
-          "title": "Doğal &",
-          "subtitle": "Dengeli Beslenme",
-          "icon": "restaurant",
-          "link": "/beslenme"
-        }
-      ],
-      "dailyRoutine": {
-        "badge": "Eylül'de Bir Gün",
-        "title": "Özenle Planlanmış Günlük Akış",
-        "subtitle": "Çocuklarımızın biyoritmi ve keşif arzusu gözetilerek dengelenmiş etkinlik programı",
-        "items": [
-          {
-            "time": "08:30 - 09:15",
-            "title": "Güne Merhaba & Doğal Kahvaltı",
-            "desc": "Sıcak karşılama, serbest oyun ve organik sabah kahvaltısı",
-            "icon": "bakery_dining"
-          },
-          {
-            "time": "09:30 - 11:30",
-            "title": "BEM Çemberi & All Day English",
-            "desc": "Bütünleştirilmiş eğitim atölyeleri ve ana dili İngilizce öğretmenlerle pratik",
-            "icon": "psychology"
-          },
-          {
-            "time": "11:45 - 12:45",
-            "title": "Dengeli Öğle Yemeği & Bahçe Saati",
-            "desc": "Diyetisyen onaylı sıcak menü ve temiz havada serbest doğa oyunu",
-            "icon": "lunch_dining"
-          },
-          {
-            "time": "13:00 - 14:30",
-            "title": "Dinlenme & Masal / Ses Atölyesi",
-            "desc": "Yaş gruplarına uygun sessiz dinlenme veya rahatlatıcı hikaye odası",
-            "icon": "bedtime"
-          },
-          {
-            "time": "14:45 - 16:30",
-            "title": "Branş Dersleri & İkindi Beslenmesi",
-            "desc": "Piyano, bale/jimnastik, kodlama, satranç ve taze ikindi atıştırmalığı",
-            "icon": "palette"
-          },
-          {
-            "time": "16:45 - 18:30",
-            "title": "Günün Değerlendirmesi & Uğurlama",
-            "desc": "Günü pekiştirici serbest köşe oyunları ve ailelere teslim",
-            "icon": "sentiment_very_satisfied"
-          }
-        ]
-      },
-      "highlightBanner": {
-        "title": "Her Çocuk Bir Keşif",
-        "description": "Çocuğunuzun merakını, özgüvenini ve sanatsal bakışını sevgi dolu bir çatı altında birlikte büyütelim.",
-        "buttonText": "Okul Ziyareti Planla",
-        "buttonLink": "/kayit-ve-basvuru",
-        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDMJOcMj_5ofmln-7zxjodxrkIggHEPizxtTm6fTxnlJg9orzRErxF4C5ICuonpZmqeFVsCoQN4U8gzVHTAyoWKzH6YVhlZxg2nyUAe7x8QfWnJJHPMtuZyG7g7DBiVPoyzftXbVbzN_TdtqPQIBPLU7VGIZvsWhBlNtYwxeF0QEa68LKcxh3xhE3DrgfO0l31wjXMOFnKZ3aCzvZTY8pmeNzQ1MZ2zu8brUXpubQfpQIsbqyZpma6h"
-      },
-      "instagramShowcase": {
-        "title": "Eylül'de Hayat",
-        "handle": "@eylulcocukakademisi",
-        "url": "https://instagram.com/eylulcocukakademisi",
-        "posts": [
-          {
-            "id": "ig-1",
-            "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAIhDg4p8-gT_vNjaupVxMvU0BM4pvpL49udkQZ5Ol2cFtEwFhnwzEWuXCFlWivq37jmc2h7W-EPlaXlBykvmWvHpOPBI9R2omsbWD241a1OGYNynRhHpdbv-KlMJp--m4NdVsY_SnRf1zyvgFZFPFNIIr4fV-zvDCSyfpmiMQKiwwl7VtStT4LuAH3wqE0ToAYQYQf50eCxKmCatW4CeLflxfHnYpELKtFrqSBOhce_M-zCF7KKgn0",
-            "caption": "Doğa atölyemizde sonbahar yapraklarını inceliyoruz 🍁🌿",
-            "link": "https://instagram.com"
-          },
-          {
-            "id": "ig-2",
-            "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCyiN03arbqJBsDVFV1HUx8dy-0bAohSvrbAVnltFemm95vAkyAGyQNAHxMTuLHa4qDTSkH0IXZIxJhyXManVZMlLgW0w5JUzYdl9d8x_kcnTvOPOWa-blJUhgUfC6Rz6QiBCywGeQacUHXhmod4LDhy9CeBY_xClJyR-geaBYhVs8Tar70UAri1uEDuyTLj28jRWD5AEZt2m8MajVuEjyIozikNXLhwDoaBW9ewtiiHYMK7OQ8sQNM",
-            "caption": "Müzik ve piyano odamızdan neşeli tınılar yükseliyor 🎹✨",
-            "link": "https://instagram.com"
-          },
-          {
-            "id": "ig-3",
-            "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBLTcFcP5lqXe6FlaDkYCXiyBz960GYtwkL5B3CnPmnU0BATMdea0vAAz_DMA_5USrA4-_e7kF0_0KX1FSz4XUXLkfw0Dsbv8G69wNNxzcmDkUl94iOK3v9TvGHu5n7Wcl0vj17K_5OgIK2aE_QBQDfb5B0OcJGKxqkzjoqF7foIS4nKSRHF2MI8qpQXArYcRcCkFHn_xBtJvo9wjaJqUBTqpK6kZf-vewwrV9S4RGsAjBe7FR81dVS",
-            "caption": "Çayyolu yeşillikler içindeki güvenli bahçemizde koşup oynuyoruz! ☀️🏃",
-            "link": "https://instagram.com"
-          }
-        ]
-      }
-    },
-    "about": {
-      "header": {
-        "badge": "Biz Kimiz?",
-        "title": "Eylül Çocuk Akademisi",
-        "subtitle": "Daha Mutlu Çocuklar, Daha Güçlü Yarınlar",
-        "description": "Eylül Çocuk Akademisi, 3-6 yaş grubu çocuklar için sevgi, ilgi ve özenle tasarlanmış; bireysel farklılıkları zenginlik kabul eden, modern pedagojik yaklaşımlarla donatılmış öncü bir okul öncesi eğitim kurumudur."
-      },
-      "stats": [
-        {
-          "id": "stat-1",
-          "value": "12+",
-          "label": "Yıllık Deneyim",
-          "icon": "workspace_premium"
-        },
-        {
-          "id": "stat-2",
-          "value": "4",
-          "label": "Yaş Grubu Sınıfı",
-          "icon": "meeting_room"
-        },
-        {
-          "id": "stat-3",
-          "value": "3-6",
-          "label": "Yaş Odaklı Pedagoji",
-          "icon": "child_care"
-        },
-        {
-          "id": "stat-4",
-          "value": "Uzman",
-          "label": "Pedagog & Öğretmen Kadrosu",
-          "icon": "supervisor_account"
-        }
-      ],
-      "valuesTitle": "Değerlerimiz",
-      "values": [
-        {
-          "id": "val-1",
-          "title": "Sevgi",
-          "desc": "Koşulsuz kabul ve güven",
-          "icon": "favorite",
-          "colorBg": "#fde9cf",
-          "colorText": "#8f4700"
-        },
-        {
-          "id": "val-2",
-          "title": "İlgi",
-          "desc": "Bireysel gelişim odağı",
-          "icon": "search_spark",
-          "colorBg": "#d6e3ff",
-          "colorText": "#00458d"
-        },
-        {
-          "id": "val-3",
-          "title": "Özen",
-          "desc": "Her detayda hassasiyet",
-          "icon": "volunteer_activism",
-          "colorBg": "#b4f2b3",
-          "colorText": "#0e4a1c"
-        },
-        {
-          "id": "val-4",
-          "title": "Saygı",
-          "desc": "Farklılıklara değer",
-          "icon": "spa",
-          "colorBg": "#ffdcc5",
-          "colorText": "#944a00"
-        },
-        {
-          "id": "val-5",
-          "title": "Güvenli Ortam",
-          "desc": "Huzurlu ve korunaklı yuva",
-          "icon": "shield",
-          "colorBg": "#d6e7ff",
-          "colorText": "#003e80"
-        }
-      ],
-      "showcase": {
-        "quote": "“Her çocuk, doğru ortam ve şefkatle kendi içindeki cevheri parlatır.”",
-        "quoteAuthor": "Eylül Çocuk Akademisi Kurucu Temsilciliği",
-        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAbHkyHF6gL2zHQy7ObwfbgqCVc0_IKOCb4j-2Kklgs1gQijyvNd1VnVRubKPthFi0RtL23koQd23NOsuO1clIZyRH0kl0SmlUXKmDX9CtoDvFWDFlX07rXo4aJS9Gr744f8uJw0CZ6m5tw1lmqhYU-pKbv5VME3y5LhQQKATG80IDyvRvix4XUoImO67rtQTAj6ai8FFw7YF7pA5HLPjslswNbRGTkZqwO1Q9zw3FCxbtNVOsEzlsC",
-        "imageAlt": "Doğal bahçemizde yaprak tutan tebessüm dolu çocuk portresi",
-        "badgeText": "Doğal & Bütünsel Yaklaşım"
-      }
-    },
-    "campus": {
-      "header": {
-        "badge": "Fiziksel İmkânlar ve Yerleşke",
-        "title": "Okulumuz",
-        "subtitle": "Güvenli, Sağlıklı ve İlham Veren Bir Ortam",
-        "description": "Eylül Çocuk Akademisi'nde çocuklarımızın güvenle büyümesi, öğrenmesi ve sosyalleşmesi için her detay titizlikle planlandı. Doğal ışık alan sınıflarımız, geniş yeşil bahçemiz ve özel atölyelerimizle çocuklara ikinci bir ev sıcaklığı sunuyoruz."
-      },
-      "virtualTour": {
-        "title": "360° Sanal Tur İle Okulumuzu Keşfedin",
-        "subtitle": "Sınıflarımızı, bahçemizi ve atölyelerimizi evinizden adım adım gezin.",
-        "description": "Fiziksel mimarimizin çocuk güvenliği ve ergonomisine uygun standartlarını dilediğiniz an 3 boyutlu olarak inceleyin.",
-        "buttonText": "Sanal Turu Başlat",
-        "embedUrl": "https://eylulcocukakademisi.com/sanal-tur",
-        "thumbnailImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuBUEjo9ZUCqHf32UKFjkA5D2wQxvju9qjMX-D_MSPE2QORQFbLCdNZY7u6C8jhkLy3XvDQWo8iJ9pkyPKQS5-3r-y_NAzdX2mlNA1sUsrphVqX_M9hKuI2kXrPqBTYwboAulTXIkrcGAm0h3pajyjECeRqEuXMAhwFlbpoq87qupfDRgWRn-rN0ACRSj6w79BOs4BhXwL0tRnliB70m0cB0Htwvosw54J6XVfj9_dhYNOdGZXyd6ktQ"
-      },
-      "facilities": [
-        {
-          "id": "fac-1",
-          "title": "Montessori ve Doğal Ahşap Atölyeleri",
-          "description": "Çocuk boyuna uygun açık raflar, doğal ahşap eğitici materyaller ve duyusal öğrenmeyi teşvik eden ergonomik öğrenme ortamı.",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBUEjo9ZUCqHf32UKFjkA5D2wQxvju9qjMX-D_MSPE2QORQFbLCdNZY7u6C8jhkLy3XvDQWo8iJ9pkyPKQS5-3r-y_NAzdX2mlNA1sUsrphVqX_M9hKuI2kXrPqBTYwboAulTXIkrcGAm0h3pajyjECeRqEuXMAhwFlbpoq87qupfDRgWRn-rN0ACRSj6w79BOs4BhXwL0tRnliB70m0cB0Htwvosw54J6XVfj9_dhYNOdGZXyd6ktQ",
-          "imageAlt": "Montessori ve ahşap atölye sınıfı",
-          "features": [
-            "Organik ahşap mobilyalar",
-            "Doğal gün ışığı",
-            "Anti-alerjik zemin kaplama"
-          ]
-        },
-        {
-          "id": "fac-2",
-          "title": "Sıcak Masal & Oyun Köşesi",
-          "description": "Yumuşak minderler, zengin çocuk kütüphanesi ve dinlendirici pastel tonlarıyla çocukların hayal güçlerini özgür bırakan huzurlu alan.",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDwMJCgn6ONAX8QrFWd3YuXmrO7E3u5FWK3Xb545MR2GGXliEjEFhlR7aHtTI9iCxhHCyN88wCP6odSqfPeewCFVxBqYrkwA_ujTL71cNGmd1thiPbKesfqsMYE3LJdg4LiOmFiv0r69YZyE0FomHTo7M4Hapw7VyaP0RcaP708kYLg_Pf159bzU9eEM0INlZ92ABD9832X915nwdU10OmDCalxOh5i1nIgRSFRNaKb2DwqetABr0d3",
-          "imageAlt": "Masal ve kitap okuma alanı",
-          "features": [
-            "Zengin resimli kütüphane",
-            "Yumuşak akustik kumaşlar",
-            "Masal dinleme saati"
-          ]
-        },
-        {
-          "id": "fac-3",
-          "title": "Yaratıcı Sanat & Tasarım Alanı",
-          "description": "Renklerin, dokuların ve kil/çamur çalışmalarının özgürce üretildiği; çocukların görsel zekalarını geliştiren ilham verici sanat atölyesi.",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDiGXd78fKBnSqMEf7jV3gsncuEhdTLbXW25Qvz3veuUd8RltUEpmJQ3XFAooO0YWQPFXL89MAknNYXDBioG6ylW0TAy3UexK83SUpSxCG5FNz957ZFHR3Y0GFCLMTDYI2mQxTqHaXMsQX0FzEAYLHeariuItq4_YeVn5KcB3APoYzDeJcjfyUzSB6XFLqLuShrIWRMuxIoWwqM3b1x7p2bgYCHAQ3jkQeD4cT-Gdmc7QF3FeY1nGE4",
-          "imageAlt": "Yaratıcı sanat ve resim atölyesi",
-          "features": [
-            "Şövale ve serbest tuval alanı",
-            "Duyusal seramik masaları",
-            "Kolay temizlenebilir doğal yüzeyler"
-          ]
-        },
-        {
-          "id": "fac-4",
-          "title": "Doğal Çim Bahçe & Oyun Parkı",
-          "description": "Şehrin gürültüsünden uzak, yüksek korunaklı, yumuşak çim zeminli, kum havuzlu ve organik sebze tarhlarına sahip 3000 m² geniş yaşam alanı.",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCcVimafQaD2S34RBokdm0KCeZdebZPPUEHhW7eh93oDvxsYe7FTRIv8JMMkK8GE2eJ7iNuyZq6W7YJKdKFWsSHMCqsV2BPLOCt7V98AUERJ2kB-PhU9wESGhOE0n3jiBbQTvAk4JaOmIgBps5juOUULcvIYxth0M8gEEFMsH0F7NYR_9_BuD466vr93xoVe-sxsxlcvTXDIPfyFXUwjvHSyLO3vDhwXSLMMIygtyq_uuYigEV71sxA",
-          "imageAlt": "Çim bahçe ve ahşap oyun parkı",
-          "features": [
-            "Doğal çim ve ahşap oyun kuleleri",
-            "Organik tarım bahçesi",
-            "Güvenlik sertifikalı yumuşak zemin"
-          ]
-        }
-      ]
-    },
-    "bem": {
-      "header": {
-        "badge": "Özgün Müfredat & Pedagoji",
-        "title": "Bütünleştirilmiş Eğitim Modeli (BEM)",
-        "subtitle": "Çok Yönlü Gelişim, Güçlü Temeller",
-        "description": "Eylül Çocuk Akademisi Bütünleştirilmiş Eğitim Modeli (BEM); çocuğun zihinsel, duygusal, sosyal, sanatsal ve fiziksel potansiyelini bir bütün olarak ele alan, merak odaklı ve oyun temelli çağdaş bir eğitim felsefesidir."
-      },
-      "wheelHub": {
-        "centerTitle": "BEM",
-        "centerSubtitle": "EĞİTİM MODELİ",
-        "sectors": [
-          {
-            "id": "sosyal-duygusal",
-            "name": "Sosyal Duygusal Gelişim",
-            "icon": "favorite",
-            "colorBg": "#fde9cf",
-            "colorText": "#8f4700",
-            "description": "Duygularını tanıma, empati kurma, grup içi uyum ve sağlıklı arkadaşlık ilişkileri kurabilme becerisi."
-          },
-          {
-            "id": "dil-gelisimi",
-            "name": "Dil Gelişimi",
-            "icon": "forum",
-            "colorBg": "#d6e3ff",
-            "colorText": "#00458d",
-            "description": "Zengin kelime dağarcığı, kendini ifade edebilme, dinleme kültürü ve All Day English ile erken çift dillilik temeli."
-          },
-          {
-            "id": "bilissel-gelisim",
-            "name": "Bilişsel Gelişim",
-            "icon": "psychology",
-            "colorBg": "#b4f2b3",
-            "colorText": "#0e4a1c",
-            "description": "Neden-sonuç ilişkisi kurma, problem çözme, algoritmik düşünme, merak odaklı fen ve doğa keşifleri."
-          },
-          {
-            "id": "sanat-yaraticilik",
-            "name": "Sanat ve Yaratıcılık",
-            "icon": "palette",
-            "colorBg": "#ffd8d6",
-            "colorText": "#ba1a1a",
-            "description": "Müzik, piyano, resim ve seramikle estetik algıyı, ritim duygusunu ve özgün hayal gücünü dışa vurma."
-          },
-          {
-            "id": "fiziksel-gelisim",
-            "name": "Fiziksel Gelişim",
-            "icon": "sports_handball",
-            "colorBg": "#d6e7ff",
-            "colorText": "#00458d",
-            "description": "Jimnastik, denge, kaba ve ince motor kas koordinasyonu, beden farkındalığı ve açık hava hareket serbestliği."
-          },
-          {
-            "id": "degerler-egitimi",
-            "name": "Değerler Eğitimi",
-            "icon": "volunteer_activism",
-            "colorBg": "#ebdccb",
-            "colorText": "#713700",
-            "description": "Nezaket, dürüstlük, yardımlaşma, çevreye ve canlılara saygı duyma gibi evrensel insani erdemler."
-          }
-        ]
-      },
-      "showcase": {
-        "title": "BEM ile",
-        "description": "Bütünleştirilmiş eğitim programımızla her gün yeni deneyimler biriktiren çocuklarımız:",
-        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuA_HUJ8Dk0I5-9-CcAVN-23EtmKiHOp7uF7iJTio35lPh-RVt2Ww3BzorxwMjJCNw6-6J3RjPlIUZfiZPQqxBzublamKjRz0wCD7IXo6qX8F_35XYKa_eUaYfvau2j1sffb6E8wDPNa9Uak8ftkjp5WfYtaN4mv58_zTpEwiApJP9Cie23W1J1G_wIQp4-L2WSE8A7B9FraFpJuirTRQOaK_08d1Dwe4biK2A2tzfjBJj-bxe06lsLs-RVt2Ww3BzorxwMjJCNw6-6J3RjPlIUZfiZPQqxBzublamKjRz0wCD7IXo6qX8F_35XYKa_eUaYfvau2j1sffb6E8wDPNa9Uak8ftkjp5WfYtaN4mv58_zTpEwiApJP9Cie23W1J1G_wIQp4-L2WSE8A7B9FraFpJuirTRQOaK_08d1Dwe4biK2A2tzfjBJj-bxe06lsLs",
-        "imageAlt": "Neşeli bir öğrenci renkli Montessori bloklarıyla eğlenerek öğrenirken",
-        "quote": "“Her çocuk, kendi merakı ve ritmi doğrultusunda keşfederek büyür.”",
-        "outcomes": [
-          "Keşfeden",
-          "Soran",
-          "Üreten",
-          "Paylaşan",
-          "Özgüvenli",
-          "Dünya insanı bireyler yetişir."
-        ],
-        "ctaText": "Okul Ziyareti ile Yerinde İnceleyin",
-        "ctaLink": "/kayit-ve-basvuru"
-      }
-    },
-    "english": {
-      "header": {
-        "badge": "Çift Dilli Okul Öncesi Deneyimi",
-        "title": "All Day English",
-        "subtitle": "Gün Boyu İngilizce, Doğal ve Kalıcı Öğrenme",
-        "description": "Eylül Çocuk Akademisi'nde yabancı dil ders olarak öğretilmez; günün her anına yayılan doğal bir yaşam diline dönüşür. Sınıflarımızda Türk sınıf öğretmeninin yanında tam zamanlı ana dili seviyesinde İngilizce öğretmeni yer alır."
-      },
-      "features": [
-        {
-          "id": "feat-1",
-          "title": "Gün Boyu İngilizce",
-          "desc": "Kahvaltıdan bahçe oyununa, sanattan müzik saatine kadar hayatın doğal akışında İngilizce maruziyeti.",
-          "icon": "schedule"
-        },
-        {
-          "id": "feat-2",
-          "title": "Sınıf + İngilizce Öğretmeni",
-          "desc": "Her sınıfta iki öğretmen eşzamanlı bulunur; çocuklar iki dilli iletişim güvenliğini hisseder.",
-          "icon": "group"
-        },
-        {
-          "id": "feat-3",
-          "title": "Cambridge Materyalleri",
-          "desc": "Erken çocukluk yaş grubuna özel sertifikalı uluslararası görsel ve işitsel eğitim kaynakları.",
-          "icon": "menu_book"
-        },
-        {
-          "id": "feat-4",
-          "title": "Günlük Konuşma",
-          "desc": "Ezber kalıplardan uzak; şarkılar, tekerlemeler, dramalar ve rol oyunlarıyla kalıcı konuşma pratiği.",
-          "icon": "record_voice_over"
-        }
-      ],
-      "galleryTitle": "İngilizce Etkinliklerimizden Kareler",
-      "gallerySubtitle": "Miniklerimizin İngilizce şarkılar, hikaye çemberleri ve drama oyunlarıyla dolu neşeli anları",
-      "gallery": [
-        {
-          "id": "eng-img-1",
-          "title": "Circle Time Hikaye Saati",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAIhDg4p8-gT_vNjaupVxMvU0BM4pvpL49udkQZ5Ol2cFtEwFhnwzEWuXCFlWivq37jmc2h7W-EPlaXlBykvmWvHpOPBI9R2omsbWD241a1OGYNynRhHpdbv-KlMJp--m4NdVsY_SnRf1zyvgFZFPFNIIr4fV-zvDCSyfpmiMQKiwwl7VtStT4LuAH3wqE0ToAYQYQf50eCxKmCatW4CeLflxfHnYpELKtFrqSBOhce_M-zCF7KKgn0",
-          "imageAlt": "Circle Time İngilizce hikaye anlatımı"
-        },
-        {
-          "id": "eng-img-2",
-          "title": "Sing & Move Ritim Atölyesi",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDXJD_3d19T3mQ0xzBqu8_DswbaPm-S9hzi0sJYL3_hVzSHNBdmqhsF_TBq2XmAfGy879A0-5oXilRvEl7jhBPecGNeMjIglDP15witIYbLsW1l34yza_YvcjkjhooZ6YU3Th9tzcNirn_IrHs8wMd6bXYTUqDYEj2sxFw9l2NVxFrWe-ZR0ZQ2Li37ajTvZ3qxDpR4thWeLnnbeiLiazasuMtOCvmXa4rBfHG0dIQxeKc6rro1d-DI",
-          "imageAlt": "İngilizce şarkılar eşliğinde ritim ve hareket"
-        },
-        {
-          "id": "eng-img-3",
-          "title": "Vocabulary Flashcards Keşfi",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCGbHX2Nvh4DvZ-ximLLAnTNWoJv1eJISuXF82SrSEUd_6sTWQzAM5KIaGeK1kDlVHfkuir5cjHoEQJA8yU_NTvvAJ8xPHIYSz2uzlDS3ILK7-1RXoKT1VBzN8BMCbB4m8Nul8dXPTr2mg6G70SIwauiiyj0ESrg2IhOcBoAcOaP5qGGETuq7lBS7ui6JLYfVcP__XrObAViSzaxt1tuKXdpnGy1dxRtPr0AsZh0re42pjMkHntZOIo",
-          "imageAlt": "Renkli görsel kartlarla kelime pekiştirme"
-        },
-        {
-          "id": "eng-img-4",
-          "title": "Puppet Show & Drama",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDobE0UwaVtC0DXgtNF4BEmPkh_ni8-lpM9dtIJTs42j413H4m24issQw7pq6AceGkWc4dyiW62YS29Ei-2OU2BKeg8tTGaMo0BIeyfovps1UsqKIowWYWFl7je2S1PFr3qBq7IjBia8hjWMRF8w2sfCD1nSUrn3jGmmsCi4WfjJp4-NCcSfDDVNz4CtDFER0fHNjqryWtVSTwB3Wc6Pt6_3k0FI0AeQEqUtJQjYzofA0AAQeXLfJmL",
-          "imageAlt": "Kukla tiyatrosu ile interaktif İngilizce diyalog"
-        },
-        {
-          "id": "eng-img-5",
-          "title": "Outdoor English Games",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBmG99bD5lg1G-4BiA1dJKD7opkWipSGmnOnptHLwTv3VbCKvahxu0fTXWtjS-hrdsdu-ZwQE3Bjhf8GV2EVuwbYxbfuh9uqPwifjwlazqTMhmTwQk21keNfglFhtImEwBTeZtF0bvqlbuvimw538PFUClhp6lQyKglYQQVcPb1L7Tq08XVpkFn3O9jnlmMCkAS7_I__ejXIB5JWLUoTFQNW3bGw-ijE5Wrt9UTwVBM2vUNS1rdPIyQ",
-          "imageAlt": "Bahçede oynanan neşeli İngilizce yön oyunları"
-        },
-        {
-          "id": "eng-img-6",
-          "title": "Creative Art in English",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBJTNsPLitGJT-uvdRSPCRGg_yPtS_QtMkPUIvggdXTvXwPG7EDbom4CfIXeUXvifwYZmW9gl94QFDv0gjfydHWZH9JneCAXHd6wsxUmsQwk9b2RONAADroTMG5rNEPBZDEIaCWYTr1D0VJDlcHqGMLVFn0t7HZVmloNqQjum0yY_NdohLz0gNI9zHWGpPb1TnOnzb-Am_uX6Ed9pKS0AVVhv1-pUTO17tdV6Q64Azh3-CxINyMOesQ",
-          "imageAlt": "İngilizce yönlendirmelerle boyama ve tasarım"
-        },
-        {
-          "id": "eng-img-7",
-          "title": "Cooking Fun & Colors",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCTh5n2RgRYXhDnn-WlAZ398rFl2GakD1IfFyh2566wTFk-4JP6YS47I8f3V-TtGxHVi1qZShctDNAsSJqYSWuCyUo7ui5-kTd15ZewFVQ85gzv6Z0PDZWryL5QQ9EWlrrc_vD1TGpXjZ3I5sCuBBH4Gx9uEwJsoVrGDB9MFuYUyEU8M_FNeWC29PeRApONav1nUHfcqGABUW3OhT6XnvHnwQGWLHio1waLgTYYpgeLlkVHhuGRqame",
-          "imageAlt": "Meyve salatası ve İngilizce renk/tat keşfi"
-        },
-        {
-          "id": "eng-img-8",
-          "title": "Storytelling Corner",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAJm7fj5jggxLyGHyLXPCMChbuXeKexB3OtQSmUwJkt5CGzR2rw-6jluW0rEVn5l44E3GaN8q_1IfpSf5nxOe8MWHzxVlSVgnuV1zAyMb4ZLivBl7A8U6ZtU-u_giJKbjaENpl2rSBrqtN3I86PrLMoZeCiyeLOanelmUQMaj2U0y4FuDvfBJ3S5iJQELWBOa0YpyhGt8Cya44CINnKm5EQREflMetgxgSH5Jv3ENR-KnoYCKIpC74y",
-          "imageAlt": "Kitap köşesinde birebir telaffuz ve sohbet"
-        }
-      ],
-      "ctaBanner": {
-        "title": "Çift Dilli Eğitimimizi Yakından Görün",
-        "subtitle": "Çocuğunuzun İngilizceyi bir ders değil yaşam biçimi olarak kazanacağı ortamı keşfedin.",
-        "buttonText": "Randevu Alın",
-        "buttonLink": "/kayit-ve-basvuru"
-      }
-    },
-    "activities": {
-      "header": {
-        "badge": "Atölyeler & Branş Dersleri",
-        "title": "Zengin Etkinlik Dünyası",
-        "subtitle": "Her Gün Yeni Bir Keşif",
-        "description": "Çocukların ilgi ve yeteneklerini keşfetmeleri, estetik duyarlılık kazanmaları ve kendilerini çok yönlü ifade edebilmeleri için zenginleştirilmiş atölye programlarımız."
-      },
-      "activities": [
-        {
-          "id": "act-piyano",
-          "title": "Piyano",
-          "description": "Ritim algısı, çift el koordinasyonu ve işitsel dikkat geliştirme",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCyiN03arbqJBsDVFV1HUx8dy-0bAohSvrbAVnltFemm95vAkyAGyQNAHxMTuLHa4qDTSkH0IXZIxJhyXManVZMlLgW0w5JUzYdl9d8x_kcnTvOPOWa-blJUhgUfC6Rz6QiBCywGeQacUHXhmod4LDhy9CeBY_xClJyR-geaBYhVs8Tar70UAri1uEDuyTLj28jRWD5AEZt2m8MajVuEjyIozikNXLhwDoaBW9ewtiiHYMK7OQ8sQNM",
-          "imageAlt": "Piyano başında nota ve tuşları öğrenen sevimli çocuk",
-          "category": "Müzik & Sanat",
-          "order": 1
-        },
-        {
-          "id": "act-resim",
-          "title": "Resim",
-          "description": "Görsel ifade, renk teorisi ve sınırsız hayal gücü atölyesi",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAwu52rU0SIT8ikWDgkNHi7XkWQjVRwqmgfd_ntKBvMaIA-4Fe-rK0FsIKMGGEik7NqqRCdDGzdBzEY4AczBOAa6EzJXBisddPqt9KcpTIk1E0p6kQ45so3YYdwcUY9Pq0xI3dCao9P5I-yMs_dbB-Ov5LmqBk31O-6o3jqCp2pUpJrVaaLHJcP_HbNPGVWTBWBhUvMJvOi07_cZrFuPB33n5iZnr9ReIvpkKqofc6pfc3741l-XFfh",
-          "imageAlt": "Renklerle tuval üzerinde resim yapan minik sanatçı",
-          "category": "Müzik & Sanat",
-          "order": 2
-        },
-        {
-          "id": "act-jimnastik",
-          "title": "Jimnastik",
-          "description": "Denge, esneklik, beden farkındalığı ve kaba motor güçlendirme",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDK9BJZq33Vq-ESZ01DJCa2vSHyrbqa9yUU-jbyIsazRqGsCa_DSGpW9sfC8XTfxR7tKlVxKakm5PIYRg75I6KSUbyLdXvehcT54GI-amuzszYTjXtUvXmbEm2mlXVzd7p4QYjFXP0I6Y6sziiVlhk_OSlEwfTmxZ8apyBbSoRyAtc41kqr5CuLbOiGAJXl5k7U2aTvdhxk29d4Y_HeM6ZTQEVaHMjEa8iXApOcm_MdqXNNZ296O6QO",
-          "imageAlt": "Jimnastik minderi üzerinde esneme ve denge hareketleri",
-          "category": "Beden & Hareket",
-          "order": 3
-        },
-        {
-          "id": "act-satranc",
-          "title": "Satranç",
-          "description": "Stratejik düşünme, sabır, odaklanma ve planlama becerileri",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuCmlJHBRLWiQ2Q-qpQGJqv2VTSeyDaB_wu7sGjoGaDg7nR8ikf6mZO_2dZaDKbGPKGGf0cVzjzY0sh5sLk21R54Zw1X3CLZ5UMKolADJfT6z9coFJns9Ffwub5onCfCeNGjrvvs9Q9WhWPB3uC8hadiuzeghHvYARzhn_-K8fGf_n1xyullYs_j4EiM51ZUO28vTf3BQuwr8w6hMUsFFzXRd-EHoBfpr3ebNXAdVPQJE66WnFsCUm3f",
-          "imageAlt": "Satranç tahtasında piyonları dikkatle inceleyen öğrenci",
-          "category": "Zeka & Strateji",
-          "order": 4
-        },
-        {
-          "id": "act-fen-doga",
-          "title": "Fen ve Doğa",
-          "description": "Ekolojik keşif, canlılar dünyası ve deney odaklı merak eğitimi",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuAPMzZ_tBqU1IxDoftuw0MfXIwyuEfXM90xiEopFj1byhY_a-psn19stclGKRMCqT0__THHYaN2PqPaliMGdhZzAbjpgTGgyDotH8RRKK8NvVpDbwmog6cTspzJCGRAwcQRvpFWBuyNEGGXKnvSSJtT4WaM2UkRCQ3NhYMsAxkhl2zFwcjgts32UYNO0L4pmrBK5Bkuuwsum54m9ScGNgOmUlFT61HYhmMAgDIX8gs2kPbFsRoKacbK",
-          "imageAlt": "Büyüteç ile bitki yapraklarını inceleyen meraklı çocuk",
-          "category": "Bilim & Keşif",
-          "order": 5
-        },
-        {
-          "id": "act-drama",
-          "title": "Drama",
-          "description": "Empati geliştirme, rol yapma ve sözlü & bedensel ifade özgürlüğü",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuABfqcqWrgiK9uCeqr4PMenFHX70PhbW12QQBkZQ5QsjQIZl9jsyeENwv_Xsjy2WEByKDesn0wcMjcHGOyZ4wMsHLnUGJDOC7fK1coCmC4bIkQPmnpTNeSdkMxCYj9CHNKJPD6dMDGo4AS-X5UtAO9u8E8NPVtFp_Yq57QwnCQbYwYlcSdcaO4L_qDhQaOpK1-CajxQaVfIiH4ksf5_DNUI8hJoWlePQvc-HG0Nkn92Ss8i3PL1xela",
-          "imageAlt": "Köstüm ve sahnede rol oynayan neşeli anaokulu öğrencileri",
-          "category": "Sosyal & Sahne",
-          "order": 6
-        },
-        {
-          "id": "act-muzik",
-          "title": "Müzik",
-          "description": "Orff yaklaşımı, perküsyon enstrümanları ve koro uyumu",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuA9b2ttUoepKG3ryo5WNpOKOTa91-qYn8OZ1YEa8JeYSSioD9Agof0sG2Rs3CYP28A2vo1hAHklv4ZpSSc2PJ3rPJeHUTu-qIsVdHVrgOuHtwyYIViwvhue5S2UJJ__fgNQU1uF3JXfRc56j65BLkidQnbwmGBDN1nvbn4oKJXjBnh1H1gWXJIqIqsQaGhwopJ1JQ4yUSMCrm5NH-bhyi1IKHPBolv3is2s76wEc4AjL8zv7e4zwRW9",
-          "imageAlt": "Orff zilleri ve perküsyon aletleriyle ritim tutan çocuklar",
-          "category": "Müzik & Sanat",
-          "order": 7
-        },
-        {
-          "id": "act-kodlama",
-          "title": "Kodlama",
-          "description": "Algoritmik düşünce, sebep-sonuç ilişkisi ve erken STEM okuryazarlığı",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBdbTHYbC_qjZAZjl8Mv2W5b7r5HXTOeFCo5n3iWUsKQJrZfrk1bxCcsNKXUGkogFmrHL1nLOj11byrxOYI4Zocp0PNO7_VB1Wzes7UwFD_G9oLR7SLhiR0uQsOl0YGPN0zSLQgzx3VerJ8QRYNYj0tWZS3T8KPJCJNIq-Wg7pRKpBqJg3OBkOBJyPUhzklPbJxwzfcZfgTHVcB-A5-VNR5KJqJZ2BMiTyzG1PPAjMcY9E5OBC6fzRE",
-          "imageAlt": "Eğlenceli robotik bloklarla temel kodlama kuran çocuk",
-          "category": "STEM & Teknoloji",
-          "order": 8
-        },
-        {
-          "id": "act-degerler",
-          "title": "Değerler Eğitimi",
-          "description": "Saygı, sevgi, yardımlaşma, nezaket ve küresel vatandaşlık bilinci",
-          "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDEEF-PGVPW-5HTJ0kIlWjMI321V_loos6JYcAK8SNvl7Awt13DN1lAgA1qyW37GfVOHijAaaaNIXM9zYqkwPUBABodE5YkE1YuQvOmI8zaomF5pRZQA4MC-9inS48GyPbt08UQXAy5jl-3L2KyjC36SBOK7J6dVrK1D-JslTc16fUH02D0L929I7lndXyHut8FSjKAHxte2RZZnhQzOabRWTykm8MSa2rofymDPJy0EAn-w38gR59h",
-          "imageAlt": "Birbirine el uzatan, sevgi ve yardımlaşma çemberindeki öğrenciler",
-          "category": "Karakter & Toplum",
-          "order": 9
-        }
-      ],
-      "footerCta": {
-        "title": "Çocuğunuzun Yeteneğini Birlikte Uyandıralım",
-        "description": "Her branşın profesyonel eğitmenler eşliğinde sunulduğu zengin dünyamıza davetlisiniz.",
-        "buttonText": "Hemen Ziyaret Planlayın",
-        "buttonLink": "/kayit-ve-basvuru"
-      }
-    },
-    "nutrition": {
-      "header": {
-        "badge": "Eylül Mutfak Atölyesi",
-        "title": "Doğal ve Dengeli Beslenme",
-        "subtitle": "Sağlıklı Çocuklar, Mutlu Yarınlar",
-        "description": "Okulumuzda sunulan her öğün; uzman çocuk diyetisyenleri kontrolünde, yerel üreticilerden temin edilen mevsimine uygun taze ve organik malzemelerle kendi mutfağımızda günlük olarak pişirilir."
-      },
-      "pillars": [
-        {
-          "id": "nutr-1",
-          "title": "Taze ve Doğal",
-          "desc": "Mevsiminde sebze ve meyve, katkısız doğal gıdalar",
-          "icon": "eco"
-        },
-        {
-          "id": "nutr-2",
-          "title": "Diyetisyen Kontrolü",
-          "desc": "Yaş gruplarına özel kalori ve mikro-besin planlaması",
-          "icon": "health_and_safety"
-        },
-        {
-          "id": "nutr-3",
-          "title": "Günlük Taze Pişirim",
-          "desc": "Endüstriyel hazır gıdasız, okul mutfağında sıcacık üretim",
-          "icon": "soup_kitchen"
-        },
-        {
-          "id": "nutr-4",
-          "title": "Dengeli Menü",
-          "desc": "Kahvaltı, sıcak öğle yemeği ve taze ikindi atıştırmalığı",
-          "icon": "restaurant_menu"
-        }
-      ],
-      "weeklyMenu": [
-        {
-          "dayId": "pazartesi",
-          "dayName": "Pazartesi",
-          "breakfast": "Zeytin, peynir, domates, salatalık, haşlanmış yumurta, tam tahıl ekmeği, ıhlamur çayı",
-          "breakfastTime": "08:45 - 09:30",
-          "lunch": "Sebze çorbası, zeytinyağlı taze fasulye & bulgur pilavı, ev yapımı yoğurt, mevsim meyvesi",
-          "lunchTime": "12:00 - 13:00",
-          "snack": "Günlük ılık süt, taze elma dilimleri, yulaflı fındıklı kurabiye",
-          "snackTime": "15:15 - 15:45"
-        },
-        {
-          "dayId": "sali",
-          "dayName": "Salı",
-          "breakfast": "Kaşar peyniri, ev yapımı reçel, tereyağı, ceviz içi, omlet, çavdar ekmeği",
-          "breakfastTime": "08:45 - 09:30",
-          "lunch": "Mercimek çorbası, fırında anne köftesi & patates, mevsim yeşillikleri salatası, ayran",
-          "lunchTime": "12:00 - 13:00",
-          "snack": "Kefir, muz dilimleri, kuru üzüm & çiğ badem tabağı",
-          "snackTime": "15:15 - 15:45"
-        },
-        {
-          "dayId": "carsamba",
-          "dayName": "Çarşamba",
-          "breakfast": "Labne peynir, haşlanmış yumurta, siyah-yeşil zeytin, taze nane, köy ekmeği",
-          "breakfastTime": "08:45 - 09:30",
-          "lunch": "Ezogelin çorbası, nohut yemeği & siyez bulguru pilavı, ev turşusu, yoğurt",
-          "lunchTime": "12:00 - 13:00",
-          "snack": "Taze sıkılmış portakal & elma suyu, ev yapımı havuçlu tarçınlı kek",
-          "snackTime": "15:15 - 15:45"
-        },
-        {
-          "dayId": "persembe",
-          "dayName": "Perşembe",
-          "breakfast": "Menemen, beyaz peynir, domates söğüş, simit, doğal adaçayı",
-          "breakfastTime": "08:45 - 09:30",
-          "lunch": "Balkabağı çorbası, fırında sebzeli somon balığı, patates püresi, yeşil salata",
-          "lunchTime": "12:00 - 13:00",
-          "snack": "Organik yoğurt & taze çilek püresi, tam buğday grissini",
-          "snackTime": "15:15 - 15:45"
-        },
-        {
-          "dayId": "cuma",
-          "dayName": "Cuma",
-          "breakfast": "Beyaz peynir, kaşar peyniri, kuru kayısı, ceviz, krep, taze süt",
-          "breakfastTime": "08:45 - 09:30",
-          "lunch": "Tarhana çorbası, kıymalı ıspanak yemeği, fırın makarna, komposto",
-          "lunchTime": "12:00 - 13:00",
-          "snack": "Ilık süt, ev yapımı elmalı turta, kavrulmamış fındık",
-          "snackTime": "15:15 - 15:45"
-        }
-      ],
-      "dietitianNote": {
-        "title": "Diyetisyen QA Özel Notu",
-        "content": "Mevsim geçişlerinde çocuklarımıza taze sıkılmış C vitamini ve propolisli organik yoğurt sunulmaktadır.",
-        "dietitianName": "Uzm. Dyt. Eylül Test",
-        "dietitianTitle": "Pediatrik Beslenme Uzmanı"
-      }
-    },
-    "parents": {
-      "header": {
-        "badge": "Okul & Aile İş Birliği",
-        "title": "Velilerimiz İçin",
-        "subtitle": "Birlikte Daha Güçlü Bir Eğitim Yolculuğu",
-        "description": "Eylül Çocuk Akademisi olarak çocuklarımızın potansiyelini ailelerimizle kurduğumuz şeffaf, güven dolu ve kesintisiz iletişimle açığa çıkarıyoruz. Dijital veli portalımız üzerinden öğrencinizin gelişim raporlarına, günlük etkinliklere ve okul duyurularına anında ulaşabilirsiniz."
-      },
-      "portalModules": [
-        {
-          "id": "p-1",
-          "title": "Veli Portalı",
-          "subtitle": "Giriş & Bilgi Sistemi",
-          "icon": "badge",
-          "link": "/veli-portali",
-          "isPrimary": true
-        },
-        {
-          "id": "p-2",
-          "title": "Duyurular",
-          "subtitle": "Güncel Haberler",
-          "icon": "campaign",
-          "link": "/veli-portali/duyurular"
-        },
-        {
-          "id": "p-3",
-          "title": "Etkinlik Takvimi",
-          "subtitle": "Aylık Programlar",
-          "icon": "calendar_month",
-          "link": "/veli-portali/takvim"
-        },
-        {
-          "id": "p-4",
-          "title": "Gelişim Portfolyosu",
-          "subtitle": "Bireysel Raporlar",
-          "icon": "assignment_ind",
-          "link": "/veli-portali/portfolyo"
-        },
-        {
-          "id": "p-5",
-          "title": "Yemek Menüsü",
-          "subtitle": "Haftalık & Doğal Beslenme",
-          "icon": "restaurant_menu",
-          "link": "/beslenme"
-        },
-        {
-          "id": "p-6",
-          "title": "Öğretmen İletişimi",
-          "subtitle": "Birebir Mesajlaşma",
-          "icon": "forum",
-          "link": "/veli-portali/mesajlar"
-        },
-        {
-          "id": "p-7",
-          "title": "Görüşme Randevusu",
-          "subtitle": "PDR & Yönetim",
-          "icon": "event_available",
-          "link": "/kayit-ve-basvuru"
-        },
-        {
-          "id": "p-8",
-          "title": "Belgeler & Formlar",
-          "subtitle": "Dilekçe & İzin Belgeleri",
-          "icon": "folder_open",
-          "link": "/veli-portali/belgeler"
-        }
-      ],
-      "storyBanner": {
-        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBW7JpjUGLG6hQ1lEt6ds6K-96oZG5vOoMlpAp8peVFLhkSS3vqBGKUVfDPPq57VhARMXTx8bCmgx4f3RihcjU_I3xN380pb1nOlb2CCImbUJJt_Vai7vhddVDS-uFupciZa0mymwk88vP9Qwx60W3Dww8FXPwFIMajg5W_EFQIoZBLbn36YjEd_cBB-4y59HYWzjDBb0amxJd05Gdu-AsxXx7QC_jR2_hCqh_AadN87GRGbLARQOz4",
-        "imageAlt": "Sevgi dolu anne ve küçük kızı güneşli sınıfta resimli masal kitabı okurken",
-        "badgeText": "Birlikte Büyüyoruz",
-        "quote": "“Aile desteği, çocuğun gelişiminde en güçlü adımdır.”",
-        "author": "Eylül Çocuk Akademisi Rehberlik ve Aile Danışmanlığı Birimi"
-      },
-      "quickHelp": {
-        "title": "Veli Destek Hattı",
-        "desc": "Portal girişi, şifre sıfırlama veya idari sorularınız için danışma hattımız hizmetinizdedir.",
-        "buttonText": "Hemen Arayın",
-        "phone": "0 (551) 589 32 12"
-      }
-    },
-    "enrollment": {
-      "header": {
-        "badge": "2024 - 2025 Dönemi Ön Kayıtları Başladı",
-        "title": "Kayıt ve Başvuru",
-        "subtitle": "Eylül'de Yeni Bir Başlangıç",
-        "description": "Eylül Çocuk Akademisi ailesine adım atmak için ilk adımı bugün atın. Çocuğunuzun bireysel gelişim hızına saygı duyan, sevgi temelli ve modern öğrenme ortamımızda yerinizi erken kayıt imkanlarıyla ayırtabilirsiniz."
-      },
-      "steps": [
-        {
-          "stepNumber": "01",
-          "title": "Başvuru Formu",
-          "description": "Ön başvuru formunu doldurun, uzman rehberlik ekibimiz en kısa sürede sizinle iletişime geçsin.",
-          "icon": "assignment"
-        },
-        {
-          "stepNumber": "02",
-          "title": "Okul Ziyareti",
-          "description": "Okulumuzu gezin, eğitim kadromuzla tanışın ve çocuğunuz için hazırlanan doğal atölye ortamını keşfedin.",
-          "icon": "school"
-        },
-        {
-          "stepNumber": "03",
-          "title": "Kayıt Süreci",
-          "description": "Kontenjan dahilinde kayıt işlemlerini güvenle tamamlayın, sıcacık Eylül Akademisi ailesine katılın.",
-          "icon": "verified"
-        }
-      ],
-      "scheduleTourCard": {
-        "title": "Okul Ziyareti Planlayın",
-        "description": "Çocuğunuzla birlikte sınıflarımızı, bahçemizi ve yemekhanemizi bizzat deneyimleyin. Randevu oluşturarak uzman pedagoglarımızla birebir görüşebilirsiniz.",
-        "buttonText": "Randevu Al",
-        "hoursNote": "Hafta içi 09:00 - 17:00 arası müsait",
-        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuDtGA22rDFxNNgD1z4vl8u94Ga7ZPRILsbzshGnnP_mnQL23QrMMQjZFwGAFrktFj2eHwOga2ROZNvGcHg2IqsHUW2pLRZ0cb9qIM2LFYpvQu9kS5A5FiWYqJAMZxuDX194VqENUTtgNy7K32Mhr7LW1T5sHJajHH3PvkeGtJ7oFCthA9RthQwpYgVtxJF77dURfP-0pX4nIAmEMQ02y4eriO6SDolx5nmxUSvqPCvCRoO3-dfdM6dJ",
-        "imageAlt": "Güler yüzlü anaokulu öğretmeni ve okul ziyareti ortamı"
-      },
-      "faq": [
-        {
-          "question": "Hangi yaş gruplarına eğitim veriyorsunuz?",
-          "answer": "Okulumuz 36-72 ay (3-6 yaş) grubu çocuklarımıza yaş ve gelişim özelliklerine göre ayrılmış özel sınıflarda hizmet vermektedir."
-        },
-        {
-          "question": "Kayıt için hangi belgeler gereklidir?",
-          "answer": "Ön kayıt onayından sonra; aşı kartı fotokopisi, kimlik fotokopileri, vesikalık fotoğraflar ve sağlık durum beyan formu talep edilmektedir."
-        },
-        {
-          "question": "Okul saatleri ve servis imkânı nasıldır?",
-          "answer": "Eğitim saatlerimiz tam gün 08:30 - 18:30 arasındadır. Çayyolu, Ümitköy, İncek ve Yaşamkent bölgelerine hostesli okul servisimiz mevcuttur."
-        }
-      ]
-    },
-    "contact": {
-      "header": {
-        "badge": "Birlikte Geleceği İnşa Edelim",
-        "title": "İletişim",
-        "subtitle": "Sizi Tanımaktan Mutluluk Duyarız",
-        "description": "Eylül Çocuk Akademisi ailesine katılmak, eğitim modelimiz hakkında ayrıntılı bilgi edinmek veya okulumuzu yerinde keşfetmek için bize her zaman ulaşabilirsiniz."
-      },
-      "infoCards": {
-        "phoneTitle": "Telefon",
-        "phoneNumber": "0 (551) 589 32 12",
-        "phoneHours": "Hafta içi 08.00-17.00",
-        "emailTitle": "E-Posta",
-        "emailAddress": "info@eylulanaokulu.com.tr",
-        "emailNote": "24 Saat İçinde Yanıt",
-        "locationTitle": "Konum",
-        "locationCity": "Merkez / KARS",
-        "locationNote": "Villalar Bölgesi",
-        "faxTitle": "Faks",
-        "faxNumber": "0 (474) 225 12 22"
-      },
-      "addressBox": {
-        "title": "Açık Adresimiz",
-        "fullAddress": "Şehitler mh. 108 Sokak, No: 8 AL (Villalar Bölgesi) KARS",
-        "directionsNote": "Özel Eylül Anaokulu - Kars Kreş ve Anaokulu Müstakil Villa Kampüsü"
-      },
-      "mapInfo": {
-        "title": "Özel Eylül Anaokulu - Kars Kreş ve Anaokulu",
-        "badge": "Otopark ve Servis Alanı Mevcuttur",
-        "directionsUrl": "https://maps.google.com/?q=Ozel+Eylul+Anaokulu+Kars",
-        "visitingHours": "Hafta içi: 08.00 - 17.00"
-      },
-      "campusImage": {
-        "image": "https://lh3.googleusercontent.com/aida-public/AB6AXuBLTcFcP5lqXe6FlaDkYCXiyBz960GYtwkL5B3CnPmnU0BATMdea0vAAz_DMA_5USrA4-_e7kF0_0KX1FSz4XUXLkfw0Dsbv8G69wNNxzcmDkUl94iOK3v9TvGHu5n7Wcl0vj17K_5OgIK2aE_QBQDfb5B0OcJGKxqkzjoqF7foIS4nKSRHF2MI8qpQXArYcRcCkFHn_xBtJvo9wjaJqUBTqpK6kZf-vewwrV9S4RGsAjBe7FR81dVSnPmnU0BATMdea0vAAz_DMA_5USrA4-_e7kF0_0KX1FSz4XUXLkfw0Dsbv8G69wNNxzcmDkUl94iOK3v9TvGHu5n7Wcl0vj17K_5OgIK2aE_QBQDfb5B0OcJGKxqkzjoqF7foIS4nKSRHF2MI8qpQXArYcRcCkFHn_xBtJvo9wjaJqUBTqpK6kZf-vewwrV9S4RGsAjBe7FR81dVS",
-        "badge": "Kampüsümüz",
-        "title": "Kars Yeşillikler İçinde Güvenli Villa Bahçesi",
-        "subtitle": "Müstakil villa ve çocuklara özel geniş yeşil yaşam alanı"
-      },
-      "formIntro": {
-        "title": "Bize Yazın",
-        "subtitle": "Sorularınızı, okul ziyareti taleplerinizi veya kayıt ile ilgili detayları form aracılığıyla hemen bize iletebilirsiniz."
-      }
-    }
-  },
+  "pages": {},
   "mediaLibrary": [
     {
       "id": "med-hero-1",
@@ -1097,7 +289,7 @@ export const initialCmsData: CmsStore = {
       "targetClass": "Tümü",
       "publishDate": "2026-10-20T10:00:00.000Z",
       "isImportant": false,
-      "author": "Uzm. Dyt. Zeynep Kaya"
+      "author": "Eylül Çocuk Akademisi Beslenme Birimi"
     }
   ],
   "studentPortfolios": [
@@ -1487,7 +679,7 @@ export const initialCmsData: CmsStore = {
     ]
   },
   "monthlyMealList": {
-    "badge": "Eylül Mutfak Atölyesi",
+    "badge": "Eylül Mutfağı",
     "title": "Aylık Yemek Menüsü",
     "monthLabel": "Kasım 2026 Beslenme Takvimi",
     "description": "Uzman çocuk diyetisyenimiz tarafından hazırlanan; taze, katkısız, mevsimine uygun organik gıdalarla hazırlanan 4 haftalık tam menü planı.",
@@ -1659,7 +851,7 @@ export const initialCmsData: CmsStore = {
         "excerpt": "Çocuğunuzun ilk okul deneyimi gelecekteki tüm öğrenme serüvenini şekillendirir. Kars'ın iklim koşulları, fiziki bina güvenliği, öğretmen niteliği ve oyun alanları seçimde nasıl rol oynar?",
         "content": [
           "Okul öncesi eğitim dönemi, bir çocuğun hayatındaki en kritik bilişsel ve duygusal eşiklerden biridir. Kars gibi kış aylarının uzun ve soğuk geçtiği bir coğrafyada anaokulu seçimi yaparken velilerin sadece eğitim müfredatına değil, aynı zamanda fiziksel yerleşkenin korunaklılığına, hava sirkülasyonuna ve doğal gün ışığı alma oranına özel dikkat göstermesi gerekir.",
-          "Özel Eylül Anaokulu olarak Kars Merkez Villalar Bölgesi'ndeki müstakil kampüsümüzde, çocuklarımızın kışın dahi ferah, sıcak ve doğal ahşap atölyelerde güvenle hareket edebilmelerini sağlıyoruz. Şehrin gürültüsünden ve egzoz dumanından uzak, 3000 m² genişliğindeki yeşil bahçemiz ve yüksek tavanlı sınıflarımız çocukların enerjilerini sağlıklı bir şekilde dışa vurmalarına imkan tanır.",
+          "Özel Eylül Anaokulu olarak Kars Merkez Villalar Bölgesi'ndeki müstakil kampüsümüzde, çocuklarımızın kışın dahi ferah, sıcak ve aydınlık sınıflarda güvenle hareket edebilmelerini sağlıyoruz. Şehrin gürültüsünden ve egzoz dumanından uzak, 3000 m² genişliğindeki yeşil bahçemiz ve yüksek tavanlı sınıflarımız çocukların enerjilerini sağlıklı bir şekilde dışa vurmalarına imkan tanır.",
           "Bunun yanı sıra bir kurumun pedagojik vizyonu, ezberci yaklaşımlar yerine çocuğun merak duygusunu besleyen bir eğitim modeli içermelidir. Öğretmen kadrosunun lisanslı okul öncesi eğitimcilerinden oluşması, diyetisyen kontrolünde günlük sıcak yemek pişirilmesi ve açık iletişim kanalları bir anaokulunu ayrıcalıklı kılan vazgeçilmez kriterlerdir."
         ],
         "category": "Kars'ta Yaşam",
@@ -1683,12 +875,12 @@ export const initialCmsData: CmsStore = {
         "excerpt": "Çocuğu tek bir alanda yarıştırmak yerine 6 temel boyutta dengeli büyüten BEM felsefesiyle tanışın: Sosyal-duygusal, bilişsel, dil, sanat, hareket ve evrensel değerler.",
         "content": [
           "Geleneksel eğitim kalıpları çoğu zaman çocukları tek tip akademik başarılara yönlendirmeye çalışır. Oysa 3-6 yaş aralığı, insan beyninin nöral bağlantılarının en yoğun kurulduğu ve kişiliğin temel harcının atıldığı dönemdir. Bütünleştirilmiş Eğitim Modeli (BEM), çocuğun gelişimini parçalara ayırmadan bir bütün olarak kucaklar.",
-          "BEM çarkımız 6 ana petalsen oluşur: Sosyal-Duygusal Gelişim ile empati ve özgüven; Dil Gelişimi ve All Day English ile çift dillilik; Bilişsel Gelişim ile neden-sonuç ve kodlama; Sanat ve Yaratıcılık ile estetik duyuş; Fiziksel Gelişim ile jimnastik ve denge; Değerler Eğitimi ile nezaket ve paylaşma bilinci inşa edilir.",
+          "BEM çarkımız altı yapraktan oluşmaktadır: Sosyal-Duygusal Gelişim ile empati ve özgüven; Dil Gelişimi ve All Day English ile çift dillilik; Bilişsel Gelişim ile neden-sonuç ve kodlama; Sanat ve Yaratıcılık ile estetik duyuş; Fiziksel Gelişim ile jimnastik ve denge; Değerler Eğitimi ile nezaket ve paylaşma bilinci inşa edilir.",
           "Sınıflarımızda uygulanan her etkinlik bu 6 alanın en az ikisini veya üçünü eşzamanlı aktive eder. Örneğin bir sonbahar yaprağı incelenirken hem fen-doğa kavramları (bilişsel), hem renk ve doku baskısı (sanat), hem de yaprağın İngilizce adlandırılması (dil) aynı deneyim içinde harmanlanır."
         ],
         "category": "BEM Modeli",
         "coverImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuA_HUJ8Dk0I5-9-CcAVN-23EtmKiHOp7uF7iJTio35lPh-RVt2Ww3BzorxwMjJCNw6-6J3RjPlIUZfiZPQqxBzublamKjRz0wCD7IXo6qX8F_35XYKa_eUaYfvau2j1sffb6E8wDPNa9Uak8ftkjp5WfYtaN4mv58_zTpEwiApJP9Cie23W1J1G_wIQp4-L2WSE8A7B9FraFpJuirTRQOaK_08d1Dwe4biK2A2tzfjBJj-bxe06lsLs",
-        "author": "Psk. Selin Öztürk (Program Koordinatörü)",
+        "author": "Eylül Çocuk Akademisi PDR Servisi",
         "publishedAt": "2026-10-15T11:30:00.000Z",
         "readTime": "6 dk okuma",
         "status": "published",
@@ -1707,12 +899,12 @@ export const initialCmsData: CmsStore = {
         "excerpt": "Haftada 2 saatlik yabancı dil dersi yerine tüm gün doğal yaşam diline dönüşen İngilizce, çocukların ana dil edinim hızında dünya insanı olmalarını sağlıyor.",
         "content": [
           "Çocuk beyni 6 yaşına kadar duyduğu her dili birincil sistem olarak kodlama kabiliyetine sahiptir. Ancak masa başında kelime ezberletilen geleneksel yabancı dil dersleri bu doğal mekanizmayı işletemez. Çift dilli bireyler yetiştirmenin tek bilimsel yolu, dili bir ders konusu değil, iletişim aracı kılmaktır.",
-          "All Day English programımız kapsamında Özel Eylül Anaokulu sınıflarında tam zamanlı Türk sınıf öğretmenimizin yanında ileri seviye İngilizce öğretmeni daima sınıftadır. Kahvaltıda süt isterken, bahçede körebe oynarken veya resim yaparken İngilizce doğal akışında kullanılır.",
+          "All Day English programımız kapsamında Özel Eylül Anaokulu sınıflarında tam zamanlı sınıf öğretmenimizin yanında ileri seviye İngilizce öğretmeni daima sınıftadır. Kahvaltıda süt isterken, bahçede körebe oynarken veya resim yaparken İngilizce doğal akışında kullanılır.",
           "Cambridge erken çocukluk materyalleri, şarkılar, kuklalar ve hareketli oyunlarla çocuklar İngilizceyi çeviri yapmadan, düşüncelerini doğrudan bu dilde kurgulayarak öğrenirler. Bu da ilkokula geçtiklerinde olağanüstü bir dil özgüveni kazandırır."
         ],
         "category": "Yabancı Dil",
         "coverImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuAIhDg4p8-gT_vNjaupVxMvU0BM4pvpL49udkQZ5Ol2cFtEwFhnwzEWuXCFlWivq37jmc2h7W-EPlaXlBykvmWvHpOPBI9R2omsbWD241a1OGYNynRhHpdbv-KlMJp--m4NdVsY_SnRf1zyvgFZFPFNIIr4fV-zvDCSyfpmiMQKiwwl7VtStT4LuAH3wqE0ToAYQYQf50eCxKmCatW4CeLflxfHnYpELKtFrqSBOhce_M-zCF7KKgn0",
-        "author": "Emily Walker (Yabancı Diller Bölüm Başkanı)",
+        "author": "Eylül Çocuk Akademisi İngilizce Birimi",
         "publishedAt": "2026-10-12T14:15:00.000Z",
         "readTime": "4 dk okuma",
         "status": "published",
@@ -1731,12 +923,12 @@ export const initialCmsData: CmsStore = {
         "excerpt": "Sert kış şartlarında minik bedenleri güçlü tutmanın sırrı: Yerel tereyağı, probiyotik ev yoğurdu, mevsim çorbaları ve paketli gıdasız okul mutfağı.",
         "content": [
           "Beslenme, okul öncesi çağdaki bir çocuğun yalnızca fiziksel büyümesini değil, dikkat süresini, duygusal dengesini ve bağışıklık direncini doğrudan belirler. Kars'ın sert karasal ikliminde çocuklarımızın hastalıklara karşı dirençli olabilmeleri için besleyici, sıcak ve dengeli bir beslenme protokolü şarttır.",
-          "Eylül Mutfak Atölyesi'nde endüstriyel hazır gıdalar, bulyonlar, yapay tatlandırıcılar ve gazlı içecekler kesinlikle yer almaz. Menülerimiz uzman çocuk diyetisyenimiz tarafından haftalık ve aylık olarak planlanır; Kars'ın taze sütü, yerel üreticilerden alınan tereyağı, bakliyatlar ve ev yapımı yoğurt baş tacımızdır.",
+          "Eylül Mutfağı'nda endüstriyel hazır gıdalar, bulyonlar, yapay tatlandırıcılar ve gazlı içecekler kesinlikle yer almaz. Menülerimiz uzman çocuk diyetisyenimiz tarafından haftalık ve aylık olarak planlanır; Kars'ın taze sütü, yerel üreticilerden alınan tereyağı, bakliyatlar ve ev yapımı yoğurt baş tacımızdır.",
           "Günde 3 öğün (Doğal Kahvaltı, Sıcak Öğle Yemeği, İkindi Beslenmesi) okulumuzun kendi mutfağında hijyenik koşullarda günlük olarak pişirilir. Ayrıca alerjisi veya hassasiyeti olan çocuklarımız için kişiye özel menü alternatifleri titizlikle takip edilir."
         ],
         "category": "Beslenme & Sağlık",
         "coverImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuBDPtPuOkoCFkx4vkNoJTLA0Ul1IQs_atMo-Mh2b-M4DK981siYIn5sPXDE7Z41c0lJrDUHSNWOtEC6jQE1mQAv-iYOxP69s4nGmJuMqRqamlIxH246wiGWbnCkw4h6tS-2on-7k5EygAAFeZagzxym3RSx0XZE11hkLk3Mc37UmdKrH5Z42tg_2DUENN6ADUzHkb8rP80gItK_k1kIvelwKiMCtZ6LyHO6MzPYMxMMSDKbPqUgZf-o",
-        "author": "Uzm. Dyt. Zeynep Kaya",
+        "author": "Eylül Çocuk Akademisi Beslenme Birimi",
         "publishedAt": "2026-10-09T09:00:00.000Z",
         "readTime": "5 dk okuma",
         "status": "published",
@@ -1760,7 +952,7 @@ export const initialCmsData: CmsStore = {
         ],
         "category": "Gelişim & Psikoloji",
         "coverImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuBW7JpjUGLG6hQ1lEt6ds6K-96oZG5vOoMlpAp8peVFLhkSS3vqBGKUVfDPPq57VhARMXTx8bCmgx4f3RihcjU_I3xN380pb1nOlb2CCImbUJJt_Vai7vhddVDS-uFupciZa0mymwk88vP9Qwx60W3Dww8FXPwFIMajg5W_EFQIoZBLbn36YjEd_cBB-4y59HYWzjDBb0amxJd05Gdu-AsxXx7QC_jR2_hCqh_AadN87GRGbLARQOz4",
-        "author": "Psk. Dan. Merve Şahin",
+        "author": "Eylül Çocuk Akademisi PDR Servisi",
         "publishedAt": "2026-10-05T13:00:00.000Z",
         "readTime": "5 dk okuma",
         "status": "published",
@@ -1776,10 +968,10 @@ export const initialCmsData: CmsStore = {
         "id": "post-6",
         "slug": "3-6-yas-doneminde-bireysel-ilgi-ve-yetenek-kesfi",
         "title": "3-6 Yaş Döneminde Bireysel İlgi ve Yetenek Keşfi Nasıl Yapılır?",
-        "excerpt": "Her çocuk piyanist veya ressam olmak zorunda değildir; önemli olan piyano, satranç, drama, jimnastik ve fen atölyelerinde kendi tutkusunu bulmasıdır.",
+        "excerpt": "Her çocuk piyanist veya ressam olmak zorunda değildir; önemli olan piyano, satranç, drama, jimnastik ve fen etkinliklerinde kendi tutkusunu bulmasıdır.",
         "content": [
-          "Erken çocukluk dönemi yeteneklerin dikte edildiği değil, binbir çeşit uyaranla çocuğun önüne serildiği bir açık büfe olmalıdır. Bir çocuğun satranca mı, görsel sanatlara mı, ritim ve müziğe mi yoksa doğa ve mekanik düzeneklere mi yatkın olduğunu ancak zengin atölye deneyimleri açığa çıkarır.",
-          "Özel Eylül Anaokulu'nun 9 branş etkinlik atölyesi (Piyano, Resim, Jimnastik, Satranç, Fen ve Doğa, Drama, Müzik, Kodlama, Değerler Eğitimi) her çocuğun haftalık döngüde tüm bu disiplinlerle doğrudan etkileşime girmesini sağlar.",
+          "Erken çocukluk dönemi yeteneklerin dikte edildiği değil, binbir çeşit uyaranla çocuğun önüne serildiği bir açık büfe olmalıdır. Bir çocuğun satranca mı, görsel sanatlara mı, ritim ve müziğe mi yoksa doğa ve mekanik düzeneklere mi yatkın olduğunu ancak zengin etkinlik deneyimleri açığa çıkarır.",
+          "Özel Eylül Anaokulu'nun 9 branş etkinliği (Piyano, Resim, Jimnastik, Satranç, Fen ve Doğa, Drama, Müzik, Kodlama, Değerler Eğitimi) her çocuğun haftalık döngüde tüm bu disiplinlerle doğrudan etkileşime girmesini sağlar.",
           "Öğretmenlerimiz öğrencinin hangi köşede daha uzun süre pürdikkat kaldığını, hangi malzemeyle çalışırken gözlerinin parladığını gözlemleyerek Veli Portalı Gelişim Raporlarına kaydeder ve aileye rehberlik sunar."
         ],
         "category": "Eğitim & Pedagoji",

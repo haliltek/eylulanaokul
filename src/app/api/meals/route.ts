@@ -13,16 +13,16 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const nutrition = await db.getNutritionPage();
+    const nutrition = { ...(await db.getNutritionPage()) };
 
-    if (body.weeklyMenu) {
+    if (Array.isArray(body.weeklyMenu)) {
       nutrition.weeklyMenu = body.weeklyMenu;
     }
-    if (body.dietitianNote) {
+    if (body.dietitianNote && typeof body.dietitianNote === 'object') {
       nutrition.dietitianNote = body.dietitianNote;
     }
 
-    const updated = await db.updateNutritionPage(nutrition);
+    const updated = await db.updatePage('nutrition', nutrition);
     return NextResponse.json({ success: true, message: 'Yemek menüsü güncellendi', data: updated.weeklyMenu });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
