@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import { Logo } from '@/components/common/Logo';
+import { AdminCredit } from '../components/AdminCredit';
 
 export default function AdminLoginPage() {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,7 +18,7 @@ export default function AdminLoginPage() {
       const res = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
       const json = await res.json();
       if (json.success) {
@@ -43,18 +45,33 @@ export default function AdminLoginPage() {
         </div>
         <p className="text-xs text-white/50">© Eylül Çocuk Akademisi Kars</p>
       </div>
-      <div className="flex items-center justify-center p-6">
+      <div className="flex flex-col items-center justify-center gap-6 p-6">
         <form onSubmit={submit} className="w-full max-w-sm bg-white rounded-2xl border border-slate-200 shadow-sm p-8 space-y-5">
           <div className="lg:hidden"><Logo size="sm" /></div>
           <div>
             <h2 className="text-xl font-bold text-slate-900">Giriş Yap</h2>
-            <p className="text-xs text-slate-500 mt-1">Devam etmek için yönetici şifresini girin.</p>
+            <p className="text-xs text-slate-500 mt-1">Devam etmek için kullanıcı adı ve şifrenizi girin.</p>
           </div>
           <div>
-            <label className="text-xs font-semibold text-slate-600">Şifre</label>
+            <label htmlFor="admin-username" className="text-xs font-semibold text-slate-600">Kullanıcı Adı</label>
             <input
-              type="password"
+              id="admin-username"
+              type="text"
               autoFocus
+              autoComplete="username"
+              autoCapitalize="none"
+              spellCheck={false}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="mt-1 w-full px-3.5 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E4984]/30 focus:border-[#0E4984]"
+            />
+          </div>
+          <div>
+            <label htmlFor="admin-password" className="text-xs font-semibold text-slate-600">Şifre</label>
+            <input
+              id="admin-password"
+              type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1 w-full px-3.5 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#0E4984]/30 focus:border-[#0E4984]"
@@ -62,12 +79,13 @@ export default function AdminLoginPage() {
           </div>
           {error && <p className="text-xs font-semibold text-red-600">{error}</p>}
           <button
-            disabled={loading || !password}
+            disabled={loading || !username || !password}
             className="w-full py-2.5 rounded-lg bg-[#0E4984] text-white text-sm font-bold hover:bg-[#0a3a6b] disabled:opacity-50 transition"
           >
             {loading ? 'Giriş yapılıyor…' : 'Giriş Yap'}
           </button>
         </form>
+        <AdminCredit />
       </div>
     </div>
   );

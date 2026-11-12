@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { AdminCredit } from './components/AdminCredit';
 import Link from 'next/link';
 import { CmsStore, BlogPostItem, SerpKeywordItem } from '@/types/cms';
 import { MediaField, ImageField } from './components/ImageField';
@@ -1587,6 +1588,9 @@ export const AdminDashboardClient: React.FC<AdminDashboardClientProps> = ({ init
         </div>
       )}
       </main>
+      <footer className="px-4 sm:px-6 lg:px-8 pb-6 pt-2 max-w-[1400px]">
+        <AdminCredit />
+      </footer>
     </div>
   );
 };

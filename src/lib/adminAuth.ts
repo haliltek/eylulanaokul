@@ -1,6 +1,7 @@
 /**
  * Yönetim paneli oturum doğrulaması (Edge + Node uyumlu, Web Crypto).
  * ADMIN_PASSWORD tanımlı değilse koruma kapalıdır (geriye dönük uyumluluk).
+ * Kullanıcı adı ADMIN_USERNAME ile belirlenir (varsayılan: eyluladmin).
  */
 export const ADMIN_COOKIE = 'admin_session';
 const MAX_AGE_MS = 1000 * 60 * 60 * 12; // 12 saat
@@ -38,10 +39,16 @@ export async function verifySessionToken(token?: string | null): Promise<boolean
   return diff === 0;
 }
 
-export function passwordMatches(input: string): boolean {
-  const pw = process.env.ADMIN_PASSWORD || '';
-  if (!pw || input.length !== pw.length) return false;
+function safeEqual(a: string, b: string): boolean {
+  if (!a || a.length !== b.length) return false;
   let diff = 0;
-  for (let i = 0; i < pw.length; i++) diff |= pw.charCodeAt(i) ^ input.charCodeAt(i);
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return diff === 0;
+}
+
+export function credentialsMatch(username: string, password: string): boolean {
+  const user = process.env.ADMIN_USERNAME || 'eyluladmin';
+  const userOk = safeEqual(user.toLocaleLowerCase('tr'), username.trim().toLocaleLowerCase('tr'));
+  const passOk = safeEqual(process.env.ADMIN_PASSWORD || '', password);
+  return userOk && passOk;
 }
